@@ -1,0 +1,3048 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Cursos Técnicos — Atlas CEEP</title>
+  <meta
+    name="description"
+    content="Descubra o curso técnico que mais combina com você no Atlas CEEP."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* =========================================================
+       DESIGN SYSTEM
+    ========================================================= */
+
+    :root {
+      --accent: #a8ff35;
+      --accent-2: #79d61d;
+      --accent-soft: rgba(168, 255, 53, .12);
+      --accent-glow: rgba(168, 255, 53, .28);
+
+      --purple: #9b5cff;
+      --blue: #58a6ff;
+      --orange: #ff9d42;
+      --cyan: #42e8e0;
+      --pink: #ff5ca8;
+      --yellow: #ffd45c;
+
+      --bg: #050607;
+      --bg-2: #08090b;
+      --surface: #0d0f11;
+      --surface-2: #121519;
+      --surface-3: #181b20;
+
+      --border: rgba(255,255,255,.075);
+      --border-light: rgba(255,255,255,.12);
+
+      --text: #f4f7f3;
+      --text-2: #a1a8ae;
+      --text-3: #666d75;
+
+      --radius-sm: 12px;
+      --radius: 18px;
+      --radius-lg: 26px;
+
+      --shadow:
+        0 30px 80px rgba(0,0,0,.45);
+
+      --container: 1180px;
+    }
+
+    /* =========================================================
+       RESET
+    ========================================================= */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(168,255,53,.06), transparent 28rem),
+        radial-gradient(circle at 90% 15%, rgba(155,92,255,.06), transparent 30rem),
+        var(--bg);
+      font-family: Inter, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .18;
+      z-index: 999;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: linear-gradient(to bottom, black, transparent 75%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    ::selection {
+      color: #050607;
+      background: var(--accent);
+    }
+
+    .container {
+      width: min(var(--container), calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    /* =========================================================
+       UTILITIES
+    ========================================================= */
+
+    .gradient-text {
+      color: var(--accent);
+      background: linear-gradient(
+        110deg,
+        #fff 0%,
+        var(--accent) 45%,
+        #7ee61f 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .muted {
+      color: var(--text-2);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid rgba(168,255,53,.2);
+      border-radius: 999px;
+      color: var(--accent);
+      background: rgba(168,255,53,.07);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .section-label::before {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid transparent;
+      background: rgba(5,6,7,.72);
+      backdrop-filter: blur(20px);
+      transition: .3s ease;
+    }
+
+    .header.scrolled {
+      border-color: var(--border);
+      background: rgba(5,6,7,.9);
+    }
+
+    .nav {
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      flex-shrink: 0;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      color: #050607;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 24px var(--accent-glow);
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    .brand-text {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+
+    .brand-text span {
+      display: block;
+      margin-top: 1px;
+      color: var(--accent);
+      font-family: Inter, sans-serif;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 27px;
+    }
+
+    .nav-links a {
+      color: var(--text-2);
+      font-size: 12px;
+      font-weight: 600;
+      transition: .2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 15px;
+      border: 1px solid rgba(168,255,53,.25);
+      border-radius: 10px;
+      color: var(--accent);
+      background: rgba(168,255,53,.06);
+      font-size: 12px;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent);
+      color: #050607;
+      transform: translateY(-1px);
+    }
+
+    .menu-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      background: var(--surface);
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+
+    .hero {
+      position: relative;
+      min-height: 650px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 80px 0 70px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 650px;
+      height: 650px;
+      top: -280px;
+      left: -180px;
+      border-radius: 50%;
+      background: rgba(168,255,53,.07);
+      filter: blur(100px);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      right: -200px;
+      bottom: -250px;
+      border-radius: 50%;
+      background: rgba(155,92,255,.08);
+      filter: blur(90px);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 70px;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+    }
+
+    .hero h1 {
+      margin: 22px 0 20px;
+      font-family: "Manrope", sans-serif;
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 800;
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    .hero-description {
+      max-width: 570px;
+      color: var(--text-2);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 800;
+      transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-primary {
+      color: #050607;
+      background: var(--accent);
+      box-shadow: 0 10px 30px rgba(168,255,53,.18);
+    }
+
+    .btn-primary:hover {
+      background: #b7ff55;
+      box-shadow: 0 15px 40px rgba(168,255,53,.25);
+    }
+
+    .btn-secondary {
+      border: 1px solid var(--border-light);
+      color: var(--text);
+      background: rgba(255,255,255,.025);
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(255,255,255,.2);
+      background: rgba(255,255,255,.05);
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 26px;
+      margin-top: 42px;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stat-icon {
+      width: 35px;
+      height: 35px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--accent);
+      background: var(--surface);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 2px;
+      color: var(--text-3);
+      font-size: 10px;
+    }
+
+    /* =========================================================
+       DECORATIVE WHEEL
+    ========================================================= */
+
+    .hero-visual {
+      position: relative;
+      min-height: 470px;
+      display: grid;
+      place-items: center;
+    }
+
+    .visual-orbit {
+      position: absolute;
+      width: 390px;
+      height: 390px;
+      border: 1px solid rgba(168,255,53,.12);
+      border-radius: 50%;
+      animation: orbit 22s linear infinite;
+    }
+
+    .visual-orbit::before,
+    .visual-orbit::after {
+      content: "";
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 18px var(--accent);
+    }
+
+    .visual-orbit::before {
+      top: 23px;
+      left: 50%;
+    }
+
+    .visual-orbit::after {
+      right: 18px;
+      bottom: 80px;
+      background: var(--purple);
+      box-shadow: 0 0 18px var(--purple);
+    }
+
+    @keyframes orbit {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .wheel-glow {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background:
+        conic-gradient(
+          var(--accent),
+          var(--purple),
+          var(--blue),
+          var(--accent)
+        );
+      filter: blur(55px);
+      opacity: .14;
+      animation: spin 12s linear infinite;
+    }
+
+    .wheel {
+      position: relative;
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      padding: 9px;
+      background:
+        conic-gradient(
+          from 10deg,
+          var(--accent),
+          #426d20,
+          var(--purple),
+          #452c72,
+          var(--blue),
+          #254a70,
+          var(--accent)
+        );
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.08),
+        0 30px 80px rgba(0,0,0,.65),
+        0 0 50px rgba(168,255,53,.1);
+      animation: spin 24s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .wheel-inner {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      border: 7px solid var(--bg);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, #171b1f 0%, #0b0d0f 70%);
+    }
+
+    .wheel-center {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      color: var(--accent);
+      background: #0a0c0d;
+      box-shadow:
+        0 0 30px rgba(168,255,53,.25),
+        inset 0 0 20px rgba(168,255,53,.08);
+    }
+
+    .wheel-center svg {
+      animation: counterSpin 24s linear infinite;
+    }
+
+    @keyframes counterSpin {
+      to {
+        transform: rotate(-360deg);
+      }
+    }
+
+    .floating-card {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 13px;
+      border: 1px solid var(--border-light);
+      border-radius: 13px;
+      background: rgba(13,15,17,.8);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+
+    .floating-card strong {
+      display: block;
+      color: var(--text);
+      font-size: 11px;
+    }
+
+    .floating-card span {
+      display: block;
+      margin-top: 2px;
+      color: var(--text-3);
+      font-size: 9px;
+    }
+
+    .floating-icon {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      color: var(--accent);
+      background: rgba(168,255,53,.1);
+    }
+
+    .float-one {
+      top: 50px;
+      right: 10px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .float-two {
+      bottom: 50px;
+      left: 0;
+      animation: float 4s ease-in-out 1s infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* =========================================================
+       QUIZ
+    ========================================================= */
+
+    .quiz-section {
+      padding: 80px 0 100px;
+    }
+
+    .quiz-shell {
+      position: relative;
+      overflow: hidden;
+      max-width: 850px;
+      margin: auto;
+      padding: 1px;
+      border-radius: 28px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(168,255,53,.25),
+          rgba(255,255,255,.05),
+          rgba(155,92,255,.2)
+        );
+    }
+
+    .quiz {
+      padding: 45px;
+      border-radius: 27px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(168,255,53,.07), transparent 35%),
+        var(--surface);
+    }
+
+    .quiz-header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .quiz-header h2 {
+      margin: 14px 0 8px;
+      font-family: Manrope, sans-serif;
+      font-size: 28px;
+      letter-spacing: -.04em;
+    }
+
+    .quiz-header p {
+      color: var(--text-2);
+      font-size: 13px;
+    }
+
+    .progress {
+      display: flex;
+      gap: 7px;
+      justify-content: center;
+      margin-top: 22px;
+    }
+
+    .progress span {
+      width: 38px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--surface-3);
+      transition: .35s ease;
+    }
+
+    .progress span.active,
+    .progress span.done {
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(168,255,53,.35);
+    }
+
+    .question {
+      display: none;
+    }
+
+    .question.active {
+      display: block;
+      animation: questionIn .4s ease;
+    }
+
+    @keyframes questionIn {
+      from {
+        opacity: 0;
+        transform: translateX(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .question-number {
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .question h3 {
+      max-width: 620px;
+      margin: 0 auto 24px;
+      font-family: Manrope, sans-serif;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .option {
+      position: relative;
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      background: var(--surface-2);
+      cursor: pointer;
+      text-align: left;
+      transition: .22s ease;
+    }
+
+    .option:hover {
+      border-color: rgba(168,255,53,.4);
+      background: rgba(168,255,53,.045);
+      transform: translateY(-2px);
+    }
+
+    .option.selected {
+      border-color: var(--accent);
+      background: rgba(168,255,53,.09);
+      box-shadow: 0 0 25px rgba(168,255,53,.08);
+    }
+
+    .option-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      color: var(--accent);
+      background: rgba(168,255,53,.09);
+    }
+
+    .option strong {
+      display: block;
+      font-size: 12.5px;
+    }
+
+    .option small {
+      display: block;
+      margin-top: 3px;
+      color: var(--text-3);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+    }
+
+    .quiz-count {
+      color: var(--text-3);
+      font-size: 11px;
+    }
+
+    .quiz-next {
+      min-width: 125px;
+    }
+
+    /* =========================================================
+       RESULT
+    ========================================================= */
+
+    .result {
+      display: none;
+      text-align: center;
+    }
+
+    .result.show {
+      display: block;
+      animation: resultIn .55s cubic-bezier(.2,.9,.25,1.2);
+    }
+
+    @keyframes resultIn {
+      from {
+        opacity: 0;
+        transform: scale(.94);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .result-icon {
+      width: 80px;
+      height: 80px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      border: 1px solid rgba(168,255,53,.3);
+      border-radius: 22px;
+      color: var(--accent);
+      background: rgba(168,255,53,.08);
+      box-shadow: 0 0 35px rgba(168,255,53,.13);
+    }
+
+    .result h3 {
+      margin-bottom: 8px;
+      font-family: Manrope, sans-serif;
+      font-size: 30px;
+    }
+
+    .result p {
+      max-width: 550px;
+      margin: 0 auto;
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    .result-tags {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 20px 0 27px;
+    }
+
+    .result-tag {
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-2);
+      background: var(--surface-2);
+      font-size: 10px;
+    }
+
+    /* =========================================================
+       COURSES
+    ========================================================= */
+
+    .courses-section {
+      padding: 50px 0 110px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 35px;
+    }
+
+    .section-header h2 {
+      max-width: 600px;
+      font-family: Manrope, sans-serif;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1;
+      letter-spacing: -.05em;
+    }
+
+    .section-header p {
+      max-width: 420px;
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* filters */
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 30px;
+      padding: 7px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .filter {
+      padding: 9px 13px;
+      border-radius: 9px;
+      color: var(--text-2);
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+
+    .filter:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .filter.active {
+      color: #050607;
+      background: var(--accent);
+    }
+
+    .search-box {
+      position: relative;
+      margin-left: auto;
+    }
+
+    .search-box svg {
+      position: absolute;
+      top: 50%;
+      left: 11px;
+      width: 15px;
+      transform: translateY(-50%);
+      color: var(--text-3);
+    }
+
+    .search-box input {
+      width: 190px;
+      height: 35px;
+      padding: 0 12px 0 34px;
+      outline: none;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: var(--text);
+      background: var(--surface-2);
+      font-size: 11px;
+    }
+
+    .search-box input:focus {
+      border-color: rgba(168,255,53,.35);
+    }
+
+    /* cards */
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .course-card {
+      --card-accent: var(--accent);
+
+      position: relative;
+      overflow: hidden;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      transition:
+        transform .3s cubic-bezier(.2,.8,.2,1),
+        border-color .3s ease,
+        box-shadow .3s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-7px);
+      border-color: color-mix(
+        in srgb,
+        var(--card-accent) 35%,
+        transparent
+      );
+      box-shadow:
+        0 25px 55px rgba(0,0,0,.42),
+        0 0 35px color-mix(
+          in srgb,
+          var(--card-accent) 8%,
+          transparent
+        );
+    }
+
+    .course-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          color-mix(
+            in srgb,
+            var(--card-accent) 12%,
+            transparent
+          ),
+          transparent 55%
+        );
+    }
+
+    .course-visual {
+      position: relative;
+      height: 135px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background:
+        radial-gradient(
+          circle,
+          color-mix(
+            in srgb,
+            var(--card-accent) 12%,
+            transparent
+          ),
+          transparent 68%
+        ),
+        var(--surface-2);
+    }
+
+    .course-visual::after {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 200px;
+      transform: rotate(35deg) translateX(-170px);
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.13),
+        transparent
+      );
+      transition: transform .6s ease;
+    }
+
+    .course-card:hover .course-visual::after {
+      transform: rotate(35deg) translateX(280px);
+    }
+
+    .course-visual-icon {
+      position: relative;
+      z-index: 2;
+      width: 65px;
+      height: 65px;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(
+        in srgb,
+        var(--card-accent) 30%,
+        transparent
+      );
+      border-radius: 19px;
+      color: var(--card-accent);
+      background: color-mix(
+        in srgb,
+        var(--card-accent) 9%,
+        transparent
+      );
+      box-shadow:
+        0 0 30px color-mix(
+          in srgb,
+          var(--card-accent) 12%,
+          transparent
+        );
+      transition: .35s cubic-bezier(.2,.9,.3,1.3);
+    }
+
+    .course-card:hover .course-visual-icon {
+      transform: scale(1.12) rotate(-5deg);
+    }
+
+    .course-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 19px;
+    }
+
+    .course-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .course-category {
+      color: var(--card-accent);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .course-mode {
+      padding: 4px 7px;
+      border-radius: 6px;
+      color: var(--text-3);
+      background: rgba(255,255,255,.04);
+      font-size: 8px;
+      font-weight: 700;
+    }
+
+    .course-card h3 {
+      margin: 10px 0 7px;
+      font-family: Manrope, sans-serif;
+      font-size: 16px;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+    }
+
+    .course-card p {
+      color: var(--text-2);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .course-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 13px;
+    }
+
+    .meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-3);
+      font-size: 9px;
+    }
+
+    .meta svg {
+      width: 12px;
+      color: var(--card-accent);
+    }
+
+    .course-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: auto;
+      padding-top: 17px;
+      color: var(--card-accent);
+      font-size: 10.5px;
+      font-weight: 800;
+    }
+
+    .course-link svg {
+      width: 13px;
+      transition: transform .2s ease;
+    }
+
+    .course-card:hover .course-link svg {
+      transform: translateX(4px);
+    }
+
+    .course-card.hidden {
+      display: none;
+    }
+
+    /* =========================================================
+       CTA
+    ========================================================= */
+
+    .cta {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 90px;
+      padding: 60px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background:
+        radial-gradient(
+          circle at 85% 50%,
+          rgba(168,255,53,.13),
+          transparent 35%
+        ),
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,.035),
+          rgba(255,255,255,.015)
+        );
+    }
+
+    .cta::before {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: 70px;
+      top: -130px;
+      border-radius: 50%;
+      border: 1px solid rgba(168,255,53,.15);
+      box-shadow:
+        0 0 0 30px rgba(168,255,53,.025),
+        0 0 0 60px rgba(168,255,53,.018);
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      max-width: 650px;
+    }
+
+    .cta h2 {
+      margin: 13px 0 12px;
+      font-family: Manrope, sans-serif;
+      font-size: clamp(27px, 4vw, 40px);
+      letter-spacing: -.045em;
+    }
+
+    .cta p {
+      max-width: 560px;
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .cta .btn {
+      margin-top: 24px;
+    }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    footer {
+      padding: 30px 0 45px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .footer-copy {
+      color: var(--text-3);
+      font-size: 10px;
+    }
+
+    .footer-brand {
+      color: var(--text-2);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .footer-brand span {
+      color: var(--accent);
+    }
+
+    /* =========================================================
+       REVEAL
+    ========================================================= */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition:
+        opacity .7s ease,
+        transform .7s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 1000px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-copy {
+        max-width: 750px;
+        margin: auto;
+      }
+
+      .hero-description {
+        margin-inline: auto;
+      }
+
+      .hero-actions,
+      .hero-stats {
+        justify-content: center;
+      }
+
+      .hero-visual {
+        min-height: 400px;
+      }
+
+      .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .section-header {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        width: min(var(--container), calc(100% - 28px));
+      }
+
+      .nav-links,
+      .nav-cta {
+        display: none;
+      }
+
+      .menu-btn {
+        display: grid;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 65px 0 45px;
+      }
+
+      .hero h1 {
+        font-size: clamp(39px, 12vw, 58px);
+      }
+
+      .hero-visual {
+        min-height: 350px;
+        transform: scale(.85);
+      }
+
+      .quiz {
+        padding: 30px 20px;
+      }
+
+      .options {
+        grid-template-columns: 1fr;
+      }
+
+      .quiz-footer {
+        gap: 15px;
+      }
+
+      .filters {
+        align-items: stretch;
+      }
+
+      .search-box {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .search-box input {
+        width: 100%;
+      }
+
+      .course-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta {
+        padding: 38px 25px;
+      }
+
+      .footer-inner {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        text-align: left;
+      }
+
+      .floating-card {
+        display: none;
+      }
+
+      .wheel {
+        width: 225px;
+        height: 225px;
+      }
+
+      .visual-orbit {
+        width: 310px;
+        height: 310px;
+      }
+
+      .wheel-center {
+        width: 65px;
+        height: 65px;
+      }
+
+      .quiz-header h2 {
+        font-size: 23px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =======================================================
+       HEADER
+  ======================================================== -->
+
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav">
+
+        <a href="#" class="brand" aria-label="Atlas CEEP">
+          <div class="brand-mark">A</div>
+
+          <div class="brand-text">
+            ATLAS
+            <span>CEEP • CURSOS TÉCNICOS</span>
+          </div>
+        </a>
+
+        <div class="nav-links">
+          <a href="#quiz">Descobrir curso</a>
+          <a href="#cursos">Cursos</a>
+          <a href="#sobre">Sobre</a>
+        </div>
+
+        <a href="#quiz" class="nav-cta">
+          Encontrar meu curso
+          <i data-lucide="arrow-up-right"></i>
+        </a>
+
+        <button class="menu-btn" aria-label="Abrir menu">
+          <i data-lucide="menu"></i>
+        </button>
+
+      </nav>
+    </div>
+  </header>
+
+
+  <main>
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero">
+
+      <div class="container hero-grid">
+
+        <div class="hero-copy reveal">
+
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Formação que abre caminhos
+          </div>
+
+          <h1>
+            Seu próximo passo
+            <span class="gradient-text">começa aqui.</span>
+          </h1>
+
+          <p class="hero-description">
+            Conheça os cursos técnicos do Atlas CEEP e descubra
+            uma formação que combina com seus interesses, seu jeito
+            de pensar e o futuro que você quer construir.
+          </p>
+
+          <div class="hero-actions">
+
+            <a href="#quiz" class="btn btn-primary">
+              <i data-lucide="sparkles"></i>
+              Descobrir meu curso
+            </a>
+
+            <a href="#cursos" class="btn btn-secondary">
+              Explorar cursos
+              <i data-lucide="arrow-down"></i>
+            </a>
+
+          </div>
+
+          <div class="hero-stats">
+
+            <div class="stat">
+              <div class="stat-icon">
+                <i data-lucide="layers"></i>
+              </div>
+              <div>
+                <strong>8+ áreas</strong>
+                <span>de formação</span>
+              </div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-icon">
+                <i data-lucide="target"></i>
+              </div>
+              <div>
+                <strong>Perfil ideal</strong>
+                <span>para cada curso</span>
+              </div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-icon">
+                <i data-lucide="rocket"></i>
+              </div>
+              <div>
+                <strong>Foco no futuro</strong>
+                <span>e no mercado</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="hero-visual reveal">
+
+          <div class="visual-orbit"></div>
+          <div class="wheel-glow"></div>
+
+          <div class="wheel">
+
+            <div class="wheel-inner">
+
+              <div class="wheel-center">
+                <i data-lucide="compass" size="30"></i>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="floating-card float-one">
+
+            <div class="floating-icon">
+              <i data-lucide="brain"></i>
+            </div>
+
+            <div>
+              <strong>Seu perfil</strong>
+              <span>pode revelar novos caminhos</span>
+            </div>
+
+          </div>
+
+          <div class="floating-card float-two">
+
+            <div class="floating-icon">
+              <i data-lucide="zap"></i>
+            </div>
+
+            <div>
+              <strong>Quiz rápido</strong>
+              <span>descubra sua área ideal</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+    <section class="quiz-section" id="quiz">
+
+      <div class="container">
+
+        <div class="quiz-shell reveal">
+
+          <div class="quiz">
+
+            <div class="quiz-header">
+
+              <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                Teste de perfil
+              </div>
+
+              <h2>
+                Qual curso combina com você?
+              </h2>
+
+              <p>
+                Responda algumas perguntas. Não existe resposta certa.
+              </p>
+
+              <div class="progress">
+                <span class="active"></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+
+            </div>
+
+
+            <div id="questions">
+
+              <!-- PERGUNTA 1 -->
+
+              <div class="question active" data-question="0">
+
+                <div class="question-number">
+                  Pergunta 01
+                </div>
+
+                <h3>
+                  O que mais desperta sua curiosidade?
+                </h3>
+
+                <div class="options">
+
+                  <button class="option" data-value="tech">
+                    <div class="option-icon">
+                      <i data-lucide="code-2"></i>
+                    </div>
+                    <div>
+                      <strong>Tecnologia e inovação</strong>
+                      <small>Computadores, sistemas, dados e soluções.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="health">
+                    <div class="option-icon">
+                      <i data-lucide="heart-pulse"></i>
+                    </div>
+                    <div>
+                      <strong>Saúde e pessoas</strong>
+                      <small>Cuidar, ajudar e entender o ser humano.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="business">
+                    <div class="option-icon">
+                      <i data-lucide="chart-no-axes-combined"></i>
+                    </div>
+                    <div>
+                      <strong>Negócios e gestão</strong>
+                      <small>Organização, liderança e resultados.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="creative">
+                    <div class="option-icon">
+                      <i data-lucide="palette"></i>
+                    </div>
+                    <div>
+                      <strong>Criatividade</strong>
+                      <small>Design, comunicação e criação.</small>
+                    </div>
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              <!-- PERGUNTA 2 -->
+
+              <div class="question" data-question="1">
+
+                <div class="question-number">
+                  Pergunta 02
+                </div>
+
+                <h3>
+                  Como você prefere resolver problemas?
+                </h3>
+
+                <div class="options">
+
+                  <button class="option" data-value="tech">
+                    <div class="option-icon">
+                      <i data-lucide="puzzle"></i>
+                    </div>
+                    <div>
+                      <strong>Com lógica</strong>
+                      <small>Entendo o problema e monto uma solução.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="health">
+                    <div class="option-icon">
+                      <i data-lucide="users"></i>
+                    </div>
+                    <div>
+                      <strong>Conversando</strong>
+                      <small>Escuto as pessoas e procuro ajudar.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="business">
+                    <div class="option-icon">
+                      <i data-lucide="list-checks"></i>
+                    </div>
+                    <div>
+                      <strong>Organizando</strong>
+                      <small>Crio um plano e acompanho cada etapa.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="creative">
+                    <div class="option-icon">
+                      <i data-lucide="lightbulb"></i>
+                    </div>
+                    <div>
+                      <strong>Pensando diferente</strong>
+                      <small>Busco uma ideia nova para sair do padrão.</small>
+                    </div>
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              <!-- PERGUNTA 3 -->
+
+              <div class="question" data-question="2">
+
+                <div class="question-number">
+                  Pergunta 03
+                </div>
+
+                <h3>
+                  Qual ambiente parece mais interessante?
+                </h3>
+
+                <div class="options">
+
+                  <button class="option" data-value="tech">
+                    <div class="option-icon">
+                      <i data-lucide="monitor"></i>
+                    </div>
+                    <div>
+                      <strong>Laboratório ou computador</strong>
+                      <small>Um ambiente tecnológico e experimental.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="health">
+                    <div class="option-icon">
+                      <i data-lucide="hospital"></i>
+                    </div>
+                    <div>
+                      <strong>Clínica ou hospital</strong>
+                      <small>Um ambiente focado em cuidado.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="business">
+                    <div class="option-icon">
+                      <i data-lucide="briefcase-business"></i>
+                    </div>
+                    <div>
+                      <strong>Empresa</strong>
+                      <small>Projetos, equipes e decisões.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="creative">
+                    <div class="option-icon">
+                      <i data-lucide="pen-tool"></i>
+                    </div>
+                    <div>
+                      <strong>Estúdio</strong>
+                      <small>Um espaço para criar e experimentar.</small>
+                    </div>
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              <!-- PERGUNTA 4 -->
+
+              <div class="question" data-question="3">
+
+                <div class="question-number">
+                  Pergunta 04
+                </div>
+
+                <h3>
+                  O que você gostaria de construir?
+                </h3>
+
+                <div class="options">
+
+                  <button class="option" data-value="tech">
+                    <div class="option-icon">
+                      <i data-lucide="cpu"></i>
+                    </div>
+                    <div>
+                      <strong>Soluções digitais</strong>
+                      <small>Sistemas, automações e tecnologia.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="health">
+                    <div class="option-icon">
+                      <i data-lucide="hand-heart"></i>
+                    </div>
+                    <div>
+                      <strong>Bem-estar</strong>
+                      <small>Impacto positivo na vida das pessoas.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="business">
+                    <div class="option-icon">
+                      <i data-lucide="trending-up"></i>
+                    </div>
+                    <div>
+                      <strong>Projetos e negócios</strong>
+                      <small>Ideias que podem virar resultados.</small>
+                    </div>
+                  </button>
+
+                  <button class="option" data-value="creative">
+                    <div class="option-icon">
+                      <i data-lucide="brush"></i>
+                    </div>
+                    <div>
+                      <strong>Experiências visuais</strong>
+                      <small>Marcas, imagens e comunicação.</small>
+                    </div>
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- QUIZ FOOTER -->
+
+            <div class="quiz-footer" id="quizFooter">
+
+              <span class="quiz-count">
+                1 de 4
+              </span>
+
+              <button
+                class="btn btn-primary quiz-next"
+                id="nextQuestion"
+                disabled
+              >
+                Continuar
+                <i data-lucide="arrow-right"></i>
+              </button>
+
+            </div>
+
+
+            <!-- RESULTADO -->
+
+            <div class="result" id="result">
+
+              <div class="result-icon">
+                <i data-lucide="sparkles" size="34"></i>
+              </div>
+
+              <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                Seu resultado
+              </div>
+
+              <h3 id="resultTitle">
+                Tecnologia
+              </h3>
+
+              <p id="resultDescription">
+                Seu perfil demonstra afinidade com tecnologia,
+                lógica e resolução de problemas.
+              </p>
+
+              <div class="result-tags" id="resultTags"></div>
+
+              <div class="hero-actions" style="justify-content:center">
+
+                <a
+                  href="#cursos"
+                  class="btn btn-primary"
+                  id="resultCourseLink"
+                >
+                  Ver cursos relacionados
+                  <i data-lucide="arrow-right"></i>
+                </a>
+
+                <button
+                  class="btn btn-secondary"
+                  id="restartQuiz"
+                >
+                  Refazer teste
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CURSOS
+    ====================================================== -->
+
+    <section class="courses-section" id="cursos">
+
+      <div class="container">
+
+        <div class="section-header reveal">
+
+          <div>
+            <div class="section-label">
+              Formação
+            </div>
+
+            <h2>
+              Encontre uma área
+              <span class="gradient-text">para chamar de sua.</span>
+            </h2>
+          </div>
+
+          <p>
+            Explore as opções de formação e encontre um curso
+            alinhado aos seus interesses e objetivos profissionais.
+          </p>
+
+        </div>
+
+
+        <!-- FILTROS -->
+
+        <div class="filters reveal">
+
+          <button class="filter active" data-filter="all">
+            Todos
+          </button>
+
+          <button class="filter" data-filter="tech">
+            Tecnologia
+          </button>
+
+          <button class="filter" data-filter="health">
+            Saúde
+          </button>
+
+          <button class="filter" data-filter="business">
+            Gestão
+          </button>
+
+          <button class="filter" data-filter="creative">
+            Criatividade
+          </button>
+
+          <div class="search-box">
+
+            <i data-lucide="search"></i>
+
+            <input
+              type="search"
+              id="courseSearch"
+              placeholder="Buscar curso..."
+              aria-label="Buscar curso"
+            >
+
+          </div>
+
+        </div>
+
+
+        <!-- GRID -->
+
+        <div class="course-grid" id="courseGrid">
+
+
+          <!-- DESENVOLVIMENTO DE SISTEMAS -->
+
+          <article
+            class="course-card reveal"
+            data-category="tech"
+            data-name="Desenvolvimento de Sistemas"
+            style="--card-accent:#a8ff35"
+          >
+
+            <div class="course-visual">
+              <div class="course-visual-icon">
+                <i data-lucide="code-2" size="30"></i>
+              </div>
+            </div>
+
+            <div class="course-content">
+
+              <div class="course-top">
+                <span class="course-category">Tecnologia</span>
+                <span class="course-mode">TÉCNICO</span>
+              </div>
+
+              <h3>Desenvolvimento de Sistemas</h3>
+
+              <p>
+                Crie aplicações, sistemas e soluções digitais
+                para problemas reais.
+              </p>
+
+              <div class="course-meta">
+                <span class="meta">
+                  <i data-lucide="monitor"></i>
+                  Tecnologia
+                </span>
+
+                <span class="meta">
+                  <i data-lucide="braces"></i>
+                  Programação
+                </span>
+              </div>
+
+              <a href="#" class="course-link">
+                Conhecer curso
+                <i data-lucide="arrow-right"></i>
+              </a>
+
+            </div>
+
+          </article>
+
+
+          <!-- INFORMÁTICA -->
+
+          <article
+            class="course-card reveal"
+            data-category="tech"
+            data-name="Informática"
+            style="--card-accent:#58a6ff"
+          >
+
+            <div class="course-visual">
+              <div class="course-visual-icon">
+                <i data-lucide="laptop" size="30"></i>
+              </div>
+            </div>
+
+            <div class="course-content">
+
+              <div class="course-top">
+                <span class="course-category">Tecnologia</span>
+                <span class="course-mode">TÉCNICO</span>
+              </div>
+
+              <h3>Informática</h3>
+
+              <p>
+                Desenvolva conhecimentos em computadores,
+                redes, sistemas e ferramentas digitais.
+              </p>
+
+              <div class="course-meta">
+                <span class="meta">
+                  <i data-lucide="wifi"></i>
+                  Redes
+                </span>
+
+                <span class="meta">
+                  <i data-lucide="settings"></i>
+                  Sistemas
+                </span>
+              </div>
+
+              <a href="#" class="course-link">
+                Conhecer curso
+                <i data-lucide="arrow-right"></i>
+              </a>
+
+            </div>
+
+          </article>
+
+
+          <!-- ADMINISTRAÇÃO -->
+
+          <article
+            class="course-card reveal"
+            data-category="business"
+            data-name="Administração"
+            style="--card-accent:#ff9d42"
+          >
+
+            <div class="course-visual">
+              <div class="course-visual-icon">
+                <i data-lucide="briefcase-business" size="30"></i>
+              </div>
+            </div>
+
+            <div class="course-content">
+
+              <div class="course-top">
+                <span class="course-category">Gestão</span>
+                <span class="course-mode">TÉCNICO</span>
+              </div>
+
+              <h3>Administração</h3>
+
+              <p>
+                Aprenda a organizar processos, pessoas,
+                projetos e estratégias empresariais.
+              </p>
+
+              <div class="course-meta">
+                <span class="meta">
+                  <i data-lucide="users"></i>
+                  Gestão
+                </span>
+
+                <span class="meta">
+                  <i data-lucide="chart-no-axes-combined"></i>
+                  Negócios
+                </span>
+              </div>
+
+              <a href="#" class="course-link">
+                Conhecer curso
+                <i data-lucide="arrow-right"></i>
+              </a>
+
+            </div>
+
+          </article>
+
+
+          <!-- ENFERMAGEM -->
+
+          <article
+            class="course-card reveal"
+            data-category="health"
+            data-name="Enfermagem"
+            style="--card-accent:#ff5ca8"
+          >
+
+            <div class="course-visual">
+              <div class="course-visual-icon">
+                <i data-lucide="heart-pulse" size="30"></i>
+              </div>
+            </div>
+
+            <div class="course-content">
+
+              <div class="course-top">
+                <span class="course-category">Saúde</span>
+                <span class="course-mode">TÉCNICO</span>
+              </div>
+
+              <h3>Enfermagem</h3>
+
+              <p>
+                Formação voltada ao cuidado, assistência
+                e promoção da saúde.
+              </p>
+
+              <div class="course-meta">
+                <span class="meta">
+                  <i data-lucide="heart"></i>
+                  Saúde
+                </span>
+
+                <span class="meta">
+                  <i data-lucide="hand-heart"></i>
+                  Cuidado
+                </span>
+              </div>
+
+              <a href="#" class="course-link">
+                Conhecer curso
+                <i data-lucide="arrow-right"></i>
+              </a>
+
+            </div>
+
+          </article>
+
+
+          <!-- DESIGN -->
+
+          <article
+            class="course-card reveal"
+            data-category="creative"
+            data-name="Design Gráfico"
+            style="--card-accent:#9b5cff"
+          >
+
+            <div class="course-visual">
+              <div class="course-visual-icon">
+                <i data-lucide="palette" size="30"></i>
+              </div>
+            </div>
+
+            <div class="course-content">
+
+              <div class="course-top">
+                <span class="course-category">Criatividade</span>
+                <span class="course-mode">TÉCNICO</span>
+              </div>
+
+              <h3>Design Gráfico</h3>
+
+              <p>
+                Transforme ideias em identidades visuais,
+                peças digitais e experiências criativas.
+              </p>
+
+              <div class="course-meta">
+                <span class="meta">
+                  <i data-lucide="pen-tool"></i>
+                  Design
+                </span>
+
+                <span class="meta">
+                  <i data-lucide="image"></i>
+                  Visual
+                </span>
+              </div>
+
+              <a href="#" class="course-link">
+                Conhecer curso
+                <i data-lucide="arrow-right"></i>
+              </a>
+
+            </div>
+
+          </article>
+
+
+          <!-- MARKETING -->
+
+          <article
+            class="course-card reveal"
+            data-category="business"
+            data-name="Marketing"
+            style="--card-accent:#ffd45c"
+          >
+
+            <div class="course-visual">
+              <div class="course-visual-icon">
+                <i data-lucide="megaphone" size="30"></i>
+              </div>
+            </div>
+
+            <div class="course-content">
+
+              <div class="course-top">
+                <span class="course-category">Gestão</span>
+                <span class="course-mode">TÉCNICO</span>
+              </div>
+
+              <h3>Marketing</h3>
+
+              <p>
+                Entenda marcas, comportamento, comunicação
+                e estratégias para conectar pessoas e negócios.
+              </p>
+
+              <div class="course-meta">
+                <span class="meta">
+                  <i data-lucide="radio"></i>
+                  Comunicação
+                </span>
+
+                <span class="meta">
+                  <i data-lucide="trending-up"></i>
+                  Estratégia
+                </span>
+              </div>
+
+              <a href="#" class="course-link">
+                Conhecer curso
+                <i data-lucide="arrow-right"></i>
+              </a>
+
+            </div>
+
+          </article>
+
+
+          <!-- SEGURANÇA DO TRABALHO -->
+
+          <article
+            class="course-card reveal"
+            data-category="health"
+            data-name="Segurança do Trabalho"
+            style="--card-accent:#42e8e0"
+          >
+
+            <div class="course-visual">
+              <div class="course-visual-icon">
+                <i data-lucide="shield-check" size="30"></i>
+              </div>
+            </div>
+
+            <div class="course-content">
+
+              <div class="course-top">
+                <span class="course-category">Segurança</span>
+                <span class="course-mode">TÉCNICO</span>
+              </div>
+
+              <h3>Segurança do Trabalho</h3>
+
+              <p>
+                Atue na prevenção de riscos e na criação
+                de ambientes profissionais mais seguros.
+              </p>
+
+              <div class="course-meta">
+                <span class="meta">
+                  <i data-lucide="shield"></i>
+                  Prevenção
+                </span>
+
+                <span class="meta">
+                  <i data-lucide="hard-hat"></i>
+                  Trabalho
+                </span>
+              </div>
+
+              <a href="#" class="course-link">
+                Conhecer curso
+                <i data-lucide="arrow-right"></i>
+              </a>
+
+            </div>
+
+          </article>
+
+
+          <!-- LOGÍSTICA -->
+
+          <article
+            class="course-card reveal"
+            data-category="business"
+            data-name="Logística"
+            style="--card-accent:#79d61d"
+          >
+
+            <div class="course-visual">
+              <div class="course-visual-icon">
+                <i data-lucide="truck" size="30"></i>
+              </div>
+            </div>
+
+            <div class="course-content">
+
+              <div class="course-top">
+                <span class="course-category">Gestão</span>
+                <span class="course-mode">TÉCNICO</span>
+              </div>
+
+              <h3>Logística</h3>
+
+              <p>
+                Planeje operações, estoques, transportes
+                e processos de distribuição.
+              </p>
+
+              <div class="course-meta">
+                <span class="meta">
+                  <i data-lucide="package"></i>
+                  Operações
+                </span>
+
+                <span class="meta">
+                  <i data-lucide="route"></i>
+                  Distribuição
+                </span>
+              </div>
+
+              <a href="#" class="course-link">
+                Conhecer curso
+                <i data-lucide="arrow-right"></i>
+              </a>
+
+            </div>
+
+          </article>
+
+        </div>
+
+        <div
+          id="noResults"
+          style="
+            display:none;
+            text-align:center;
+            padding:70px 20px;
+            color:var(--text-3);
+          "
+        >
+          <i data-lucide="search-x" size="35"></i>
+
+          <p style="margin-top:12px;font-size:13px;">
+            Nenhum curso encontrado.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+    <section class="container" id="sobre">
+
+      <div class="cta reveal">
+
+        <div class="cta-content">
+
+          <div class="section-label">
+            Seu futuro começa agora
+          </div>
+
+          <h2>
+            Não escolha apenas um curso.
+            <span class="gradient-text">
+              Escolha uma direção.
+            </span>
+          </h2>
+
+          <p>
+            Explore as formações disponíveis, descubra seus interesses
+            e dê o primeiro passo para transformar curiosidade
+            em conhecimento e conhecimento em oportunidade.
+          </p>
+
+          <a href="#quiz" class="btn btn-primary">
+            Fazer o teste de perfil
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =======================================================
+       FOOTER
+  ======================================================== -->
+
+  <footer>
+
+    <div class="container">
+
+      <div class="footer-inner">
+
+        <div class="footer-brand">
+          ATLAS <span>CEEP</span>
+        </div>
+
+        <div class="footer-copy">
+          © 2026 Atlas CEEP — Cursos Técnicos.
+        </div>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <script>
+    /* =========================================================
+       LUCIDE
+    ========================================================= */
+
+    lucide.createIcons();
+
+
+    /* =========================================================
+       HEADER SCROLL
+    ========================================================= */
+
+    const header = document.getElementById("header");
+
+    window.addEventListener("scroll", () => {
+      header.classList.toggle("scrolled", window.scrollY > 20);
+    }, { passive: true });
+
+
+    /* =========================================================
+       REVEAL ON SCROLL
+    ========================================================= */
+
+    const revealObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: .12
+      }
+    );
+
+    document.querySelectorAll(".reveal").forEach(el => {
+      revealObserver.observe(el);
+    });
+
+
+    /* =========================================================
+       QUIZ
+    ========================================================= */
+
+    const questions = [...document.querySelectorAll(".question")];
+    const progress = [...document.querySelectorAll(".progress span")];
+
+    const nextButton = document.getElementById("nextQuestion");
+    const quizFooter = document.getElementById("quizFooter");
+    const result = document.getElementById("result");
+
+    const quizCount = document.querySelector(".quiz-count");
+
+    const resultTitle = document.getElementById("resultTitle");
+    const resultDescription = document.getElementById("resultDescription");
+    const resultTags = document.getElementById("resultTags");
+
+    const answers = [];
+    let currentQuestion = 0;
+
+
+    const profiles = {
+
+      tech: {
+        title: "Tecnologia",
+        description:
+          "Seu perfil demonstra afinidade com lógica, tecnologia e resolução de problemas. Você pode se destacar criando soluções digitais e explorando novas ferramentas.",
+        tags: [
+          "Programação",
+          "Tecnologia",
+          "Lógica",
+          "Inovação"
+        ]
+      },
+
+      health: {
+        title: "Saúde e cuidado",
+        description:
+          "Você parece valorizar pessoas, cuidado e impacto humano. Áreas relacionadas à saúde podem transformar sua vontade de ajudar em uma carreira.",
+        tags: [
+          "Cuidado",
+          "Saúde",
+          "Pessoas",
+          "Responsabilidade"
+        ]
+      },
+
+      business: {
+        title: "Gestão e negócios",
+        description:
+          "Seu perfil combina organização, estratégia e visão de resultados. Você pode gostar de transformar ideias em projetos e oportunidades.",
+        tags: [
+          "Gestão",
+          "Estratégia",
+          "Liderança",
+          "Negócios"
+        ]
+      },
+
+      creative: {
+        title: "Criatividade e comunicação",
+        description:
+          "Você demonstra um perfil criativo e aberto a novas ideias. Áreas de design, comunicação e criação podem ser um ótimo caminho.",
+        tags: [
+          "Criatividade",
+          "Design",
+          "Comunicação",
+          "Expressão"
+        ]
+      }
+
+    };
+
+
+    function updateQuizUI() {
+
+      quizCount.textContent =
+        `${currentQuestion + 1} de ${questions.length}`;
+
+      progress.forEach((bar, index) => {
+        bar.classList.toggle(
+          "active",
+          index === currentQuestion
+        );
+
+        bar.classList.toggle(
+          "done",
+          index < currentQuestion
+        );
+      });
+
+      const selected =
+        questions[currentQuestion].querySelector(".option.selected");
+
+      nextButton.disabled = !selected;
+
+      nextButton.innerHTML =
+        currentQuestion === questions.length - 1
+          ? `Ver meu resultado <i data-lucide="sparkles"></i>`
+          : `Continuar <i data-lucide="arrow-right"></i>`;
+
+      lucide.createIcons();
+    }
+
+
+    document.querySelectorAll(".question .option").forEach(option => {
+
+      option.addEventListener("click", () => {
+
+        const question =
+          option.closest(".question");
+
+        question
+          .querySelectorAll(".option")
+          .forEach(item => {
+            item.classList.remove("selected");
+          });
+
+        option.classList.add("selected");
+
+        answers[currentQuestion] =
+          option.dataset.value;
+
+        updateQuizUI();
+
+      });
+
+    });
+
+
+    nextButton.addEventListener("click", () => {
+
+      if (!answers[currentQuestion]) return;
+
+      if (currentQuestion < questions.length - 1) {
+
+        questions[currentQuestion]
+          .classList.remove("active");
+
+        currentQuestion++;
+
+        questions[currentQuestion]
+          .classList.add("active");
+
+        updateQuizUI();
+
+        return;
+      }
+
+      showResult();
+
+    });
+
+
+    function showResult() {
+
+      const scores = {
+        tech: 0,
+        health: 0,
+        business: 0,
+        creative: 0
+      };
+
+      answers.forEach(answer => {
+        if (scores[answer] !== undefined) {
+          scores[answer]++;
+        }
+      });
+
+      const winner =
+        Object.keys(scores)
+          .sort((a, b) => scores[b] - scores[a])[0];
+
+      const profile = profiles[winner];
+
+      document.getElementById("questions").style.display = "none";
+      quizFooter.style.display = "none";
+
+      result.classList.add("show");
+
+      resultTitle.textContent = profile.title;
+      resultDescription.textContent = profile.description;
+
+      resultTags.innerHTML =
+        profile.tags
+          .map(tag => `<span class="result-tag">${tag}</span>`)
+          .join("");
+
+      lucide.createIcons();
+
+      document
+        .querySelectorAll(".course-card")
+        .forEach(card => card.classList.remove("highlighted"));
+
+    }
+
+
+    document.getElementById("restartQuiz")
+      .addEventListener("click", () => {
+
+        answers.length = 0;
+        currentQuestion = 0;
+
+        questions.forEach(question => {
+          question.classList.remove("active");
+
+          question
+            .querySelectorAll(".option")
+            .forEach(option => {
+              option.classList.remove("selected");
+            });
+        });
+
+        questions[0].classList.add("active");
+
+        result.classList.remove("show");
+
+        document.getElementById("questions").style.display = "block";
+        quizFooter.style.display = "flex";
+
+        updateQuizUI();
+
+        document
+          .getElementById("quiz")
+          .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+
+      });
+
+
+    updateQuizUI();
+
+
+    /* =========================================================
+       COURSE FILTER
+    ========================================================= */
+
+    const filterButtons =
+      [...document.querySelectorAll(".filter")];
+
+    const courseCards =
+      [...document.querySelectorAll(".course-card")];
+
+    const searchInput =
+      document.getElementById("courseSearch");
+
+    const noResults =
+      document.getElementById("noResults");
+
+    let activeFilter = "all";
+
+
+    function filterCourses() {
+
+      const search =
+        searchInput.value
+          .trim()
+          .toLowerCase();
+
+      let visible = 0;
+
+      courseCards.forEach(card => {
+
+        const category =
+          card.dataset.category;
+
+        const name =
+          card.dataset.name.toLowerCase();
+
+        const matchesFilter =
+          activeFilter === "all" ||
+          category === activeFilter;
+
+        const matchesSearch =
+          !search ||
+          name.includes(search);
+
+        const show =
+          matchesFilter &&
+          matchesSearch;
+
+        card.classList.toggle(
+          "hidden",
+          !show
+        );
+
+        if (show) visible++;
+
+      });
+
+      noResults.style.display =
+        visible === 0 ? "block" : "none";
+
+    }
+
+
+    filterButtons.forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        filterButtons.forEach(btn =>
+          btn.classList.remove("active")
+        );
+
+        button.classList.add("active");
+
+        activeFilter =
+          button.dataset.filter;
+
+        filterCourses();
+
+      });
+
+    });
+
+
+    searchInput.addEventListener(
+      "input",
+      filterCourses
+    );
+
+
+    /* =========================================================
+       CURSOR LIGHT EFFECT ON CARDS
+    ========================================================= */
+
+    courseCards.forEach(card => {
+
+      card.addEventListener("mousemove", event => {
+
+        const rect =
+          card.getBoundingClientRect();
+
+        const x =
+          event.clientX - rect.left;
+
+        const y =
+          event.clientY - rect.top;
+
+        card.style.background =
+          `radial-gradient(
+            220px circle at ${x}px ${y}px,
+            rgba(255,255,255,.045),
+            var(--surface) 65%
+          )`;
+
+      });
+
+      card.addEventListener("mouseleave", () => {
+
+        card.style.background =
+          "var(--surface)";
+
+      });
+
+    });
+
+
+    /* =========================================================
+       SMOOTH ANCHOR LINKS
+    ========================================================= */
+
+    document
+      .querySelectorAll('a[href^="#"]')
+      .forEach(link => {
+
+        link.addEventListener("click", event => {
+
+          const id =
+            link.getAttribute("href");
+
+          if (!id || id === "#") return;
+
+          const target =
+            document.querySelector(id);
+
+          if (!target) return;
+
+          event.preventDefault();
+
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+
+        });
+
+      });
+
+
+    /* =========================================================
+       MOBILE MENU
+    ========================================================= */
+
+    const menuButton =
+      document.querySelector(".menu-btn");
+
+    const navLinks =
+      document.querySelector(".nav-links");
+
+    menuButton.addEventListener("click", () => {
+
+      const open =
+        navLinks.dataset.open === "true";
+
+      navLinks.dataset.open =
+        String(!open);
+
+      navLinks.style.display =
+        open ? "" : "flex";
+
+      if (!open) {
+
+        navLinks.style.position = "absolute";
+        navLinks.style.top = "74px";
+        navLinks.style.left = "14px";
+        navLinks.style.right = "14px";
+        navLinks.style.padding = "15px";
+        navLinks.style.flexDirection = "column";
+        navLinks.style.alignItems = "stretch";
+        navLinks.style.gap = "4px";
+        navLinks.style.border = "1px solid var(--border)";
+        navLinks.style.borderRadius = "14px";
+        navLinks.style.background = "rgba(13,15,17,.96)";
+        navLinks.style.backdropFilter = "blur(20px)";
+
+      }
+
+    });
+
+
+    /* =========================================================
+       RE-INIT ICONS
+    ========================================================= */
+
+    lucide.createIcons();
+
+  </script>
+
+</body>
+</html>
