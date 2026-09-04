@@ -3,169 +3,745 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+
 <title>Atlas CEEP — Organize sua vida escolar</title>
+
 <meta name="description" content="Tarefas, calendário de provas, materiais dos professores e aulas extras para ENEM e vestibulares — tudo em um só lugar para os alunos do CEEP Pedro Boaretto Neto." />
+
 <meta property="og:title" content="Atlas CEEP — Organize sua vida escolar" />
 <meta property="og:description" content="A plataforma acadêmica dos estudantes do CEEP Pedro Boaretto Neto, em Cascavel (PR)." />
 <meta property="og:type" content="website" />
+
 <meta name="twitter:card" content="summary_large_image" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Unbounded:wght@600;700;800&display=swap" />
+
 <link rel="stylesheet" href="style.css" />
+
+<style>
+
+/* =========================================
+   LOGO DO HEADER
+========================================= */
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    height: 55px;
+}
+
+.logo-img {
+    width: 150px;
+    height: 55px;
+    object-fit: contain;
+    display: block;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover .logo-img {
+    transform: scale(1.05);
+}
+
+
+/* =========================================
+   LOGO DENTRO DO NOTEBOOK
+========================================= */
+
+.screen-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 7px;
+    display: block;
+}
+
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 768px) {
+
+    .logo-img {
+        width: 125px;
+        height: 45px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .logo-img {
+        width: 110px;
+        height: 40px;
+    }
+
+}
+
+</style>
+
 </head>
+
 <body>
+
 <div class="ceep">
 
+  <!-- =====================================
+       HEADER
+  ====================================== -->
+
   <header id="site-header">
+
     <div class="container">
+
+      <!-- LOGO -->
       <a href="#hero" class="logo">
-        <span class="logo-mark">A</span>
-        <span class="wordmark-atlas">Atlas</span>
-        <span class="wordmark-ceep">CEEP</span>
+        <img 
+          src="page/Logo.jpg" 
+          alt="Atlas CEEP"
+          class="logo-img"
+        >
       </a>
+
+      <!-- MENU -->
       <nav class="menu">
-            <a href="#hero">Início</a>
-            <a href="#recursos">Recursos</a>
-            <a href="Cursos.html">Cursos Técnicos</a>
-            <a href="#futuro">Aulas Extras</a>
-            <a href="#contato">Contato</a>
+
+        <a href="#hero">Início</a>
+
+        <a href="#recursos">Recursos</a>
+
+        <a href="Cursos.html">Cursos Técnicos</a>
+
+        <a href="#futuro">Aulas Extras</a>
+
+        <a href="#contato">Contato</a>
+
       </nav>
+
+      <!-- AÇÕES -->
       <div class="nav-actions">
-        <div class="theme-toggle" title="Alternar tema" role="button" tabindex="0" data-theme-toggle>
-          <div class="knob"><i data-lucide="moon" width="13" height="13"></i></div>
+
+        <div 
+          class="theme-toggle" 
+          title="Alternar tema" 
+          role="button" 
+          tabindex="0" 
+          data-theme-toggle
+        >
+
+          <div class="knob">
+
+            <i 
+              data-lucide="moon" 
+              width="13" 
+              height="13"
+            ></i>
+
+          </div>
+
         </div>
-        <a href="#contato" class="btn btn-primary" style="padding:12px 26px">Login</a>
-        <div class="burger" role="button" tabindex="0" aria-label="Abrir menu" data-burger>
-          <span></span><span></span><span></span>
+
+        <a 
+          href="#contato" 
+          class="btn btn-primary" 
+          style="padding:12px 26px"
+        >
+          Login
+        </a>
+
+        <div 
+          class="burger" 
+          role="button" 
+          tabindex="0" 
+          aria-label="Abrir menu" 
+          data-burger
+        >
+
+          <span></span>
+          <span></span>
+          <span></span>
+
         </div>
+
       </div>
+
     </div>
+
   </header>
 
+
+  <!-- =====================================
+       MENU MOBILE
+  ====================================== -->
+
   <div class="mobile-overlay" data-overlay></div>
+
   <div class="mobile-menu" data-mobile-menu>
-    <div class="theme-toggle" title="Alternar tema" role="button" tabindex="0" data-theme-toggle>
-      <div class="knob"><i data-lucide="moon" width="13" height="13"></i></div>
+
+    <div 
+      class="theme-toggle" 
+      title="Alternar tema" 
+      role="button" 
+      tabindex="0" 
+      data-theme-toggle
+    >
+
+      <div class="knob">
+
+        <i 
+          data-lucide="moon" 
+          width="13" 
+          height="13"
+        ></i>
+
+      </div>
+
     </div>
-      <a href="#hero" data-close>Início</a>
-      <a href="#recursos" data-close>Recursos</a>
-      <a href="Cursos.html" data-close>Cursos Técnicos</a>
-      <a href="#futuro" data-close>Aulas Extras</a>
-      <a href="#contato" data-close>Contato</a>
-    <a href="#contato" class="btn btn-primary" style="margin-top:10px" data-close>Login</a>
+
+    <a href="#hero" data-close>Início</a>
+
+    <a href="#recursos" data-close>Recursos</a>
+
+    <a href="Cursos.html" data-close>Cursos Técnicos</a>
+
+    <a href="#futuro" data-close>Aulas Extras</a>
+
+    <a href="#contato" data-close>Contato</a>
+
+    <a 
+      href="#contato" 
+      class="btn btn-primary" 
+      style="margin-top:10px" 
+      data-close
+    >
+      Login
+    </a>
+
   </div>
 
+
+  <!-- =====================================
+       HERO
+  ====================================== -->
+
   <section class="hero" id="hero">
+
     <div class="container">
+
       <div class="hero-copy reveal">
-        <div class="eyebrow"><i data-lucide="graduation-cap" width="15" height="15"></i> Plataforma oficial dos estudantes</div>
-        <h1>Organize sua vida escolar no <span class="accent">CEEP Pedro Boaretto Neto</span>.</h1>
-        <p>Acompanhe tarefas, trabalhos, conteúdos passados em sala, calendário de provas, aulas extras para ENEM e Vestibulares, materiais dos professores e muito mais — tudo em um único ambiente desenvolvido especialmente para os alunos do CEEP Pedro Boaretto Neto.</p>
+
+        <div class="eyebrow">
+
+          <i 
+            data-lucide="graduation-cap" 
+            width="15" 
+            height="15"
+          ></i>
+
+          Plataforma oficial dos estudantes
+
+        </div>
+
+
+        <h1>
+          Organize sua vida escolar no 
+          <span class="accent">
+            CEEP Pedro Boaretto Neto
+          </span>.
+        </h1>
+
+
+        <p>
+          Acompanhe tarefas, trabalhos, conteúdos passados em sala,
+          calendário de provas, aulas extras para ENEM e Vestibulares,
+          materiais dos professores e muito mais — tudo em um único
+          ambiente desenvolvido especialmente para os alunos do CEEP
+          Pedro Boaretto Neto.
+        </p>
+
+
         <div class="hero-actions">
-          <a href="#contato" class="btn btn-primary">Acessar Plataforma</a>
-          <a href="#recursos" class="btn btn-outline">Conhecer Recursos</a>
+
+          <a href="#contato" class="btn btn-primary">
+            Acessar Plataforma
+          </a>
+
+          <a href="#recursos" class="btn btn-outline">
+            Conhecer Recursos
+          </a>
+
         </div>
+
+
         <div class="hero-trust">
-          <div><strong>1200+</strong><span>Alunos ativos</span></div>
-          <div><strong>60+</strong><span>Professores</span></div>
-          <div><strong>300+</strong><span>Materiais disponíveis</span></div>
+
+          <div>
+            <strong>1200+</strong>
+            <span>Alunos ativos</span>
+          </div>
+
+          <div>
+            <strong>60+</strong>
+            <span>Professores</span>
+          </div>
+
+          <div>
+            <strong>300+</strong>
+            <span>Materiais disponíveis</span>
+          </div>
+
         </div>
+
       </div>
+
+
+      <!-- =====================================
+           NOTEBOOK / VISUAL
+      ====================================== -->
 
       <div class="hero-visual reveal">
-            <div class="floaty f1"><i data-lucide="book-open" width="22" height="22"></i></div>
-            <div class="floaty f2"><i data-lucide="calculator" width="22" height="22"></i></div>
-            <div class="floaty f3"><i data-lucide="cog" width="22" height="22"></i></div>
-            <div class="floaty f4"><i data-lucide="calendar-days" width="22" height="22"></i></div>
-            <div class="floaty f5"><i data-lucide="code-2" width="22" height="22"></i></div>
-            <div class="floaty f6"><i data-lucide="notebook-pen" width="22" height="22"></i></div>
-        <div class="laptop">
-          <div class="laptop-cam"></div>
-          <div class="screen">
-            <div class="screen-top">
-              <div class="screen-brand">
-                <span class="logo-mark" style="width:22px;height:22px;font-size:9px;border-radius:6px">CH</span> Atlas CEEP
-              </div>
-              <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-            </div>
-            <div class="screen-grid">
-              <div style="display:flex;flex-direction:column;gap:12px">
-                <div class="panel">
-                  <h5>Tarefas de hoje</h5>
-                  <div class="task-row"><span class="check done"></span> Redação — Língua Portuguesa</div>
-                  <div class="task-row"><span class="check done"></span> Lista de exercícios — Física</div>
-                  <div class="task-row"><span class="check"></span> Projeto final — Dev. Sistemas</div>
-                  <div class="task-row"><span class="check"></span> Revisão — Matemática</div>
-                </div>
-                <div class="panel">
-                  <h5>Desempenho por disciplina</h5>
-                  <div class="bars"><i style="height:55%"></i><i style="height:80%"></i><i style="height:40%"></i><i style="height:92%"></i><i style="height:65%"></i><i style="height:74%"></i></div>
-                </div>
-              </div>
-              <div style="display:flex;flex-direction:column;gap:12px">
-                <div class="panel">
-                  <h5>Calendário</h5>
-                  <div class="cal-mini"><span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span><div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day exam">5</div><div class="day">6</div><div class="day">7</div><div class="day">8</div><div class="day today">9</div><div class="day">10</div><div class="day">11</div><div class="day">12</div><div class="day exam">13</div><div class="day">14</div></div>
-                  <div class="badge-row"><span class="badge"><i data-lucide="circle-alert" width="10" height="10"></i> Prova dia 5 e 13</span></div>
-                </div>
-                <div class="panel">
-                  <h5>Avisos</h5>
-                  <div class="task-row" style="border:none"><i data-lucide="pin" width="11" height="11"></i> Aula extra de Redação — sexta</div>
-                  <div class="task-row" style="border:none"><i data-lucide="pin" width="11" height="11"></i> Simulado ENEM — sábado</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="laptop-base"></div>
+
+        <div class="floaty f1">
+          <i data-lucide="book-open" width="22" height="22"></i>
         </div>
+
+        <div class="floaty f2">
+          <i data-lucide="calculator" width="22" height="22"></i>
+        </div>
+
+        <div class="floaty f3">
+          <i data-lucide="cog" width="22" height="22"></i>
+        </div>
+
+        <div class="floaty f4">
+          <i data-lucide="calendar-days" width="22" height="22"></i>
+        </div>
+
+        <div class="floaty f5">
+          <i data-lucide="code-2" width="22" height="22"></i>
+        </div>
+
+        <div class="floaty f6">
+          <i data-lucide="notebook-pen" width="22" height="22"></i>
+        </div>
+
+
+        <div class="laptop">
+
+          <div class="laptop-cam"></div>
+
+
+          <div class="screen">
+
+            <div class="screen-top">
+
+              <div class="screen-brand">
+
+                <img 
+                  src="page/Logo.jpg"
+                  alt="Atlas CEEP"
+                  class="screen-logo"
+                >
+
+                <span>Atlas CEEP</span>
+
+              </div>
+
+
+              <div class="dots">
+
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+
+              </div>
+
+            </div>
+
+
+            <div class="screen-grid">
+
+
+              <!-- COLUNA 1 -->
+
+              <div 
+                style="
+                  display:flex;
+                  flex-direction:column;
+                  gap:12px
+                "
+              >
+
+                <div class="panel">
+
+                  <h5>Tarefas de hoje</h5>
+
+                  <div class="task-row">
+                    <span class="check done"></span>
+                    Redação — Língua Portuguesa
+                  </div>
+
+                  <div class="task-row">
+                    <span class="check done"></span>
+                    Lista de exercícios — Física
+                  </div>
+
+                  <div class="task-row">
+                    <span class="check"></span>
+                    Projeto final — Dev. Sistemas
+                  </div>
+
+                  <div class="task-row">
+                    <span class="check"></span>
+                    Revisão — Matemática
+                  </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                  <h5>Desempenho por disciplina</h5>
+
+                  <div class="bars">
+
+                    <i style="height:55%"></i>
+                    <i style="height:80%"></i>
+                    <i style="height:40%"></i>
+                    <i style="height:92%"></i>
+                    <i style="height:65%"></i>
+                    <i style="height:74%"></i>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- COLUNA 2 -->
+
+              <div 
+                style="
+                  display:flex;
+                  flex-direction:column;
+                  gap:12px
+                "
+              >
+
+                <div class="panel">
+
+                  <h5>Calendário</h5>
+
+                  <div class="cal-mini">
+
+                    <span>D</span>
+                    <span>S</span>
+                    <span>T</span>
+                    <span>Q</span>
+                    <span>Q</span>
+                    <span>S</span>
+                    <span>S</span>
+
+                    <div class="day">1</div>
+                    <div class="day">2</div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+                    <div class="day exam">5</div>
+                    <div class="day">6</div>
+                    <div class="day">7</div>
+
+                    <div class="day">8</div>
+                    <div class="day today">9</div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+                    <div class="day">12</div>
+                    <div class="day exam">13</div>
+                    <div class="day">14</div>
+
+                  </div>
+
+
+                  <div class="badge-row">
+
+                    <span class="badge">
+
+                      <i 
+                        data-lucide="circle-alert" 
+                        width="10" 
+                        height="10"
+                      ></i>
+
+                      Prova dia 5 e 13
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                  <h5>Avisos</h5>
+
+                  <div 
+                    class="task-row" 
+                    style="border:none"
+                  >
+
+                    <i 
+                      data-lucide="pin" 
+                      width="11" 
+                      height="11"
+                    ></i>
+
+                    Aula extra de Redação — sexta
+
+                  </div>
+
+
+                  <div 
+                    class="task-row" 
+                    style="border:none"
+                  >
+
+                    <i 
+                      data-lucide="pin" 
+                      width="11" 
+                      height="11"
+                    ></i>
+
+                    Simulado ENEM — sábado
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="laptop-base"></div>
+
+        </div>
+
       </div>
+
     </div>
+
   </section>
+
+
+  <!-- =====================================
+       RECURSOS
+  ====================================== -->
 
   <section class="pad" id="recursos">
+
     <div class="container">
+
       <div class="sec-head reveal">
-        <div class="eyebrow">Recursos</div>
-        <h2>Tudo o que você precisa, em um só lugar</h2>
-        <p>Ferramentas pensadas para o dia a dia real dos estudantes do CEEP Pedro Boaretto Neto.</p>
+
+        <div class="eyebrow">
+          Recursos
+        </div>
+
+        <h2>
+          Tudo o que você precisa, em um só lugar
+        </h2>
+
+        <p>
+          Ferramentas pensadas para o dia a dia real dos estudantes
+          do CEEP Pedro Boaretto Neto.
+        </p>
+
       </div>
+
+
       <div class="grid-6">
+
+
         <div class="card reveal">
-          <div class="card-icon icon-red"><i data-lucide="clipboard-list" width="26" height="26"></i></div>
-          <h3>Tarefas Pendentes</h3>
-          <p>Organize todas as atividades por disciplina, com prazos e prioridades claras.</p>
+
+          <div class="card-icon icon-red">
+
+            <i 
+              data-lucide="clipboard-list" 
+              width="26" 
+              height="26"
+            ></i>
+
+          </div>
+
+          <h3>
+            Tarefas Pendentes
+          </h3>
+
+          <p>
+            Organize todas as atividades por disciplina,
+            com prazos e prioridades claras.
+          </p>
+
         </div>
+
+
         <div class="card reveal">
-          <div class="card-icon icon-amber"><i data-lucide="notebook-pen" width="26" height="26"></i></div>
-          <h3>O que foi passado na aula</h3>
-          <p>Ideal para alunos que faltaram. Visualize tudo que os professores trabalharam durante cada aula.</p>
+
+          <div class="card-icon icon-amber">
+
+            <i 
+              data-lucide="notebook-pen" 
+              width="26" 
+              height="26"
+            ></i>
+
+          </div>
+
+          <h3>
+            O que foi passado na aula
+          </h3>
+
+          <p>
+            Ideal para alunos que faltaram. Visualize tudo
+            que os professores trabalharam durante cada aula.
+          </p>
+
         </div>
+
+
         <div class="card reveal">
-          <div class="card-icon icon-blue"><i data-lucide="calendar-days" width="26" height="26"></i></div>
-          <h3>Calendário Escolar</h3>
-          <ul><li>Provas</li><li>Trabalhos</li><li>Eventos</li><li>Simulados</li></ul>
+
+          <div class="card-icon icon-blue">
+
+            <i 
+              data-lucide="calendar-days" 
+              width="26" 
+              height="26"
+            ></i>
+
+          </div>
+
+          <h3>
+            Calendário Escolar
+          </h3>
+
+          <ul>
+            <li>Provas</li>
+            <li>Trabalhos</li>
+            <li>Eventos</li>
+            <li>Simulados</li>
+          </ul>
+
         </div>
+
+
         <div class="card reveal">
-          <div class="card-icon icon-purple"><i data-lucide="monitor-play" width="26" height="26"></i></div>
-          <h3>Aulas Extras</h3>
-          <p>Videoaulas para:</p><ul><li>ENEM</li><li>Vestibulares</li><li>Cursos Técnicos</li><li>Reforço escolar</li></ul>
+
+          <div class="card-icon icon-purple">
+
+            <i 
+              data-lucide="monitor-play" 
+              width="26" 
+              height="26"
+            ></i>
+
+          </div>
+
+          <h3>
+            Aulas Extras
+          </h3>
+
+          <p>
+            Videoaulas para:
+          </p>
+
+          <ul>
+            <li>ENEM</li>
+            <li>Vestibulares</li>
+            <li>Cursos Técnicos</li>
+            <li>Reforço escolar</li>
+          </ul>
+
         </div>
+
+
         <div class="card reveal">
-          <div class="card-icon icon-teal"><i data-lucide="folder-open" width="26" height="26"></i></div>
-          <h3>Biblioteca Digital</h3>
-          <ul><li>Slides</li><li>PDFs</li><li>Apostilas</li><li>Materiais dos professores</li></ul>
+
+          <div class="card-icon icon-teal">
+
+            <i 
+              data-lucide="folder-open" 
+              width="26" 
+              height="26"
+            ></i>
+
+          </div>
+
+          <h3>
+            Biblioteca Digital
+          </h3>
+
+          <ul>
+            <li>Slides</li>
+            <li>PDFs</li>
+            <li>Apostilas</li>
+            <li>Materiais dos professores</li>
+          </ul>
+
         </div>
+
+
         <div class="card reveal">
-          <div class="card-icon icon-green"><i data-lucide="map-pin" width="26" height="26"></i></div>
-          <h3>Conheça o CEEP</h3>
-          <p>Mapa interativo mostrando salas, laboratórios, biblioteca, quadra, secretaria e cantina — facilitando a localização de novos alunos.</p>
+
+          <div class="card-icon icon-green">
+
+            <i 
+              data-lucide="map-pin" 
+              width="26" 
+              height="26"
+            ></i>
+
+          </div>
+
+          <h3>
+            Conheça o CEEP
+          </h3>
+
+          <p>
+            Mapa interativo mostrando salas, laboratórios,
+            biblioteca, quadra, secretaria e cantina —
+            facilitando a localização de novos alunos.
+          </p>
+
         </div>
+
+
       </div>
+
     </div>
+
   </section>
 
+
+</div>
+
+
+<!-- =====================================
+     SCRIPTS
+====================================== -->
+
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
 <script src="script.js"></script>
+
 </body>
 </html>
