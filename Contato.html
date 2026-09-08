@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Entre em contato com o CEEP Pedro Boaretto Neto através do Atlas CEEP."
+    >
+
+    <title>Contato | Atlas CEEP</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&family=Unbounded:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="Contato.css">
+
+    <!-- Tema salvo (evita piscar antes do JS carregar) -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem("atlas-theme");
+
+                if (saved !== "light" && saved !== "dark") {
+                    saved = window.matchMedia &&
+                        window.matchMedia("(prefers-color-scheme: light)").matches
+                        ? "light"
+                        : "dark";
+                }
+
+                document.documentElement.setAttribute("data-theme", saved);
+            } catch (e) {
+                document.documentElement.setAttribute("data-theme", "dark");
+            }
+        })();
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
+    <!-- JavaScript da página -->
+    <script src="Contato.js" defer></script>
+</head>
+
+<body id="topo">
+
+    <!-- HEADER -->
+    <header id="site-header">
+        <div class="container">
+
+            <a href="#topo" class="logo" aria-label="Atlas CEEP — início">
+                <span class="logo-mark" aria-hidden="true">A</span>
+                <span class="wordmark-atlas">Atlas</span>
+                <span class="wordmark-ceep">CEEP</span>
+            </a>
+
+            <nav class="menu" aria-label="Navegação principal">
+                <a href="#topo">Início</a>
+                <a href="#canais">Canais</a>
+                <a href="#cursos">Cursos Técnicos</a>
+                <a href="#formulario" aria-current="page">Contato</a>
+            </nav>
+
+            <div class="nav-actions">
+
+                <button
+                    class="theme-toggle"
+                    type="button"
+                    title="Alternar tema"
+                    aria-label="Alternar tema claro e escuro"
+                    data-theme-toggle
+                >
+                    <span class="knob">
+                        <i data-lucide="moon" aria-hidden="true"></i>
+                    </span>
+                </button>
+
+                <a href="#formulario" class="btn btn-primary">
+                    Fale conosco
+                </a>
+
+                <button
+                    class="burger"
+                    type="button"
+                    aria-label="Abrir menu"
+                    aria-expanded="false"
+                    aria-controls="mobile-menu"
+                    data-burger
+                >
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </button>
+
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- MENU MOBILE -->
+    <div class="mobile-overlay" data-overlay hidden></div>
+
+    <nav
+        id="mobile-menu"
+        class="mobile-menu"
+        aria-label="Navegação mobile"
+        data-mobile-menu
+        aria-hidden="true"
+    >
+
+        <button
+            class="mobile-menu-close"
+            type="button"
+            aria-label="Fechar menu"
+            data-close-menu
+        >
+            <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+
+        <button
+            class="theme-toggle"
+            type="button"
+            title="Alternar tema"
+            aria-label="Alternar tema claro e escuro"
+            data-theme-toggle
+        >
+            <span class="knob">
+                <i data-lucide="moon" aria-hidden="true"></i>
+            </span>
+        </button>
+
+        <a href="#topo" data-close>Início</a>
+        <a href="#canais" data-close>Canais</a>
+        <a href="#cursos" data-close>Cursos Técnicos</a>
+        <a href="#formulario" data-close>Contato</a>
+
+        <a href="#formulario" class="btn btn-primary" data-close>
+            Fale conosco
+        </a>
+
+    </nav>
+
+
+    <!-- PÁGINA -->
+    <main class="contact-page" id="contato">
+
+        <!-- HERO -->
+        <section class="contact-hero" aria-labelledby="hero-title">
+
+            <div class="contact-orbit" aria-hidden="true"></div>
+            <div class="contact-orbit-inner" aria-hidden="true"></div>
+
+            <div class="contact-hero-content">
+
+                <p class="contact-eyebrow">CONTATO</p>
+
+                <h1 id="hero-title">
+                    Vamos manter<br>
+                    <span>conexão.</span>
+                </h1>
+
+                <p>
+                    Tem dúvidas sobre a plataforma, nossos cursos
+                    ou precisa de ajuda?
+                    <br>
+                    Fale com o CEEP. Estamos prontos para ajudar.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- CONTEÚDO -->
+        <div class="contact-container">
+
+            <div class="contact-grid">
+
+                <!-- INFORMAÇÕES -->
+                <section
+                    class="contact-info-panel"
+                    id="canais"
+                    aria-labelledby="canais-title"
+                >
+
+                    <h2 id="canais-title">Como podemos ajudar?</h2>
+
+                    <p>
+                        Entre em contato pelos canais oficiais
+                        ou visite nossa unidade em Cascavel.
+                    </p>
+
+                    <div class="contact-method">
+
+                        <div class="contact-method-icon" aria-hidden="true">
+                            <i data-lucide="phone"></i>
+                        </div>
+
+                        <div>
+                            <small>Telefone</small>
+                            <a href="tel:+554532262369">(45) 3226-2369</a>
+                        </div>
+
+                    </div>
+
+                    <div class="contact-method">
+
+                        <div class="contact-method-icon" aria-hidden="true">
+                            <i data-lucide="mail"></i>
+                        </div>
+
+                        <div>
+                            <small>E-mail</small>
+                            <a href="mailto:contato@ceepcascavel.com.br">
+                                contato@ceepcascavel.com.br
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="contact-method">
+
+                        <div class="contact-method-icon" aria-hidden="true">
+                            <i data-lucide="map-pin"></i>
+                        </div>
+
+                        <div>
+                            <small>Endereço</small>
+                            <strong>R. Natal, 2800 – Centro, Cascavel – PR</strong>
+                        </div>
+
+                    </div>
+
+                    <!-- MAPA -->
+                    <div class="contact-map">
+                        <iframe
+                            src="https://www.google.com/maps?q=R.+Natal,+2800,+Centro,+Cascavel,+PR&amp;output=embed"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Localização do CEEP Pedro Boaretto Neto"
+                        ></iframe>
+                    </div>
+
+                </section>
+
+
+                <!-- FORMULÁRIO -->
+                <section
+                    class="contact-form-card"
+                    id="formulario"
+                    aria-labelledby="formulario-title"
+                >
+
+                    <h2 id="formulario-title">Envie uma mensagem</h2>
+
+                    <p>
+                        Preencha os campos abaixo e nossa equipe
+                        entrará em contato.
+                    </p>
+
+                    <form id="contact-form" class="form-grid" novalidate>
+
+                        <!-- NOME -->
+                        <div class="form-group">
+                            <label for="nome">Nome completo *</label>
+
+                            <input
+                                id="nome"
+                                name="nome"
+                                type="text"
+                                placeholder="Seu nome"
+                                autocomplete="name"
+                                aria-describedby="nomeError"
+                                required
+                            >
+
+                            <span class="field-error" id="nomeError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- EMAIL -->
+                        <div class="form-group">
+                            <label for="email">E-mail *</label>
+
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                placeholder="seu@email.com"
+                                autocomplete="email"
+                                aria-describedby="emailError"
+                                required
+                            >
+
+                            <span class="field-error" id="emailError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- TELEFONE -->
+                        <div class="form-group">
+                            <label for="telefone">Telefone</label>
+
+                            <input
+                                id="telefone"
+                                name="telefone"
+                                type="tel"
+                                placeholder="(45) 99999-9999"
+                                autocomplete="tel"
+                                inputmode="tel"
+                                aria-describedby="telefoneError"
+                            >
+
+                            <span class="field-error" id="telefoneError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- CURSO -->
+                        <div class="form-group">
+                            <label for="curso">Curso de interesse</label>
+
+                            <select id="curso" name="curso">
+                                <option value="">Selecione um curso</option>
+
+                                <optgroup label="Ensino Médio Integrado">
+                                    <option>Administração</option>
+                                    <option>Desenvolvimento de Sistemas</option>
+                                    <option>Edificações</option>
+                                    <option>Eletromecânica</option>
+                                    <option>Eletrônica</option>
+                                    <option>Enfermagem</option>
+                                    <option>Estética</option>
+                                    <option>Meio Ambiente</option>
+                                    <option>Programação de Jogos Digitais</option>
+                                    <option>Design de Interiores</option>
+                                    <option>Inteligência Artificial e Dados</option>
+                                </optgroup>
+
+                                <optgroup label="Subsequente">
+                                    <option>Administração</option>
+                                    <option>Desenvolvimento de Sistemas</option>
+                                    <option>Eletromecânica</option>
+                                    <option>Eletrônica</option>
+                                    <option>Enfermagem</option>
+                                    <option>Estética</option>
+                                    <option>Segurança do Trabalho</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <!-- MENSAGEM -->
+                        <div class="form-group full">
+                            <label for="mensagem">Mensagem *</label>
+
+                            <textarea
+                                id="mensagem"
+                                name="mensagem"
+                                placeholder="Escreva sua mensagem..."
+                                aria-describedby="mensagemError"
+                                required
+                            ></textarea>
+
+                            <span class="field-error" id="mensagemError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- BOTÃO -->
+                        <div class="form-submit">
+                            <button type="submit">
+                                <i data-lucide="send" aria-hidden="true"></i>
+                                <span>Enviar mensagem</span>
+                            </button>
+                        </div>
+
+                        <!-- SUCESSO -->
+                        <div class="form-success" id="formSuccess" role="status" aria-live="polite">
+                            <i data-lucide="circle-check" aria-hidden="true"></i>
+                            <span>
+                                Mensagem enviada com sucesso!
+                                Em breve entraremos em contato.
+                            </span>
+                        </div>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+
+            <!-- CURSOS -->
+            <section class="courses-section" id="cursos" aria-labelledby="cursos-title">
+
+                <div class="courses-heading">
+                    <p class="contact-eyebrow">FORMAÇÃO</p>
+                    <h2 id="cursos-title">Encontre seu curso</h2>
+                </div>
+
+                <div class="course-tabs" role="tablist" aria-label="Modalidades de curso">
+
+                    <button
+                        type="button"
+                        class="course-tab active"
+                        role="tab"
+                        aria-selected="true"
+                        data-category="integrado"
+                    >
+                        Ensino Médio Integrado
+                    </button>
+
+                    <button
+                        type="button"
+                        class="course-tab"
+                        role="tab"
+                        aria-selected="false"
+                        data-category="subsequente"
+                    >
+                        Subsequente
+                    </button>
+
+                </div>
+
+                <!-- Lista renderizada pelo Contato.js (dados em COURSES) -->
+                <div class="course-list" data-course-list></div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+
+            <div class="logo">
+                <span class="logo-mark" aria-hidden="true">A</span>
+                <span class="wordmark-atlas">Atlas</span>
+                <span class="wordmark-ceep">CEEP</span>
+            </div>
+
+            <p>Plataforma acadêmica do CEEP Pedro Boaretto Neto.</p>
+
+            <span>© 2026 Atlas CEEP</span>
+
+        </div>
+    </footer>
+
+</body>
+
+</html>
