@@ -1,0 +1,365 @@
+### Arquivo de testes HTTP - API Atlas
+### Compatível com a extensão "REST Client" (VS Code) e com o HTTP Client do IntelliJ/PyCharm.
+### Para usar: abra este arquivo no VS Code com a extensão REST Client instalada
+### e clique em "Send Request" acima de cada bloco.
+
+@baseUrl = http://127.0.0.1:5000
+
+
+### ==================== ROTA INICIAL ====================
+
+### Verificar se a API está no ar
+GET {{baseUrl}}/
+
+
+### ==================== ADMINISTRADORES ====================
+
+### Listar todos os administradores
+GET {{baseUrl}}/adms
+
+### Criar administrador
+POST {{baseUrl}}/adms
+Content-Type: application/json
+
+{
+    "nome": "Marcos Andrade",
+    "telefone": "45999990000",
+    "nivel_acesso": "master"
+}
+
+### Buscar administrador específico (ajuste o id conforme o criado acima)
+GET {{baseUrl}}/adms/1
+
+### Atualizar administrador
+PUT {{baseUrl}}/adms/1
+Content-Type: application/json
+
+{
+    "nome": "Marcos Andrade Silva",
+    "telefone": "45999991111",
+    "nivel_acesso": "master"
+}
+
+### Excluir administrador
+DELETE {{baseUrl}}/adms/1
+
+### Erro: buscar administrador inexistente (deve retornar 404)
+GET {{baseUrl}}/adms/9999
+
+### Erro: criar administrador sem nome (deve retornar 400)
+POST {{baseUrl}}/adms
+Content-Type: application/json
+
+{
+    "telefone": "45999990000"
+}
+
+
+### ==================== TURMAS ====================
+
+### Listar todas as turmas
+GET {{baseUrl}}/turmas
+
+### Criar turma
+POST {{baseUrl}}/turmas
+Content-Type: application/json
+
+{
+    "nome": "3º Ano A",
+    "sala": "12",
+    "ano": 2026,
+    "semestre": 2,
+    "id_administrado": 1
+}
+
+### Buscar turma específica
+GET {{baseUrl}}/turmas/1
+
+### Atualizar turma
+PUT {{baseUrl}}/turmas/1
+Content-Type: application/json
+
+{
+    "nome": "3º Ano B",
+    "sala": "14",
+    "ano": 2026,
+    "semestre": 2,
+    "id_administrado": 1
+}
+
+### Excluir turma
+DELETE {{baseUrl}}/turmas/1
+
+### Erro: criar turma com id_administrado inexistente (deve retornar 400)
+POST {{baseUrl}}/turmas
+Content-Type: application/json
+
+{
+    "nome": "1º Ano C",
+    "sala": "05",
+    "ano": 2026,
+    "semestre": 1,
+    "id_administrado": 9999
+}
+
+
+### ==================== ALUNOS ====================
+
+### Listar todos os alunos
+GET {{baseUrl}}/alunos
+
+### Criar aluno
+POST {{baseUrl}}/alunos
+Content-Type: application/json
+
+{
+    "nome": "João Silva",
+    "email": "joao@email.com",
+    "telefone": "45999998888",
+    "data_nascimento": "2005-03-12",
+    "id_turma": 1
+}
+
+### Buscar aluno específico
+GET {{baseUrl}}/alunos/1
+
+### Atualizar aluno
+PUT {{baseUrl}}/alunos/1
+Content-Type: application/json
+
+{
+    "nome": "João Silva Souza",
+    "email": "joao.souza@email.com",
+    "telefone": "45999998888",
+    "data_nascimento": "2005-03-12",
+    "id_turma": 1
+}
+
+### Excluir aluno
+DELETE {{baseUrl}}/alunos/1
+
+### Erro: criar aluno sem nome (deve retornar 400)
+POST {{baseUrl}}/alunos
+Content-Type: application/json
+
+{
+    "email": "sememail@email.com"
+}
+
+
+### ==================== PROFESSORES ====================
+
+### Listar todos os professores
+GET {{baseUrl}}/professores
+
+### Criar professor
+POST {{baseUrl}}/professores
+Content-Type: application/json
+
+{
+    "nome": "Ana Ribeiro",
+    "data_contratacao": "2022-02-01",
+    "telefone": "45988887777",
+    "atributo": "Efetivo"
+}
+
+### Buscar professor específico
+GET {{baseUrl}}/professores/1
+
+### Atualizar professor
+PUT {{baseUrl}}/professores/1
+Content-Type: application/json
+
+{
+    "nome": "Ana Ribeiro Costa",
+    "data_contratacao": "2022-02-01",
+    "telefone": "45988887777",
+    "atributo": "Efetivo"
+}
+
+### Excluir professor
+DELETE {{baseUrl}}/professores/1
+
+
+### ==================== MATÉRIAS ====================
+
+### Listar todas as matérias
+GET {{baseUrl}}/materias
+
+### Criar matéria
+POST {{baseUrl}}/materias
+Content-Type: application/json
+
+{
+    "nome": "Matemática",
+    "descricao": "Álgebra e geometria",
+    "carga_horaria": 60,
+    "ementa": "Conteúdo programático de matemática do ensino médio.",
+    "id_administrado": 1
+}
+
+### Buscar matéria específica
+GET {{baseUrl}}/materias/1
+
+### Atualizar matéria
+PUT {{baseUrl}}/materias/1
+Content-Type: application/json
+
+{
+    "nome": "Química",
+    "descricao": "Química orgânica e inorgânica",
+    "carga_horaria": 80,
+    "ementa": "Conteúdo programático de química.",
+    "id_administrado": 1
+}
+
+### Excluir matéria
+DELETE {{baseUrl}}/materias/1
+
+
+### ==================== EVENTOS ====================
+
+### Listar todos os eventos
+GET {{baseUrl}}/eventos
+
+### Criar evento
+POST {{baseUrl}}/eventos
+Content-Type: application/json
+
+{
+    "nome": "Feira de Ciências",
+    "descricao": "Exposição de projetos dos alunos",
+    "horario": "14:00",
+    "local": "Quadra poliesportiva",
+    "id_administrado": 1
+}
+
+### Buscar evento específico
+GET {{baseUrl}}/eventos/1
+
+### Atualizar evento
+PUT {{baseUrl}}/eventos/1
+Content-Type: application/json
+
+{
+    "nome": "Feira de Ciências e Tecnologia",
+    "descricao": "Exposição de projetos dos alunos",
+    "horario": "15:00",
+    "local": "Ginásio",
+    "id_administrado": 1
+}
+
+### Excluir evento
+DELETE {{baseUrl}}/eventos/1
+
+
+### ==================== ALUNO -> MATÉRIAS ====================
+
+### Buscar matérias do aluno (via JOIN)
+GET {{baseUrl}}/alunos/1/materias
+
+### Adicionar matéria ao aluno
+POST {{baseUrl}}/alunos/1/materias
+Content-Type: application/json
+
+{
+    "id_materia": 1
+}
+
+### Erro: adicionar a mesma matéria de novo (deve retornar 409)
+POST {{baseUrl}}/alunos/1/materias
+Content-Type: application/json
+
+{
+    "id_materia": 1
+}
+
+### Erro: adicionar matéria a aluno inexistente (deve retornar 404)
+POST {{baseUrl}}/alunos/9999/materias
+Content-Type: application/json
+
+{
+    "id_materia": 1
+}
+
+### Remover matéria do aluno
+DELETE {{baseUrl}}/alunos/1/materias/1
+
+### Erro: remover relação que não existe (deve retornar 404)
+DELETE {{baseUrl}}/alunos/1/materias/1
+
+
+### ==================== PROFESSOR -> TURMAS ====================
+
+### Buscar turmas do professor (via JOIN)
+GET {{baseUrl}}/professores/1/turmas
+
+### Adicionar turma ao professor
+POST {{baseUrl}}/professores/1/turmas
+Content-Type: application/json
+
+{
+    "id_turma": 1
+}
+
+### Erro: adicionar a mesma turma de novo (deve retornar 409)
+POST {{baseUrl}}/professores/1/turmas
+Content-Type: application/json
+
+{
+    "id_turma": 1
+}
+
+### Remover turma do professor
+DELETE {{baseUrl}}/professores/1/turmas/1
+
+
+### ==================== PROFESSOR -> MATÉRIAS ====================
+
+### Buscar matérias do professor (via JOIN)
+GET {{baseUrl}}/professores/1/materias
+
+### Adicionar matéria ao professor
+POST {{baseUrl}}/professores/1/materias
+Content-Type: application/json
+
+{
+    "id_materia": 1
+}
+
+### Remover matéria do professor
+DELETE {{baseUrl}}/professores/1/materias/1
+
+
+### ==================== TURMA -> MATÉRIAS ====================
+
+### Buscar matérias da turma (via JOIN)
+GET {{baseUrl}}/turmas/1/materias
+
+### Adicionar matéria à turma
+POST {{baseUrl}}/turmas/1/materias
+Content-Type: application/json
+
+{
+    "id_materia": 1
+}
+
+### Remover matéria da turma
+DELETE {{baseUrl}}/turmas/1/materias/1
+
+
+### ==================== PROFESSOR -> EVENTOS ====================
+
+### Buscar eventos do professor (via JOIN)
+GET {{baseUrl}}/professores/1/eventos
+
+### Adicionar evento ao professor
+POST {{baseUrl}}/professores/1/eventos
+Content-Type: application/json
+
+{
+    "id_evento": 1
+}
+
+### Remover evento do professor
+DELETE {{baseUrl}}/professores/1/eventos/1
