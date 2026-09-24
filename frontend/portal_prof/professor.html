@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Atlas CEEP — Professor</title>
+
+    <link rel="stylesheet" href="Professor.css">
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- =========================
+         TOPO
+    ========================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                A
+            </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    Atlas CEEP
+                </strong>
+
+                <span>
+                    Área do professor
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="top-actions">
+
+            <button
+                class="icon-btn"
+                id="themeBtn"
+                title="Alternar tema">
+
+                ☼
+
+            </button>
+
+
+            <button
+                class="profile-btn"
+                id="profileBtn">
+
+                <span class="avatar">
+                    DS
+                </span>
+
+                <span class="profile-name">
+                    Diego
+                </span>
+
+                <span class="chevron">
+                    ⌄
+                </span>
+
+            </button>
+
+
+            <div
+                class="profile-menu"
+                id="profileMenu"
+                hidden>
+
+                <div class="profile-menu-head">
+
+                    <strong>
+                        Diego da Silva
+                    </strong>
+
+                    <span>
+                        Professor · CEEP
+                    </span>
+
+                </div>
+
+
+                <button type="button">
+                    Meu perfil
+                </button>
+
+                <button
+                    type="button"
+                    id="clearDataBtn">
+
+                    Limpar dados locais
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="dashboard">
+
+        <!-- =========================
+             CABEÇALHO
+        ========================== -->
+
+        <section class="welcome">
+
+            <div>
+
+                <p class="eyebrow">
+                    PAINEL DO PROFESSOR
+                </p>
+
+                <h1>
+                    Olá, Diego.
+                </h1>
+
+                <p class="muted">
+                    Publique conteúdos, atividades e avisos
+                    para as suas turmas.
+                </p>
+
+            </div>
+
+
+            <button
+                class="primary-btn"
+                id="newContentBtn">
+
+                ＋ Publicar conteúdo
+
+            </button>
+
+        </section>
+
+
+        <!-- =========================
+             RESUMO
+        ========================== -->
+
+        <section class="quick-summary">
+
+            <article class="summary-item">
+
+                <span class="summary-dot accent-dot"></span>
+
+                <div>
+
+                    <strong id="totalContents">
+                        0
+                    </strong>
+
+                    <span>
+                        Conteúdos publicados
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <article class="summary-item">
+
+                <span class="summary-dot warning-dot"></span>
+
+                <div>
+
+                    <strong id="weekContents">
+                        0
+                    </strong>
+
+                    <span>
+                        Publicados esta semana
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <article class="summary-item">
+
+                <span class="summary-dot info-dot"></span>
+
+                <div>
+
+                    <strong id="totalClasses">
+                        0
+                    </strong>
+
+                    <span>
+                        Turmas atendidas
+                    </span>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =========================
+             CONTEÚDO PRINCIPAL
+        ========================== -->
+
+        <section class="main-grid">
+
+            <!-- =========================
+                 PUBLICAÇÕES
+            ========================== -->
+
+            <div class="left-column">
+
+                <article class="panel">
+
+                    <div class="panel-head panel-head-wrap">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                PUBLICAÇÕES
+                            </p>
+
+                            <h2>
+                                Conteúdos publicados
+                            </h2>
+
+                        </div>
+
+
+                        <button
+                            class="ghost-btn"
+                            id="newContentBtn2">
+
+                            ＋ Novo conteúdo
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- FILTROS -->
+
+                    <div class="filters-row">
+
+                        <div
+                            class="filter-scroll"
+                            id="typeFilters">
+
+                            <button
+                                class="filter-chip active"
+                                data-type="all">
+
+                                Todos
+
+                            </button>
+
+                            <button
+                                class="filter-chip"
+                                data-type="atividade">
+
+                                Atividades
+
+                            </button>
+
+                            <button
+                                class="filter-chip"
+                                data-type="material">
+
+                                Materiais
+
+                            </button>
+
+                            <button
+                                class="filter-chip"
+                                data-type="aviso">
+
+                                Avisos
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="select-row">
+
+                            <select
+                                id="classFilter"
+                                class="compact-select">
+
+                                <option value="all">
+                                    Todas as turmas
+                                </option>
+
+                            </select>
+
+
+                            <select
+                                id="subjectFilter"
+                                class="compact-select">
+
+                                <option value="all">
+                                    Todas as disciplinas
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LISTA -->
+
+                    <div
+                        class="content-list"
+                        id="contentList">
+                    </div>
+
+
+                    <div
+                        class="empty-state"
+                        id="contentEmpty"
+                        hidden>
+
+                        <span>
+                            ◌
+                        </span>
+
+                        <p>
+                            Nenhum conteúdo encontrado.
+                        </p>
+
+                        <button
+                            class="text-btn"
+                            id="emptyCreateBtn">
+
+                            Publicar conteúdo
+
+                        </button>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <!-- =========================
+                 LATERAL
+            ========================== -->
+
+            <div class="right-column">
+
+                <!-- TURMAS -->
+
+                <article class="panel classes-panel">
+
+                    <div class="panel-head">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                TURMAS
+                            </p>
+
+                            <h2>
+                                Minhas turmas
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="class-list"
+                        id="classList">
+                    </div>
+
+                </article>
+
+
+                <!-- ATIVIDADE RECENTE -->
+
+                <article class="panel">
+
+                    <div class="panel-head">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                ATIVIDADE
+                            </p>
+
+                            <h2>
+                                Publicações recentes
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="recent-list"
+                        id="recentList">
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     MODAL PUBLICAR / EDITAR
+========================== -->
+
+<dialog id="contentDialog">
+
+    <form
+        class="modal-form"
+        id="contentForm">
+
+        <button
+            type="button"
+            class="close-btn"
+            id="closeContentBtn">
+
+            ×
+
+        </button>
+
+
+        <p class="eyebrow" id="formEyebrow">
+            NOVA PUBLICAÇÃO
+        </p>
+
+
+        <h2 id="formTitle">
+            Publicar conteúdo
+        </h2>
+
+
+        <input
+            type="hidden"
+            id="editingId">
+
+
+        <!-- TÍTULO -->
+
+        <label>
+
+            Título
+
+            <input
+                type="text"
+                id="contentTitle"
+                maxlength="100"
+                required
+                placeholder="Ex.: Atividade — API REST">
+
+        </label>
+
+
+        <!-- DISCIPLINA + TIPO -->
+
+        <div class="modal-grid-two">
+
+            <label>
+
+                Disciplina
+
+                <select
+                    id="contentSubject"
+                    required>
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option>
+                        Programação no Desenvolvimento de Sistemas
+                    </option>
+
+                    <option>
+                        Banco de Dados
+                    </option>
+
+                    <option>
+                        Engenharia de Software
+                    </option>
+
+                    <option>
+                        Matemática
+                    </option>
+
+                    <option>
+                        Língua Portuguesa
+                    </option>
+
+                    <option>
+                        História
+                    </option>
+
+                    <option>
+                        Física
+                    </option>
+
+                    <option>
+                        Química
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+
+                Tipo
+
+                <select
+                    id="contentType"
+                    required>
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="atividade">
+                        Atividade
+                    </option>
+
+                    <option value="material">
+                        Material
+                    </option>
+
+                    <option value="aviso">
+                        Aviso
+                    </option>
+
+                </select>
+
+            </label>
+
+        </div>
+
+
+        <!-- TURMA + DATA -->
+
+        <div class="modal-grid-two">
+
+            <label>
+
+                Turma
+
+                <select
+                    id="contentClass"
+                    required>
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option>
+                        1º Desenvolvimento de Sistemas
+                    </option>
+
+                    <option>
+                        2º Desenvolvimento de Sistemas
+                    </option>
+
+                    <option>
+                        3º Desenvolvimento de Sistemas
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+
+                Data de publicação
+
+                <input
+                    type="date"
+                    id="contentDate"
+                    required>
+
+            </label>
+
+        </div>
+
+
+        <!-- PRAZO -->
+
+        <label id="deadlineField">
+
+            Prazo de entrega
+
+            <input
+                type="date"
+                id="contentDeadline">
+
+        </label>
+
+
+        <!-- DESCRIÇÃO -->
+
+        <label>
+
+            Descrição
+
+            <textarea
+                id="contentDescription"
+                maxlength="700"
+                placeholder="Explique o conteúdo, atividade ou aviso para os alunos.">
+            </textarea>
+
+        </label>
+
+
+        <!-- AÇÕES -->
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="secondary-btn"
+                id="cancelContentBtn">
+
+                Cancelar
+
+            </button>
+
+
+            <button
+                type="submit"
+                class="primary-btn"
+                id="saveContentBtn">
+
+                Publicar conteúdo
+
+            </button>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+
+<!-- =========================
+     MODAL CONFIRMAÇÃO
+========================== -->
+
+<dialog id="deleteDialog">
+
+    <div class="modal-form">
+
+        <button
+            type="button"
+            class="close-btn"
+            id="closeDeleteBtn">
+
+            ×
+
+        </button>
+
+
+        <p class="eyebrow">
+            EXCLUIR PUBLICAÇÃO
+        </p>
+
+
+        <h2>
+            Excluir conteúdo?
+        </h2>
+
+
+        <p class="delete-message">
+            Essa publicação será removida da sua
+            área do professor.
+        </p>
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="secondary-btn"
+                id="cancelDeleteBtn">
+
+                Cancelar
+
+            </button>
+
+
+            <button
+                type="button"
+                class="danger-btn"
+                id="confirmDeleteBtn">
+
+                Excluir
+
+            </button>
+
+        </div>
+
+    </div>
+
+</dialog>
+
+
+<script>
+
+(() => {
+
+    /* =========================
+       CONFIGURAÇÃO
+    ========================== */
+
+    const STORAGE_KEY =
+        'atlas-professor-content-v1';
+
+
+    const today =
+        new Date();
+
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    const $ =
+        selector =>
+            document.querySelector(
+                selector
+            );
+
+
+    const $$ =
+        selector =>
+            [
+                ...document.querySelectorAll(
+                    selector
+                )
+            ];
+
+
+    function isoDate(date) {
+
+        const year =
+            date.getFullYear();
+
+        const month =
+            String(
+                date.getMonth() + 1
+            ).padStart(2, '0');
+
+        const day =
+            String(
+                date.getDate()
+            ).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+
+    }
+
+
+    function addDays(
+        date,
+        days
+    ) {
+
+        const result =
+            new Date(date);
+
+        result.setDate(
+            result.getDate() + days
+        );
+
+        return result;
+
+    }
+
+
+    function uid() {
+
+        return Date.now()
+            .toString(36) +
+            Math.random()
+                .toString(36)
+                .slice(2, 8);
+
+    }
+
+
+    function escapeHtml(
+        value
+    ) {
+
+        return String(value)
+            .replace(
+                /[&<>'"]/g,
+                char => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#039;',
+                    '"': '&quot;'
+                }[char])
+            );
+
+    }
+
+
+    function formatDate(
+        value
+    ) {
+
+        if (!value) {
+            return '';
+        }
+
+        return new Date(
+            value + 'T00:00:00'
+        ).toLocaleDateString(
+            'pt-BR'
+        );
+
+    }
+
+
+    /* =========================
+       DADOS INICIAIS
+    ========================== */
+
+    const seedContent = [
+
+        {
+            id: uid(),
+
+            title:
+                'Atividade — API REST',
+
+            subject:
+                'Programação no Desenvolvimento de Sistemas',
+
+            type:
+                'atividade',
+
+            className:
+                '2º Desenvolvimento de Sistemas',
+
+            date:
+                isoDate(today),
+
+            deadline:
+                isoDate(
+                    addDays(
+                        today,
+                        3
+                    )
+                ),
+
+            description:
+                'Implementar duas tabelas relacionadas, CRUD das duas tabelas, uma rota utilizando JOIN e duas rotas de filtro.',
+
+        },
+
+
+        {
+            id: uid(),
+
+            title:
+                'Material — Introdução ao SQL',
+
+            subject:
+                'Banco de Dados',
+
+            type:
+                'material',
+
+            className:
+                '2º Desenvolvimento de Sistemas',
+
+            date:
+                isoDate(
+                    addDays(
+                        today,
+                        -1
+                    )
+                ),
+
+            deadline:
+                '',
+
+            description:
+                'Material de apoio sobre SELECT, INSERT, UPDATE, DELETE, WHERE e JOIN.',
+
+        },
+
+
+        {
+            id: uid(),
+
+            title:
+                'Aviso — Entrega do trabalho',
+
+            subject:
+                'Programação no Desenvolvimento de Sistemas',
+
+            type:
+                'aviso',
+
+            className:
+                '2º Desenvolvimento de Sistemas',
+
+            date:
+                isoDate(
+                    addDays(
+                        today,
+                        -2
+                    )
+                ),
+
+            deadline:
+                '',
+
+            description:
+                'A entrega do trabalho deverá ser realizada até o início da próxima aula.',
+
+        },
+
+
+        {
+            id: uid(),
+
+            title:
+                'Lista de exercícios — Funções',
+
+            subject:
+                'Matemática',
+
+            type:
+                'atividade',
+
+            className:
+                '1º Desenvolvimento de Sistemas',
+
+            date:
+                isoDate(
+                    addDays(
+                        today,
+                        -4
+                    )
+                ),
+
+            deadline:
+                isoDate(
+                    addDays(
+                        today,
+                        2
+                    )
+                ),
+
+            description:
+                'Resolver os exercícios 1 a 15 da lista entregue em sala.',
+
+        },
+
+
+        {
+            id: uid(),
+
+            title:
+                'Material — UML',
+
+            subject:
+                'Engenharia de Software',
+
+            type:
+                'material',
+
+            className:
+                '3º Desenvolvimento de Sistemas',
+
+            date:
+                isoDate(
+                    addDays(
+                        today,
+                        -5
+                    )
+                ),
+
+            deadline:
+                '',
+
+            description:
+                'Material introdutório sobre diagramas UML e modelagem de sistemas.',
+
+        }
+
+    ];
+
+
+    function loadContent() {
+
+        try {
+
+            const saved =
+                JSON.parse(
+                    localStorage.getItem(
+                        STORAGE_KEY
+                    )
+                );
+
+
+            if (
+                Array.isArray(saved)
+            ) {
+
+                return saved;
+
+            }
+
+        } catch (_) {}
+
+
+        return seedContent;
+
+    }
+
+
+    let contents =
+        loadContent();
+
+
+    let currentType =
+        'all';
+
+
+    let deletingId =
+        null;
+
+
+    /* =========================
+       STORAGE
+    ========================== */
+
+    function save() {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(
+                contents
+            )
+        );
+
+    }
+
+
+    /* =========================
+       FILTROS
+    ========================== */
+
+    function getFilteredContent() {
+
+        const classValue =
+            $('#classFilter').value;
+
+
+        const subjectValue =
+            $('#subjectFilter').value;
+
+
+        return contents
+            .filter(
+                item =>
+                    currentType === 'all' ||
+                    item.type === currentType
+            )
+            .filter(
+                item =>
+                    classValue === 'all' ||
+                    item.className === classValue
+            )
+            .filter(
+                item =>
+                    subjectValue === 'all' ||
+                    item.subject === subjectValue
+            )
+            .sort(
+                (a, b) =>
+                    b.date.localeCompare(
+                        a.date
+                    )
+            );
+
+    }
+
+
+    function populateFilters() {
+
+        const classes =
+            [
+                ...new Set(
+                    contents.map(
+                        item =>
+                            item.className
+                    )
+                )
+            ].sort();
+
+
+        const subjects =
+            [
+                ...new Set(
+                    contents.map(
+                        item =>
+                            item.subject
+                    )
+                )
+            ].sort();
+
+
+        const classSelect =
+            $('#classFilter');
+
+
+        const subjectSelect =
+            $('#subjectFilter');
+
+
+        const oldClass =
+            classSelect.value;
+
+
+        const oldSubject =
+            subjectSelect.value;
+
+
+        classSelect.innerHTML =
+            `<option value="all">
+                Todas as turmas
+            </option>`;
+
+
+        classes.forEach(
+            className => {
+
+                classSelect.innerHTML += `
+                    <option value="${escapeHtml(className)}">
+                        ${escapeHtml(className)}
+                    </option>
+                `;
+
+            }
+        );
+
+
+        subjectSelect.innerHTML =
+            `<option value="all">
+                Todas as disciplinas
+            </option>`;
+
+
+        subjects.forEach(
+            subject => {
+
+                subjectSelect.innerHTML += `
+                    <option value="${escapeHtml(subject)}">
+                        ${escapeHtml(subject)}
+                    </option>
+                `;
+
+            }
+        );
+
+
+        if (
+            classes.includes(
+                oldClass
+            )
+        ) {
+
+            classSelect.value =
+                oldClass;
+
+        }
+
+
+        if (
+            subjects.includes(
+                oldSubject
+            )
+        ) {
+
+            subjectSelect.value =
+                oldSubject;
+
+        }
+
+    }
+
+
+    /* =========================
+       RENDER PUBLICAÇÕES
+    ========================== */
+
+    function renderContent() {
+
+        const list =
+            $('#contentList');
+
+
+        const empty =
+            $('#contentEmpty');
+
+
+        const filtered =
+            getFilteredContent();
+
+
+        list.innerHTML =
+            '';
+
+
+        empty.hidden =
+            filtered.length !== 0;
+
+
+        filtered.forEach(
+            item => {
+
+                list.appendChild(
+                    createContentCard(
+                        item
+                    )
+                );
+
+            }
+        );
+
+    }
+
+
+    function createContentCard(
+        item
+    ) {
+
+        const card =
+            document.createElement(
+                'article'
+            );
+
+
+        card.className =
+            'content-card';
+
+
+        const typeLabel =
+            item.type === 'atividade'
+                ? 'Atividade'
+                : item.type === 'material'
+                    ? 'Material'
+                    : 'Aviso';
+
+
+        card.innerHTML = `
+
+            <div class="content-main">
+
+                <div class="content-top">
+
+                    <span
+                        class="content-type ${item.type}">
+
+                        ${typeLabel}
+
+                    </span>
+
+                    <span class="content-date">
+
+                        ${formatDate(item.date)}
+
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    ${escapeHtml(item.title)}
+                </h3>
+
+
+                <div class="content-meta">
+
+                    <span>
+                        ${escapeHtml(item.subject)}
+                    </span>
+
+                    <span>
+                        •
+                    </span>
+
+                    <span>
+                        ${escapeHtml(item.className)}
+                    </span>
+
+                </div>
+
+
+                ${
+                    item.description
+                        ? `
+                            <p class="content-description">
+                                ${escapeHtml(item.description)}
+                            </p>
+                          `
+                        : ''
+                }
+
+
+                ${
+                    item.deadline
+                        ? `
+                            <div class="deadline">
+                                <span>
+                                    Prazo
+                                </span>
+
+                                <strong>
+                                    ${formatDate(item.deadline)}
+                                </strong>
+                            </div>
+                          `
+                        : ''
+                }
+
+            </div>
+
+
+            <div class="content-actions">
+
+                <button
+                    type="button"
+                    class="edit-btn">
+
+                    Editar
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="delete-content-btn">
+
+                    Excluir
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        $('.edit-btn', card)
+            .addEventListener(
+                'click',
+                () =>
+                    openEdit(
+                        item.id
+                    )
+            );
+
+
+        $('.delete-content-btn', card)
+            .addEventListener(
+                'click',
+                () =>
+                    openDelete(
+                        item.id
+                    )
+            );
+
+
+        return card;
+
+    }
+
+
+    /* =========================
+       TURMAS
+    ========================== */
+
+    function renderClasses() {
+
+        const list =
+            $('#classList');
+
+
+        const grouped = {};
+
+
+        contents.forEach(
+            item => {
+
+                if (
+                    !grouped[item.className]
+                ) {
+
+                    grouped[item.className] =
+                        0;
+
+                }
+
+
+                grouped[item.className]++;
+
+            }
+        );
+
+
+        list.innerHTML =
+            '';
+
+
+        Object.entries(
+            grouped
+        )
+        .sort()
+        .forEach(
+            ([className, count]) => {
+
+                const item =
+                    document.createElement(
+                        'div'
+                    );
+
+
+                item.className =
+                    'class-item';
+
+
+                item.innerHTML = `
+
+                    <div class="class-icon">
+                        ${getClassInitial(className)}
+                    </div>
+
+                    <div class="class-info">
+
+                        <strong>
+                            ${escapeHtml(className)}
+                        </strong>
+
+                        <span>
+                            ${count}
+                            ${
+                                count === 1
+                                    ? 'publicação'
+                                    : 'publicações'
+                            }
+                        </span>
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(
+                    item
+                );
+
+            }
+        );
+
+    }
+
+
+    function getClassInitial(
+        value
+    ) {
+
+        const match =
+            value.match(
+                /^\d+/
+            );
+
+
+        return match
+            ? match[0]
+            : 'T';
+
+    }
+
+
+    /* =========================
+       RECENTES
+    ========================== */
+
+    function renderRecent() {
+
+        const list =
+            $('#recentList');
+
+
+        list.innerHTML =
+            '';
+
+
+        contents
+            .slice()
+            .sort(
+                (a, b) =>
+                    b.date.localeCompare(
+                        a.date
+                    )
+            )
+            .slice(
+                0,
+                4
+            )
+            .forEach(
+                item => {
+
+                    const row =
+                        document.createElement(
+                            'div'
+                        );
+
+
+                    row.className =
+                        'recent-item';
+
+
+                    row.innerHTML = `
+
+                        <span class="recent-dot">
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                ${escapeHtml(item.title)}
+                            </strong>
+
+                            <span>
+                                ${escapeHtml(item.className)}
+                                ·
+                                ${formatDate(item.date)}
+                            </span>
+
+                        </div>
+
+                    `;
+
+
+                    list.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =========================
+       RESUMO
+    ========================== */
+
+    function renderSummary() {
+
+        $('#totalContents')
+            .textContent =
+                contents.length;
+
+
+        const start =
+            new Date(today);
+
+
+        start.setDate(
+            start.getDate() -
+            start.getDay()
+        );
+
+
+        const end =
+            addDays(
+                start,
+                6
+            );
+
+
+        const week =
+            contents.filter(
+                item => {
+
+                    const date =
+                        new Date(
+                            item.date +
+                            'T00:00:00'
+                        );
+
+                    return (
+                        date >= start &&
+                        date <= end
+                    );
+
+                }
+            ).length;
+
+
+        $('#weekContents')
+            .textContent =
+                week;
+
+
+        const classes =
+            new Set(
+                contents.map(
+                    item =>
+                        item.className
+                )
+            );
+
+
+        $('#totalClasses')
+            .textContent =
+                classes.size;
+
+    }
+
+
+    /* =========================
+       MODAL
+    ========================== */
+
+    function openCreate() {
+
+        $('#editingId').value =
+            '';
+
+
+        $('#formEyebrow')
+            .textContent =
+                'NOVA PUBLICAÇÃO';
+
+
+        $('#formTitle')
+            .textContent =
+                'Publicar conteúdo';
+
+
+        $('#saveContentBtn')
+            .textContent =
+                'Publicar conteúdo';
+
+
+        $('#contentForm')
+            .reset();
+
+
+        $('#contentDate').value =
+            isoDate(today);
+
+
+        $('#contentDialog')
+            .showModal();
+
+
+        updateDeadlineField();
+
+    }
+
+
+    function openEdit(id) {
+
+        const item =
+            contents.find(
+                content =>
+                    content.id === id
+            );
+
+
+        if (!item) {
+            return;
+        }
+
+
+        $('#editingId').value =
+            item.id;
+
+
+        $('#formEyebrow')
+            .textContent =
+                'EDITAR PUBLICAÇÃO';
+
+
+        $('#formTitle')
+            .textContent =
+                'Editar conteúdo';
+
+
+        $('#saveContentBtn')
+            .textContent =
+                'Salvar alterações';
+
+
+        $('#contentTitle').value =
+            item.title;
+
+
+        $('#contentSubject').value =
+            item.subject;
+
+
+        $('#contentType').value =
+            item.type;
+
+
+        $('#contentClass').value =
+            item.className;
+
+
+        $('#contentDate').value =
+            item.date;
+
+
+        $('#contentDeadline').value =
+            item.deadline || '';
+
+
+        $('#contentDescription').value =
+            item.description || '';
+
+
+        updateDeadlineField();
+
+
+        $('#contentDialog')
+            .showModal();
+
+    }
+
+
+    function updateDeadlineField() {
+
+        const field =
+            $('#deadlineField');
+
+
+        field.style.display =
+            $('#contentType').value ===
+            'atividade'
+                ? 'flex'
+                : 'none';
+
+    }
+
+
+    function closeContentModal() {
+
+        $('#contentDialog')
+            .close();
+
+    }
+
+
+    /* =========================
+       SALVAR PUBLICAÇÃO
+    ========================== */
+
+    function saveContent(
+        event
+    ) {
+
+        event.preventDefault();
+
+
+        const id =
+            $('#editingId').value;
+
+
+        const data = {
+
+            title:
+                $('#contentTitle')
+                    .value
+                    .trim(),
+
+            subject:
+                $('#contentSubject')
+                    .value,
+
+            type:
+                $('#contentType')
+                    .value,
+
+            className:
+                $('#contentClass')
+                    .value,
+
+            date:
+                $('#contentDate')
+                    .value,
+
+            deadline:
+                $('#contentDeadline')
+                    .value,
+
+            description:
+                $('#contentDescription')
+                    .value
+                    .trim()
+
+        };
+
+
+        if (
+            !data.title ||
+            !data.subject ||
+            !data.type ||
+            !data.className ||
+            !data.date
+        ) {
+
+            return;
+
+        }
+
+
+        if (id) {
+
+            const index =
+                contents.findIndex(
+                    item =>
+                        item.id === id
+                );
+
+
+            if (
+                index !== -1
+            ) {
+
+                contents[index] = {
+                    ...contents[index],
+                    ...data
+                };
+
+            }
+
+        } else {
+
+            contents.push({
+
+                id: uid(),
+
+                ...data
+
+            });
+
+        }
+
+
+        save();
+
+        closeContentModal();
+
+        renderAll();
+
+    }
+
+
+    /* =========================
+       EXCLUSÃO
+    ========================== */
+
+    function openDelete(id) {
+
+        deletingId =
+            id;
+
+
+        $('#deleteDialog')
+            .showModal();
+
+    }
+
+
+    function confirmDelete() {
+
+        if (
+            !deletingId
+        ) {
+            return;
+        }
+
+
+        contents =
+            contents.filter(
+                item =>
+                    item.id !==
+                    deletingId
+            );
+
+
+        deletingId =
+            null;
+
+
+        save();
+
+        $('#deleteDialog')
+            .close();
+
+        renderAll();
+
+    }
+
+
+    /* =========================
+       TEMA
+    ========================== */
+
+    function loadTheme() {
+
+        const theme =
+            localStorage.getItem(
+                'atlas-theme'
+            );
+
+
+        if (theme) {
+
+            document.documentElement
+                .dataset.theme =
+                    theme;
+
+        }
+
+    }
+
+
+    function toggleTheme() {
+
+        const html =
+            document.documentElement;
+
+
+        const current =
+            html.dataset.theme;
+
+
+        const next =
+            current === 'dark'
+                ? 'light'
+                : 'dark';
+
+
+        html.dataset.theme =
+            next;
+
+
+        localStorage.setItem(
+            'atlas-theme',
+            next
+        );
+
+    }
+
+
+    /* =========================
+       RENDER GERAL
+    ========================== */
+
+    function renderAll() {
+
+        populateFilters();
+
+        renderContent();
+
+        renderClasses();
+
+        renderRecent();
+
+        renderSummary();
+
+    }
+
+
+    /* =========================
+       EVENTOS
+    ========================== */
+
+    $('#newContentBtn')
+        .addEventListener(
+            'click',
+            openCreate
+        );
+
+
+    $('#newContentBtn2')
+        .addEventListener(
+            'click',
+            openCreate
+        );
+
+
+    $('#emptyCreateBtn')
+        .addEventListener(
+            'click',
+            openCreate
+        );
+
+
+    $('#contentForm')
+        .addEventListener(
+            'submit',
+            saveContent
+        );
+
+
+    $('#contentType')
+        .addEventListener(
+            'change',
+            updateDeadlineField
+        );
+
+
+    $('#closeContentBtn')
+        .addEventListener(
+            'click',
+            closeContentModal
+        );
+
+
+    $('#cancelContentBtn')
+        .addEventListener(
+            'click',
+            closeContentModal
+        );
+
+
+    $('#closeDeleteBtn')
+        .addEventListener(
+            'click',
+            () =>
+                $('#deleteDialog')
+                    .close()
+        );
+
+
+    $('#cancelDeleteBtn')
+        .addEventListener(
+            'click',
+            () =>
+                $('#deleteDialog')
+                    .close()
+        );
+
+
+    $('#confirmDeleteBtn')
+        .addEventListener(
+            'click',
+            confirmDelete
+        );
+
+
+    $('#themeBtn')
+        .addEventListener(
+            'click',
+            toggleTheme
+        );
+
+
+    /* FILTROS */
+
+    $$('#typeFilters .filter-chip')
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    'click',
+                    () => {
+
+                        $$('#typeFilters .filter-chip')
+                            .forEach(
+                                item =>
+                                    item.classList
+                                        .remove(
+                                            'active'
+                                        )
+                            );
+
+
+                        button.classList.add(
+                            'active'
+                        );
+
+
+                        currentType =
+                            button.dataset.type;
+
+
+                        renderContent();
+
+                    }
+                );
+
+            }
+        );
+
+
+    $('#classFilter')
+        .addEventListener(
+            'change',
+            renderContent
+        );
+
+
+    $('#subjectFilter')
+        .addEventListener(
+            'change',
+            renderContent
+        );
+
+
+    /* PERFIL */
+
+    $('#profileBtn')
+        .addEventListener(
+            'click',
+            event => {
+
+                event.stopPropagation();
+
+
+                const menu =
+                    $('#profileMenu');
+
+
+                menu.hidden =
+                    !menu.hidden;
+
+            }
+        );
+
+
+    document.addEventListener(
+        'click',
+        event => {
+
+            if (
+                !event.target.closest(
+                    '.top-actions'
+                )
+            ) {
+
+                $('#profileMenu')
+                    .hidden =
+                        true;
+
+            }
+
+        }
+    );
+
+
+    /* LIMPAR DADOS */
+
+    $('#clearDataBtn')
+        .addEventListener(
+            'click',
+            () => {
+
+                localStorage.removeItem(
+                    STORAGE_KEY
+                );
+
+
+                contents =
+                    seedContent.map(
+                        item => ({
+                            ...item
+                        })
+                    );
+
+
+                $('#profileMenu')
+                    .hidden =
+                        true;
+
+
+                renderAll();
+
+            }
+        );
+
+
+    /* INICIALIZAÇÃO */
+
+    loadTheme();
+
+    renderAll();
+
+})();
+
+</script>
+
+</body>
+</html>

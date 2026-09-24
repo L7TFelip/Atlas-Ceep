@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atlas CEEP — Administrador</title>
+  <link rel="stylesheet" href="adm.css">
+</head>
+
+<body>
+
+<div class="app-shell">
+
+  <!-- ==================== TOPO ==================== -->
+  <header class="topbar">
+
+    <div class="brand">
+      <div class="brand-mark">A</div>
+
+      <div class="brand-text">
+        <strong>Atlas CEEP</strong>
+        <span>Área do administrador</span>
+      </div>
+    </div>
+
+    <div class="top-actions">
+
+      <button class="icon-btn" id="themeBtn" title="Alternar tema">
+        ☼
+      </button>
+
+      <button class="profile-btn" id="profileBtn">
+        <span class="avatar">AD</span>
+        <span class="profile-name">Administrador</span>
+        <span class="chevron">⌄</span>
+      </button>
+
+      <div class="profile-menu" id="profileMenu" hidden>
+        <div class="profile-menu-head">
+          <strong>Administrador</strong>
+          <span>Administração · CEEP</span>
+        </div>
+
+        <button type="button">Meu perfil</button>
+        <button type="button" id="clearDataBtn">
+          Limpar dados locais
+        </button>
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ==================== CONTEÚDO ==================== -->
+  <main class="dashboard">
+
+    <!-- BOAS-VINDAS -->
+    <section class="welcome">
+
+      <div>
+        <p class="eyebrow">PAINEL DO ADMINISTRADOR</p>
+
+        <h1>Olá, administrador.</h1>
+
+        <p class="muted">
+          Gerencie os eventos e informações gerais exibidos para os alunos.
+        </p>
+      </div>
+
+      <button class="primary-btn" id="newEventBtn">
+        ＋ Criar evento
+      </button>
+
+    </section>
+
+
+    <!-- ==================== RESUMO ==================== -->
+    <section class="quick-summary">
+
+      <article class="summary-item">
+
+        <span class="summary-dot accent-dot"></span>
+
+        <div>
+          <strong id="totalEvents">0</strong>
+          <span>Eventos publicados</span>
+        </div>
+
+      </article>
+
+
+      <article class="summary-item">
+
+        <span class="summary-dot warning-dot"></span>
+
+        <div>
+          <strong id="upcomingEvents">0</strong>
+          <span>Próximos eventos</span>
+        </div>
+
+      </article>
+
+
+      <article class="summary-item">
+
+        <span class="summary-dot info-dot"></span>
+
+        <div>
+          <strong id="monthEvents">0</strong>
+          <span>Eventos este mês</span>
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <!-- ==================== GRID PRINCIPAL ==================== -->
+    <section class="main-grid">
+
+      <!-- ==================== EVENTOS ==================== -->
+      <div class="left-column">
+
+        <article class="panel">
+
+          <div class="panel-head panel-head-wrap">
+
+            <div>
+              <p class="eyebrow">AGENDA INSTITUCIONAL</p>
+              <h2>Eventos publicados</h2>
+            </div>
+
+            <button class="ghost-btn" id="newEventBtn2">
+              ＋ Novo evento
+            </button>
+
+          </div>
+
+
+          <!-- FILTROS -->
+          <div class="filters-row">
+
+            <div class="filter-scroll" id="typeFilters">
+
+              <button
+                class="filter-chip active"
+                data-type="all">
+                Todos
+              </button>
+
+              <button
+                class="filter-chip"
+                data-type="evento">
+                Eventos
+              </button>
+
+              <button
+                class="filter-chip"
+                data-type="reuniao">
+                Reuniões
+              </button>
+
+              <button
+                class="filter-chip"
+                data-type="comemoracao">
+                Comemorações
+              </button>
+
+              <button
+                class="filter-chip"
+                data-type="aviso">
+                Avisos
+              </button>
+
+            </div>
+
+
+            <div class="select-row">
+
+              <select
+                id="audienceFilter"
+                class="compact-select">
+
+                <option value="all">
+                  Todos os públicos
+                </option>
+
+                <option value="alunos">
+                  Alunos
+                </option>
+
+                <option value="professores">
+                  Professores
+                </option>
+
+                <option value="todos">
+                  Toda a escola
+                </option>
+
+              </select>
+
+              <select
+                id="monthFilter"
+                class="compact-select">
+
+                <option value="all">
+                  Todos os meses
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <!-- LISTA -->
+          <div
+            class="event-list"
+            id="eventList">
+          </div>
+
+
+          <!-- VAZIO -->
+          <div
+            class="empty-state"
+            id="eventEmpty"
+            hidden>
+
+            <span>◌</span>
+
+            <p>
+              Nenhum evento encontrado.
+            </p>
+
+            <button
+              class="text-btn"
+              id="emptyCreateBtn">
+              Criar evento
+            </button>
+
+          </div>
+
+        </article>
+
+      </div>
+
+
+      <!-- ==================== LATERAL ==================== -->
+      <div class="right-column">
+
+
+        <!-- PRÓXIMOS -->
+        <article class="panel">
+
+          <div class="panel-head">
+
+            <div>
+              <p class="eyebrow">CALENDÁRIO</p>
+              <h2>Próximos eventos</h2>
+            </div>
+
+          </div>
+
+          <div
+            class="upcoming-list"
+            id="upcomingList">
+          </div>
+
+        </article>
+
+
+        <!-- CATEGORIAS -->
+        <article class="panel">
+
+          <div class="panel-head">
+
+            <div>
+              <p class="eyebrow">VISÃO GERAL</p>
+              <h2>Tipos de evento</h2>
+            </div>
+
+          </div>
+
+          <div
+            class="category-list"
+            id="categoryList">
+          </div>
+
+        </article>
+
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+
+<!-- ========================================================= -->
+<!-- MODAL — CRIAR / EDITAR EVENTO -->
+<!-- ========================================================= -->
+
+<dialog id="eventDialog">
+
+  <form
+    class="modal-form"
+    id="eventForm">
+
+    <button
+      type="button"
+      class="close-btn"
+      id="closeEventBtn">
+      ×
+    </button>
+
+
+    <p
+      class="eyebrow"
+      id="formEyebrow">
+      NOVO EVENTO
+    </p>
+
+
+    <h2 id="formTitle">
+      Criar evento
+    </h2>
+
+
+    <input
+      type="hidden"
+      id="editingId">
+
+
+    <!-- TÍTULO -->
+    <label>
+
+      Título
+
+      <input
+        type="text"
+        id="eventTitle"
+        maxlength="100"
+        required
+        placeholder="Ex.: Feira de profissões">
+
+    </label>
+
+
+    <!-- TIPO + PÚBLICO -->
+    <div class="modal-grid-two">
+
+      <label>
+
+        Tipo
+
+        <select
+          id="eventType"
+          required>
+
+          <option value="evento">
+            Evento
+          </option>
+
+          <option value="reuniao">
+            Reunião
+          </option>
+
+          <option value="comemoracao">
+            Comemoração
+          </option>
+
+          <option value="aviso">
+            Aviso
+          </option>
+
+        </select>
+
+      </label>
+
+
+      <label>
+
+        Público
+
+        <select
+          id="eventAudience"
+          required>
+
+          <option value="todos">
+            Toda a escola
+          </option>
+
+          <option value="alunos">
+            Alunos
+          </option>
+
+          <option value="professores">
+            Professores
+          </option>
+
+        </select>
+
+      </label>
+
+    </div>
+
+
+    <!-- DATA + HORÁRIO -->
+    <div class="modal-grid-two">
+
+      <label>
+
+        Data
+
+        <input
+          type="date"
+          id="eventDate"
+          required>
+
+      </label>
+
+
+      <label>
+
+        Horário
+
+        <input
+          type="time"
+          id="eventTime">
+
+      </label>
+
+    </div>
+
+
+    <!-- LOCAL -->
+    <label>
+
+      Local
+
+      <input
+        type="text"
+        id="eventLocation"
+        maxlength="120"
+        placeholder="Ex.: Auditório do CEEP">
+
+    </label>
+
+
+    <!-- DESCRIÇÃO -->
+    <label>
+
+      Descrição
+
+      <textarea
+        id="eventDescription"
+        maxlength="700"
+        placeholder="Explique os detalhes do evento para os alunos e professores."></textarea>
+
+    </label>
+
+
+    <!-- AÇÕES -->
+    <div class="modal-actions">
+
+      <button
+        type="button"
+        class="secondary-btn"
+        id="cancelEventBtn">
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="primary-btn"
+        id="saveEventBtn">
+        Publicar evento
+      </button>
+
+    </div>
+
+  </form>
+
+</dialog>
+
+
+
+<!-- ========================================================= -->
+<!-- MODAL — EXCLUSÃO -->
+<!-- ========================================================= -->
+
+<dialog id="deleteDialog">
+
+  <div class="modal-form">
+
+    <button
+      type="button"
+      class="close-btn"
+      id="closeDeleteBtn">
+      ×
+    </button>
+
+
+    <p class="eyebrow">
+      EXCLUIR EVENTO
+    </p>
+
+
+    <h2>
+      Excluir evento?
+    </h2>
+
+
+    <p class="delete-message">
+      Esse evento será removido da área do administrador e não
+      aparecerá mais na agenda institucional.
+    </p>
+
+
+    <div class="modal-actions">
+
+      <button
+        type="button"
+        class="secondary-btn"
+        id="cancelDeleteBtn">
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="danger-btn"
+        id="confirmDeleteBtn">
+        Excluir
+      </button>
+
+    </div>
+
+  </div>
+
+</dialog>
+
+
+
+<script>
+
+const STORAGE_KEY = "atlas-admin-events-v1";
+
+const $ = selector => document.querySelector(selector);
+
+
+
+/* ========================================================= */
+/* DATAS */
+/* ========================================================= */
+
+function isoDate(date = new Date()) {
+
+  const year = date.getFullYear();
+
+  const month = String(
+    date.getMonth() + 1
+  ).padStart(2, "0");
+
+  const day = String(
+    date.getDate()
+  ).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+
+function addDays(date, amount) {
+
+  const result = new Date(date);
+
+  result.setDate(
+    result.getDate() + amount
+  );
+
+  return result;
+
+}
+
+
+
+/* ========================================================= */
+/* ID */
+/* ========================================================= */
+
+function uid() {
+
+  return Date.now().toString(36) +
+    Math.random()
+      .toString(36)
+      .substring(2, 8);
+
+}
+
+
+
+/* ========================================================= */
+/* ESCAPE HTML */
+/* ========================================================= */
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+
+/* ========================================================= */
+/* FORMATAÇÃO */
+/* ========================================================= */
+
+function formatDate(dateString) {
+
+  if (!dateString) {
+    return "";
+  }
+
+  const [year, month, day] =
+    dateString.split("-");
+
+  return `${day}/${month}/${year}`;
+
+}
+
+
+function formatLongDate(dateString) {
+
+  if (!dateString) {
+    return "";
+  }
+
+  const date = new Date(
+    `${dateString}T12:00:00`
+  );
+
+  return date.toLocaleDateString(
+    "pt-BR",
+    {
+      weekday: "long",
+      day: "2-digit",
+      month: "long"
+    }
+  );
+
+}
+
+
+function getMonthName(dateString) {
+
+  const date = new Date(
+    `${dateString}T12:00:00`
+  );
+
+  return date.toLocaleDateString(
+    "pt-BR",
+    {
+      month: "long",
+      year: "numeric"
+    }
+  );
+
+}
+
+
+
+/* ========================================================= */
+/* DADOS INICIAIS */
+/* ========================================================= */
+
+function createSeedEvents() {
+
+  const today = new Date();
+
+  return [
+
+    {
+      id: uid(),
+      title: "Feira de profissões",
+      type: "evento",
+      audience: "todos",
+      date: isoDate(addDays(today, 5)),
+      time: "09:00",
+      location: "Auditório do CEEP",
+      description:
+        "Evento com apresentações sobre cursos, profissões e oportunidades de carreira."
+    },
+
+    {
+      id: uid(),
+      title: "Reunião pedagógica",
+      type: "reuniao",
+      audience: "professores",
+      date: isoDate(addDays(today, 2)),
+      time: "14:00",
+      location: "Sala de reuniões",
+      description:
+        "Reunião da equipe pedagógica para organização das próximas atividades."
+    },
+
+    {
+      id: uid(),
+      title: "Semana da Juventude",
+      type: "comemoracao",
+      audience: "alunos",
+      date: isoDate(addDays(today, 10)),
+      time: "08:00",
+      location: "Quadra do CEEP",
+      description:
+        "Programação especial com atividades, apresentações e integração dos alunos."
+    },
+
+    {
+      id: uid(),
+      title: "Entrega dos boletins",
+      type: "aviso",
+      audience: "todos",
+      date: isoDate(addDays(today, 15)),
+      time: "10:00",
+      location: "Secretaria",
+      description:
+        "Os boletins estarão disponíveis para consulta na secretaria da instituição."
+    },
+
+    {
+      id: uid(),
+      title: "Mostra de projetos",
+      type: "evento",
+      audience: "todos",
+      date: isoDate(addDays(today, 21)),
+      time: "19:00",
+      location: "CEEP Pedro Boaretto Neto",
+      description:
+        "Apresentação dos projetos desenvolvidos pelos estudantes durante o semestre."
+    }
+
+  ];
+
+}
+
+
+
+/* ========================================================= */
+/* CARREGAR / SALVAR */
+/* ========================================================= */
+
+function loadEvents() {
+
+  const saved =
+    localStorage.getItem(STORAGE_KEY);
+
+  if (!saved) {
+
+    const seed = createSeedEvents();
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(seed)
+    );
+
+    return seed;
+
+  }
+
+  try {
+
+    return JSON.parse(saved);
+
+  } catch {
+
+    return [];
+
+  }
+
+}
+
+
+let events = loadEvents();
+
+
+
+function saveEvents() {
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(events)
+  );
+
+}
+
+
+
+/* ========================================================= */
+/* LABELS */
+/* ========================================================= */
+
+const typeLabels = {
+
+  evento: "Evento",
+  reuniao: "Reunião",
+  comemoracao: "Comemoração",
+  aviso: "Aviso"
+
+};
+
+
+const audienceLabels = {
+
+  alunos: "Alunos",
+  professores: "Professores",
+  todos: "Toda a escola"
+
+};
+
+
+
+/* ========================================================= */
+/* FILTROS */
+/* ========================================================= */
+
+let activeType = "all";
+
+
+function getFilteredEvents() {
+
+  const audience =
+    $("#audienceFilter").value;
+
+  const month =
+    $("#monthFilter").value;
+
+  return [...events]
+
+    .filter(event => {
+
+      if (
+        activeType !== "all" &&
+        event.type !== activeType
+      ) {
+        return false;
+      }
+
+      if (
+        audience !== "all" &&
+        event.audience !== audience
+      ) {
+        return false;
+      }
+
+      if (
+        month !== "all" &&
+        !event.date.startsWith(month)
+      ) {
+        return false;
+      }
+
+      return true;
+
+    })
+
+    .sort(
+      (a, b) =>
+        `${a.date}${a.time}`.localeCompare(
+          `${b.date}${b.time}`
+        )
+    );
+
+}
+
+
+
+/* ========================================================= */
+/* FILTRO DE MESES */
+/* ========================================================= */
+
+function populateMonthFilter() {
+
+  const select =
+    $("#monthFilter");
+
+  const current =
+    select.value;
+
+  const months = [
+    ...new Set(
+      events.map(event =>
+        event.date.substring(0, 7)
+      )
+    )
+  ].sort();
+
+  select.innerHTML =
+    `<option value="all">
+      Todos os meses
+    </option>`;
+
+  months.forEach(month => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = month;
+
+    const date =
+      new Date(`${month}-01T12:00:00`);
+
+    option.textContent =
+      date.toLocaleDateString(
+        "pt-BR",
+        {
+          month: "long",
+          year: "numeric"
+        }
+      );
+
+    select.appendChild(option);
+
+  });
+
+  if (
+    months.includes(current)
+  ) {
+    select.value = current;
+  }
+
+}
+
+
+
+/* ========================================================= */
+/* RENDER EVENTOS */
+/* ========================================================= */
+
+function createEventCard(event) {
+
+  const article =
+    document.createElement("article");
+
+  article.className =
+    "event-card";
+
+  article.innerHTML = `
+
+    <div class="event-date">
+
+      <strong>
+        ${new Date(
+          event.date + "T12:00:00"
+        ).getDate()}
+      </strong>
+
+      <span>
+        ${new Date(
+          event.date + "T12:00:00"
+        ).toLocaleDateString(
+          "pt-BR",
+          { month: "short" }
+        ).replace(".", "")}
+      </span>
+
+    </div>
+
+
+    <div class="event-content">
+
+      <div class="event-top">
+
+        <span class="type-chip type-${escapeHtml(event.type)}">
+          ${escapeHtml(typeLabels[event.type])}
+        </span>
+
+        <span class="audience">
+          ${escapeHtml(audienceLabels[event.audience])}
+        </span>
+
+      </div>
+
+
+      <h3>
+        ${escapeHtml(event.title)}
+      </h3>
+
+
+      ${
+        event.description
+          ? `
+            <p class="event-description">
+              ${escapeHtml(event.description)}
+            </p>
+          `
+          : ""
+      }
+
+
+      <div class="event-meta">
+
+        ${
+          event.time
+            ? `
+              <span>
+                ◷ ${escapeHtml(event.time)}
+              </span>
+            `
+            : ""
+        }
+
+        ${
+          event.location
+            ? `
+              <span>
+                ⌖ ${escapeHtml(event.location)}
+              </span>
+            `
+            : ""
+        }
+
+        <span>
+          ${formatDate(event.date)}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="event-actions">
+
+      <button
+        class="small-action edit-action"
+        data-id="${event.id}"
+        title="Editar">
+        Editar
+      </button>
+
+      <button
+        class="small-action delete-action"
+        data-id="${event.id}"
+        title="Excluir">
+        Excluir
+      </button>
+
+    </div>
+
+  `;
+
+
+  article
+    .querySelector(".edit-action")
+    .addEventListener(
+      "click",
+      () => openEdit(event.id)
+    );
+
+
+  article
+    .querySelector(".delete-action")
+    .addEventListener(
+      "click",
+      () => openDelete(event.id)
+    );
+
+
+  return article;
+
+}
+
+
+
+function renderEvents() {
+
+  const list =
+    $("#eventList");
+
+  const empty =
+    $("#eventEmpty");
+
+  list.innerHTML = "";
+
+  const filtered =
+    getFilteredEvents();
+
+
+  if (!filtered.length) {
+
+    empty.hidden = false;
+
+    return;
+
+  }
+
+
+  empty.hidden = true;
+
+
+  filtered.forEach(event => {
+
+    list.appendChild(
+      createEventCard(event)
+    );
+
+  });
+
+}
+
+
+
+/* ========================================================= */
+/* PRÓXIMOS EVENTOS */
+/* ========================================================= */
+
+function renderUpcoming() {
+
+  const list =
+    $("#upcomingList");
+
+  list.innerHTML = "";
+
+
+  const today =
+    isoDate();
+
+
+  const upcoming =
+    events
+
+      .filter(event =>
+        event.date >= today
+      )
+
+      .sort(
+        (a, b) =>
+          `${a.date}${a.time}`.localeCompare(
+            `${b.date}${b.time}`
+          )
+      )
+      .slice(0, 5);
+
+
+  if (!upcoming.length) {
+
+    list.innerHTML = `
+      <div class="side-empty">
+        Nenhum evento próximo.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  upcoming.forEach(event => {
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "upcoming-item";
+
+
+    item.innerHTML = `
+
+      <div class="mini-date">
+
+        <strong>
+          ${new Date(
+            event.date + "T12:00:00"
+          ).getDate()}
+        </strong>
+
+        <span>
+          ${new Date(
+            event.date + "T12:00:00"
+          ).toLocaleDateString(
+            "pt-BR",
+            { month: "short" }
+          ).replace(".", "")}
+        </span>
+
+      </div>
+
+
+      <div>
+
+        <strong>
+          ${escapeHtml(event.title)}
+        </strong>
+
+        <span>
+          ${
+            event.time
+              ? event.time + " · "
+              : ""
+          }
+          ${escapeHtml(
+            event.location || "Sem local"
+          )}
+        </span>
+
+      </div>
+
+    `;
+
+
+    list.appendChild(item);
+
+  });
+
+}
+
+
+
+/* ========================================================= */
+/* CATEGORIAS */
+/* ========================================================= */
+
+function renderCategories() {
+
+  const list =
+    $("#categoryList");
+
+  list.innerHTML = "";
+
+
+  Object.entries(typeLabels)
+    .forEach(([type, label]) => {
+
+      const count =
+        events.filter(
+          event => event.type === type
+        ).length;
+
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "category-item";
+
+
+      item.innerHTML = `
+
+        <div class="category-name">
+
+          <span class="category-dot type-${type}"></span>
+
+          <span>
+            ${label}
+          </span>
+
+        </div>
+
+        <strong>
+          ${count}
+        </strong>
+
+      `;
+
+
+      list.appendChild(item);
+
+    });
+
+}
+
+
+
+/* ========================================================= */
+/* RESUMO */
+/* ========================================================= */
+
+function renderSummary() {
+
+  const today =
+    isoDate();
+
+
+  const currentMonth =
+    today.substring(0, 7);
+
+
+  const upcoming =
+    events.filter(
+      event => event.date >= today
+    ).length;
+
+
+  const month =
+    events.filter(
+      event =>
+        event.date.startsWith(
+          currentMonth
+        )
+    ).length;
+
+
+  $("#totalEvents").textContent =
+    events.length;
+
+  $("#upcomingEvents").textContent =
+    upcoming;
+
+  $("#monthEvents").textContent =
+    month;
+
+}
+
+
+
+/* ========================================================= */
+/* RENDER GERAL */
+/* ========================================================= */
+
+function renderAll() {
+
+  populateMonthFilter();
+
+  renderEvents();
+
+  renderUpcoming();
+
+  renderCategories();
+
+  renderSummary();
+
+}
+
+
+
+/* ========================================================= */
+/* MODAL CRIAR */
+/* ========================================================= */
+
+function openCreate() {
+
+  $("#eventForm").reset();
+
+  $("#editingId").value = "";
+
+  $("#formEyebrow").textContent =
+    "NOVO EVENTO";
+
+  $("#formTitle").textContent =
+    "Criar evento";
+
+  $("#saveEventBtn").textContent =
+    "Publicar evento";
+
+  $("#eventDate").value =
+    isoDate();
+
+
+  $("#eventDialog").showModal();
+
+}
+
+
+
+/* ========================================================= */
+/* MODAL EDITAR */
+/* ========================================================= */
+
+function openEdit(id) {
+
+  const event =
+    events.find(
+      item => item.id === id
+    );
+
+  if (!event) {
+    return;
+  }
+
+
+  $("#editingId").value =
+    event.id;
+
+  $("#eventTitle").value =
+    event.title;
+
+  $("#eventType").value =
+    event.type;
+
+  $("#eventAudience").value =
+    event.audience;
+
+  $("#eventDate").value =
+    event.date;
+
+  $("#eventTime").value =
+    event.time || "";
+
+  $("#eventLocation").value =
+    event.location || "";
+
+  $("#eventDescription").value =
+    event.description || "";
+
+
+  $("#formEyebrow").textContent =
+    "EDITAR EVENTO";
+
+  $("#formTitle").textContent =
+    "Editar evento";
+
+  $("#saveEventBtn").textContent =
+    "Salvar alterações";
+
+
+  $("#eventDialog").showModal();
+
+}
+
+
+
+/* ========================================================= */
+/* FECHAR MODAL */
+/* ========================================================= */
+
+function closeEventModal() {
+
+  $("#eventDialog").close();
+
+}
+
+
+function closeDeleteModal() {
+
+  $("#deleteDialog").close();
+
+}
+
+
+
+/* ========================================================= */
+/* SALVAR EVENTO */
+/* ========================================================= */
+
+function saveEvent(event) {
+
+  event.preventDefault();
+
+
+  const id =
+    $("#editingId").value;
+
+
+  const data = {
+
+    title:
+      $("#eventTitle").value.trim(),
+
+    type:
+      $("#eventType").value,
+
+    audience:
+      $("#eventAudience").value,
+
+    date:
+      $("#eventDate").value,
+
+    time:
+      $("#eventTime").value,
+
+    location:
+      $("#eventLocation").value.trim(),
+
+    description:
+      $("#eventDescription").value.trim()
+
+  };
+
+
+  if (!data.title || !data.date) {
+    return;
+  }
+
+
+  if (id) {
+
+    const index =
+      events.findIndex(
+        event => event.id === id
+      );
+
+
+    if (index !== -1) {
+
+      events[index] = {
+        ...events[index],
+        ...data
+      };
+
+    }
+
+  } else {
+
+    events.push({
+
+      id: uid(),
+
+      ...data
+
+    });
+
+  }
+
+
+  saveEvents();
+
+  closeEventModal();
+
+  renderAll();
+
+}
+
+
+
+/* ========================================================= */
+/* EXCLUSÃO */
+/* ========================================================= */
+
+let deletingId = null;
+
+
+function openDelete(id) {
+
+  deletingId = id;
+
+  $("#deleteDialog").showModal();
+
+}
+
+
+function confirmDelete() {
+
+  if (!deletingId) {
+    return;
+  }
+
+
+  events =
+    events.filter(
+      event =>
+        event.id !== deletingId
+    );
+
+
+  saveEvents();
+
+  deletingId = null;
+
+  closeDeleteModal();
+
+  renderAll();
+
+}
+
+
+
+/* ========================================================= */
+/* TEMA */
+/* ========================================================= */
+
+function loadTheme() {
+
+  const theme =
+    localStorage.getItem(
+      "atlas-theme"
+    ) || "dark";
+
+  document.documentElement
+    .setAttribute(
+      "data-theme",
+      theme
+    );
+
+}
+
+
+function toggleTheme() {
+
+  const current =
+    document.documentElement
+      .getAttribute("data-theme");
+
+
+  const next =
+    current === "dark"
+      ? "light"
+      : "dark";
+
+
+  document.documentElement
+    .setAttribute(
+      "data-theme",
+      next
+    );
+
+
+  localStorage.setItem(
+    "atlas-theme",
+    next
+  );
+
+}
+
+
+
+/* ========================================================= */
+/* MENU PERFIL */
+/* ========================================================= */
+
+function toggleProfile() {
+
+  const menu =
+    $("#profileMenu");
+
+  menu.hidden =
+    !menu.hidden;
+
+}
+
+
+
+/* ========================================================= */
+/* EVENTOS DOS FILTROS */
+/* ========================================================= */
+
+document
+  .querySelectorAll(
+    ".filter-chip"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(
+            ".filter-chip"
+          )
+          .forEach(btn =>
+            btn.classList.remove(
+              "active"
+            )
+          );
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        activeType =
+          button.dataset.type;
+
+
+        renderEvents();
+
+      }
+    );
+
+  });
+
+
+
+$("#audienceFilter")
+  .addEventListener(
+    "change",
+    renderEvents
+  );
+
+
+$("#monthFilter")
+  .addEventListener(
+    "change",
+    renderEvents
+  );
+
+
+
+/* ========================================================= */
+/* BOTÕES */
+/* ========================================================= */
+
+$("#newEventBtn")
+  .addEventListener(
+    "click",
+    openCreate
+  );
+
+
+$("#newEventBtn2")
+  .addEventListener(
+    "click",
+    openCreate
+  );
+
+
+$("#emptyCreateBtn")
+  .addEventListener(
+    "click",
+    openCreate
+  );
+
+
+$("#closeEventBtn")
+  .addEventListener(
+    "click",
+    closeEventModal
+  );
+
+
+$("#cancelEventBtn")
+  .addEventListener(
+    "click",
+    closeEventModal
+  );
+
+
+$("#eventForm")
+  .addEventListener(
+    "submit",
+    saveEvent
+  );
+
+
+
+$("#closeDeleteBtn")
+  .addEventListener(
+    "click",
+    closeDeleteModal
+  );
+
+
+$("#cancelDeleteBtn")
+  .addEventListener(
+    "click",
+    closeDeleteModal
+  );
+
+
+$("#confirmDeleteBtn")
+  .addEventListener(
+    "click",
+    confirmDelete
+  );
+
+
+
+$("#themeBtn")
+  .addEventListener(
+    "click",
+    toggleTheme
+  );
+
+
+$("#profileBtn")
+  .addEventListener(
+    "click",
+    toggleProfile
+  );
+
+
+
+/* ========================================================= */
+/* LIMPAR DADOS */
+/* ========================================================= */
+
+$("#clearDataBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      const confirmed =
+        confirm(
+          "Isso apagará todos os eventos salvos neste navegador. Continuar?"
+        );
+
+
+      if (!confirmed) {
+        return;
+      }
+
+
+      localStorage.removeItem(
+        STORAGE_KEY
+      );
+
+
+      events =
+        createSeedEvents();
+
+
+      saveEvents();
+
+      renderAll();
+
+      $("#profileMenu").hidden =
+        true;
+
+    }
+  );
+
+
+
+/* ========================================================= */
+/* FECHAR MENU AO CLICAR FORA */
+/* ========================================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const profile =
+      $(".top-actions");
+
+    if (
+      !profile.contains(
+        event.target
+      )
+    ) {
+
+      $("#profileMenu").hidden =
+        true;
+
+    }
+
+  }
+);
+
+
+
+/* ========================================================= */
+/* INICIALIZAÇÃO */
+/* ========================================================= */
+
+loadTheme();
+
+renderAll();
+
+</script>
+
+</body>
+</html>
