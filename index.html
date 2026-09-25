@@ -1,3003 +1,1270 @@
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Atlas CEEP — agenda escolar do aluno para acompanhar atividades, prazos, calendário e avisos.">
-    <title>Atlas CEEP — Agenda do Aluno</title>
-    <link rel="stylesheet" href="static/css/Aluno.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Atlas CEEP — agenda escolar do aluno para acompanhar atividades, prazos, calendário e avisos.">
+  <title>Atlas CEEP — Agenda do Aluno</title>
+  <link rel="stylesheet" href="Aluno(2).css">
 </head>
-
 <body>
-
 <div class="app-shell">
-
-    <header class="topbar">
-
-        <div class="brand">
-            <div class="brand-mark">A</div>
-
-            <div class="brand-text">
-                <strong>Atlas CEEP</strong>
-                <span>Agenda do aluno</span>
-            </div>
-        </div>
-
-        <div class="top-actions">
-
-            <button
-                class="icon-btn"
-                id="themeBtn"
-                title="Alternar tema"
-                aria-label="Alternar tema">
-                ☼
-            </button>
-
-            <button
-                class="profile-btn"
-                id="profileBtn"
-                aria-expanded="false"
-                aria-controls="profileMenu">
-
-                <span class="avatar">FN</span>
-                <span class="profile-name">Felipe</span>
-                <span class="chevron">⌄</span>
-
-            </button>
-
-            <div class="profile-menu" id="profileMenu" hidden>
-
-                <div class="profile-menu-head">
-                    <strong>Felipe N.</strong>
-                    <span>2º DS · CEEP</span>
-                </div>
-
-                <button type="button">
-                    Meu perfil
-                </button>
-
-                <button
-                    type="button"
-                    data-action="clear-data">
-                    Limpar dados locais
-                </button>
-
-            </div>
-
-        </div>
-
-    </header>
-
-
-    <main class="dashboard">
-
-        <!-- CABEÇALHO -->
-
-        <section class="welcome">
-
-            <div>
-
-                <p class="eyebrow">
-                    PAINEL ESCOLAR
-                </p>
-
-                <h1>
-                    Olá, Felipe.
-                </h1>
-
-                <p class="muted">
-                    Veja o que foi passado em sala,
-                    o que está atrasado e quais atividades
-                    estão mais perto do prazo.
-                </p>
-
-            </div>
-
-            <button
-                class="primary-btn"
-                id="addTaskBtn">
-
-                ＋ Anotar atividade
-
-            </button>
-
-        </section>
-
-
-        <!-- RESUMO -->
-
-        <section
-            class="quick-summary"
-            aria-label="Resumo de atividades">
-
-            <article class="summary-item danger">
-
-                <span class="summary-dot"></span>
-
-                <div>
-                    <strong id="summaryOverdue">
-                        0
-                    </strong>
-
-                    <span>
-                        Atrasadas
-                    </span>
-                </div>
-
-            </article>
-
-
-            <article class="summary-item warning">
-
-                <span class="summary-dot"></span>
-
-                <div>
-                    <strong id="summarySoon">
-                        0
-                    </strong>
-
-                    <span>
-                        Vencem em breve
-                    </span>
-                </div>
-
-            </article>
-
-
-            <article class="summary-item neutral">
-
-                <span class="summary-dot"></span>
-
-                <div>
-                    <strong id="summaryWeek">
-                        0
-                    </strong>
-
-                    <span>
-                        Esta semana
-                    </span>
-                </div>
-
-            </article>
-
-        </section>
-
-
-        <!-- ATIVIDADES CONCLUÍDAS / PENDENTES -->
-
-        <section class="stats-grid">
-
-            <article class="stat-card">
-
-                <div class="stat-icon">
-                    ✓
-                </div>
-
-                <div>
-                    <small>
-                        Atividades concluídas
-                    </small>
-
-                    <strong id="doneCount">
-                        0
-                    </strong>
-                </div>
-
-            </article>
-
-
-            <article class="stat-card">
-
-                <div class="stat-icon">
-                    ◷
-                </div>
-
-                <div>
-                    <small>
-                        Atividades pendentes
-                    </small>
-
-                    <strong id="pendingCount">
-                        0
-                    </strong>
-                </div>
-
-            </article>
-
-        </section>
-
-
-        <!-- HOJE -->
-
-        <section class="today-section">
-
-            <div class="today-header">
-
-                <div>
-
-                    <p class="eyebrow">
-                        HOJE
-                    </p>
-
-                    <h2 id="todayTitle">
-                        Hoje
-                    </h2>
-
-                </div>
-
-                <span
-                    class="today-count"
-                    id="todayCount">
-
-                    0 atividades
-
-                </span>
-
-            </div>
-
-
-            <div
-                class="today-list"
-                id="todayList">
-            </div>
-
-
-            <div
-                class="today-empty"
-                id="todayEmpty"
-                hidden>
-
-                <span>
-                    ✓
-                </span>
-
-                <div>
-
-                    <strong>
-                        Hoje você não tem atividades para entregar.
-                    </strong>
-
-                    <p>
-                        Seu dia está livre de prazos.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- CONTEÚDO PRINCIPAL -->
-
-        <section class="main-grid">
-
-
-            <!-- ATIVIDADES -->
-
-            <div class="left-column">
-
-                <article class="panel tasks-panel">
-
-                    <div class="panel-head panel-head-wrap">
-
-                        <div>
-
-                            <p class="eyebrow">
-                                ATIVIDADES
-                            </p>
-
-                            <h2>
-                                O que você precisa fazer
-                            </h2>
-
-                        </div>
-
-                        <button
-                            class="ghost-btn"
-                            id="clearDoneBtn">
-
-                            Limpar concluídas
-
-                        </button>
-
-                    </div>
-
-
-                    <!-- FILTROS -->
-
-                    <div class="filters-row">
-
-                        <div
-                            class="filter-scroll"
-                            id="statusFilters">
-
-                            <button
-                                class="filter-chip active"
-                                data-filter="all">
-
-                                Todas
-
-                            </button>
-
-                            <button
-                                class="filter-chip"
-                                data-filter="pending">
-
-                                Pendentes
-
-                            </button>
-
-                            <button
-                                class="filter-chip"
-                                data-filter="progress">
-
-                                Em andamento
-
-                            </button>
-
-                            <button
-                                class="filter-chip"
-                                data-filter="overdue">
-
-                                Atrasadas
-
-                            </button>
-
-                            <button
-                                class="filter-chip"
-                                data-filter="soon">
-
-                                Vencem em breve
-
-                            </button>
-
-                            <button
-                                class="filter-chip"
-                                data-filter="done">
-
-                                Concluídas
-
-                            </button>
-
-                        </div>
-
-
-                        <select
-                            id="subjectFilter"
-                            class="compact-select"
-                            aria-label="Filtrar por disciplina">
-
-                            <option value="all">
-                                Todas as disciplinas
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- LISTA -->
-
-                    <div
-                        class="task-list"
-                        id="taskList">
-                    </div>
-
-
-                    <div
-                        class="empty-state"
-                        id="taskEmpty"
-                        hidden>
-
-                        <span>
-                            ✓
-                        </span>
-
-                        <p>
-                            Nenhuma atividade encontrada.
-                        </p>
-
-                        <button
-                            class="text-btn"
-                            id="emptyAddBtn">
-
-                            Anotar atividade
-
-                        </button>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-
-            <!-- LATERAL -->
-
-            <div class="right-column">
-
-
-                <!-- CALENDÁRIO -->
-
-                <article class="panel calendar-panel">
-
-                    <div class="panel-head">
-
-                        <div>
-
-                            <p class="eyebrow">
-                                AGENDA
-                            </p>
-
-                            <h2>
-                                Calendário
-                            </h2>
-
-                        </div>
-
-
-                        <div class="calendar-nav">
-
-                            <button
-                                class="small-btn"
-                                id="prevMonth"
-                                aria-label="Mês anterior">
-
-                                ‹
-
-                            </button>
-
-                            <span id="monthLabel">
-                            </span>
-
-                            <button
-                                class="small-btn"
-                                id="nextMonth"
-                                aria-label="Próximo mês">
-
-                                ›
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="weekdays">
-
-                        <span>
-                            DOM
-                        </span>
-
-                        <span>
-                            SEG
-                        </span>
-
-                        <span>
-                            TER
-                        </span>
-
-                        <span>
-                            QUA
-                        </span>
-
-                        <span>
-                            QUI
-                        </span>
-
-                        <span>
-                            SEX
-                        </span>
-
-                        <span>
-                            SÁB
-                        </span>
-
-                    </div>
-
-
-                    <div
-                        class="calendar"
-                        id="calendar">
-                    </div>
-
-
-                    <div
-                        class="selected-events"
-                        id="selectedEvents">
-                    </div>
-
-                </article>
-
-
-                <!-- AVISOS -->
-
-                <article class="panel notices-panel">
-
-                    <div class="panel-head">
-
-                        <div>
-
-                            <p class="eyebrow">
-                                MURAL
-                            </p>
-
-                            <h2>
-                                Avisos
-                            </h2>
-
-                        </div>
-
-                        <button
-                            class="ghost-btn"
-                            id="addNoticeBtn">
-
-                            ＋ Aviso
-
-                        </button>
-
-                    </div>
-
-
-                    <div
-                        class="notice-list"
-                        id="noticeList">
-                    </div>
-
-                </article>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</div>
-
-
-<!-- MODAL DE ATIVIDADE -->
-
-<dialog id="taskDialog">
-
-    <form
-        method="dialog"
-        class="modal-form"
-        id="taskForm">
-
-        <button
-            type="button"
-            class="close-btn"
-            data-close="taskDialog">
-
-            ×
-
-        </button>
-
-
-        <p class="eyebrow">
-            NOVA ATIVIDADE
-        </p>
-
-        <h2>
-            Anotar atividade passada em sala
-        </h2>
-
-
-        <div class="modal-grid-two">
-
-            <label>
-
-                Título
-
-                <input
-                    id="taskTitle"
-                    required
-                    maxlength="90"
-                    placeholder="Ex.: Lista de exercícios">
-
-            </label>
-
-
-            <label>
-
-                Disciplina
-
-                <select id="taskSubject">
-
-                    <option>
-                        Língua Portuguesa
-                    </option>
-
-                    <option>
-                        Matemática
-                    </option>
-
-                    <option>
-                        Física
-                    </option>
-
-                    <option>
-                        Química
-                    </option>
-
-                    <option>
-                        Biologia
-                    </option>
-
-                    <option>
-                        Desenvolvimento de Sistemas
-                    </option>
-
-                    <option>
-                        História
-                    </option>
-
-                    <option>
-                        Geografia
-                    </option>
-
-                    <option>
-                        Inglês
-                    </option>
-
-                </select>
-
-            </label>
-
-        </div>
-
-
-        <div class="modal-grid-two">
-
-            <label>
-
-                Professor
-
-                <input
-                    id="taskTeacher"
-                    maxlength="60"
-                    placeholder="Ex.: Prof. Diego">
-
-            </label>
-
-
-            <label>
-
-                Prazo de entrega
-
-                <input
-                    id="taskDue"
-                    type="date"
-                    required>
-
-            </label>
-
-        </div>
-
-
-        <label>
-
-            Descrição / observação
-
-            <textarea
-                id="taskDescription"
-                maxlength="240"
-                placeholder="Ex.: Fazer as questões 1 a 10 da página 82.">
-            </textarea>
-
-        </label>
-
-
-        <label class="checkbox-line">
-
-            <input
-                type="checkbox"
-                id="taskIsToday"
-                checked>
-
-            <span>
-                Foi passada em sala hoje
-            </span>
-
-        </label>
-
-
-        <div class="modal-actions">
-
-            <button
-                type="button"
-                class="secondary-btn"
-                data-close="taskDialog">
-
-                Cancelar
-
-            </button>
-
-            <button class="primary-btn">
-
-                Salvar atividade
-
-            </button>
-
-        </div>
-
-    </form>
-
-</dialog>
-
-
-<!-- MODAL DE AVISO -->
-
-<dialog id="noticeDialog">
-
-    <form
-        method="dialog"
-        class="modal-form"
-        id="noticeForm">
-
-        <button
-            type="button"
-            class="close-btn"
-            data-close="noticeDialog">
-
-            ×
-
-        </button>
-
-
-        <p class="eyebrow">
-            NOVO AVISO
-        </p>
-
-        <h2>
-            Adicionar aviso
-        </h2>
-
-
-        <label>
-
-            Mensagem
-
-            <input
-                id="noticeTitle"
-                required
-                maxlength="120"
-                placeholder="Ex.: Prova de matemática sexta-feira">
-
-        </label>
-
-
-        <label>
-
-            Data
-
-            <input
-                id="noticeDate"
-                type="date">
-
-        </label>
-
-
-        <div class="modal-actions">
-
-            <button
-                type="button"
-                class="secondary-btn"
-                data-close="noticeDialog">
-
-                Cancelar
-
-            </button>
-
-            <button class="primary-btn">
-
-                Publicar aviso
-
-            </button>
-
-        </div>
-
-    </form>
-
-</dialog>
-
-
-<!-- MODAL DE DETALHES -->
-
-<dialog id="detailDialog">
-
-    <div class="modal-form detail-form">
-
-        <button
-            type="button"
-            class="close-btn"
-            data-close="detailDialog">
-
-            ×
-
-        </button>
-
-
-        <p
-            class="eyebrow"
-            id="detailSubject">
-
-            DISCIPLINA
-
-        </p>
-
-
-        <h2 id="detailTitle">
-            Atividade
-        </h2>
-
-
-        <div
-            class="detail-meta"
-            id="detailMeta">
-        </div>
-
-
-        <p
-            class="detail-description"
-            id="detailDescription">
-        </p>
-
-
-        <div class="modal-actions">
-
-            <button
-                type="button"
-                class="secondary-btn"
-                data-close="detailDialog">
-
-                Fechar
-
-            </button>
-
-            <button
-                type="button"
-                class="primary-btn"
-                id="detailToggleBtn">
-
-                Marcar como concluída
-
-            </button>
-
-        </div>
-
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-logo-frame">
+        <img class="brand-logo" src="Logo futurista ATLAS em verde neon.png" alt="Atlas">
+      </span>
     </div>
 
+    <div class="top-actions">
+      <button class="icon-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema">☼</button>
+      <button class="profile-btn" id="profileBtn" aria-expanded="false" aria-controls="profileMenu">
+        <span class="avatar">FN</span>
+        <span class="profile-name">Felipe</span>
+        <span class="chevron">⌄</span>
+      </button>
+      <div class="profile-menu" id="profileMenu" hidden>
+        <div class="profile-menu-head">
+          <strong>Felipe N.</strong>
+          <span>2º DS · CEEP</span>
+        </div>
+        <button type="button">Meu perfil</button>
+        <button type="button" data-action="clear-data">Limpar dados locais</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <section class="welcome">
+      <div>
+        <p class="eyebrow">PAINEL ESCOLAR</p>
+        <h1>Olá, Felipe.</h1>
+        <p class="muted">
+          Veja o que foi passado em sala, o que está atrasado
+          e quais atividades estão mais perto do prazo.
+        </p>
+      </div>
+      <button class="primary-btn" id="addTaskBtn">＋ Anotar atividade</button>
+    </section>
+
+    <section class="main-grid">
+      <div class="left-column">
+        <article class="panel tasks-panel">
+          <div class="panel-head panel-head-wrap">
+            <div>
+              <p class="eyebrow">ATIVIDADES</p>
+              <h2>O que você precisa fazer</h2>
+            </div>
+            <button class="ghost-btn" id="clearDoneBtn">Limpar concluídas</button>
+          </div>
+
+          <div class="filters-row">
+            <div class="filter-scroll" id="statusFilters">
+              <button class="filter-chip active" data-filter="all">
+                Todas <span class="filter-count" data-count="all">0</span>
+              </button>
+              <button class="filter-chip" data-filter="pending">
+                Pendentes <span class="filter-count" data-count="pending">0</span>
+              </button>
+              <button class="filter-chip" data-filter="progress">
+                Em andamento <span class="filter-count" data-count="progress">0</span>
+              </button>
+              <button class="filter-chip" data-filter="overdue">
+                Atrasadas <span class="filter-count" data-count="overdue">0</span>
+              </button>
+              <button class="filter-chip" data-filter="soon">
+                Vencem em breve <span class="filter-count" data-count="soon">0</span>
+              </button>
+              <button class="filter-chip" data-filter="done">
+                Concluídas <span class="filter-count" data-count="done">0</span>
+              </button>
+            </div>
+
+            <select id="subjectFilter" class="compact-select" aria-label="Filtrar por disciplina">
+              <option value="all">Todas as disciplinas</option>
+            </select>
+          </div>
+
+          <div class="task-list" id="taskList"></div>
+
+          <div class="empty-state" id="taskEmpty" hidden>
+            <span>✓</span>
+            <p>Nenhuma atividade encontrada.</p>
+            <button class="text-btn" id="emptyAddBtn">Anotar atividade</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="right-column">
+        <article class="panel calendar-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">AGENDA</p>
+              <h2>Calendário</h2>
+            </div>
+            <div class="calendar-nav">
+              <button class="small-btn" id="prevMonth" aria-label="Mês anterior">‹</button>
+              <span id="monthLabel"></span>
+              <button class="small-btn" id="nextMonth" aria-label="Próximo mês">›</button>
+            </div>
+          </div>
+
+          <div class="weekdays">
+            <span>DOM</span><span>SEG</span><span>TER</span><span>QUA</span>
+            <span>QUI</span><span>SEX</span><span>SÁB</span>
+          </div>
+          <div class="calendar" id="calendar"></div>
+
+          <section class="today-section" id="todaySection">
+            <div class="today-header">
+              <div>
+                <p class="eyebrow">HOJE</p>
+                <h2 id="todayTitle">Hoje</h2>
+              </div>
+              <span class="today-count" id="todayCount">0 atividades</span>
+            </div>
+            <div class="today-list" id="todayList"></div>
+            <div class="today-empty" id="todayEmpty" hidden>
+              <span>✓</span>
+              <div>
+                <strong>Hoje você não tem atividades para entregar.</strong>
+                <p>Seu dia está livre de prazos.</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="selected-events" id="selectedEvents"></div>
+        </article>
+
+        <article class="panel notices-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">MURAL</p>
+              <h2>Avisos</h2>
+            </div>
+            <button class="ghost-btn" id="addNoticeBtn">＋ Aviso</button>
+          </div>
+          <div class="notice-list" id="noticeList"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="taskDialog">
+  <form method="dialog" class="modal-form" id="taskForm">
+    <button type="button" class="close-btn" data-close="taskDialog">×</button>
+    <p class="eyebrow">NOVA ATIVIDADE</p>
+    <h2 id="taskDialogTitle">Anotar atividade passada em sala</h2>
+
+    <div class="modal-grid-two">
+      <label>
+        Título
+        <input id="taskTitle" required maxlength="90" placeholder="Ex.: Lista de exercícios">
+      </label>
+      <label>
+        Disciplina
+        <select id="taskSubject">
+          <option>Língua Portuguesa</option>
+          <option>Matemática</option>
+          <option>Física</option>
+          <option>Química</option>
+          <option>Biologia</option>
+          <option>Desenvolvimento de Sistemas</option>
+          <option>História</option>
+          <option>Geografia</option>
+          <option>Inglês</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="modal-grid-two">
+      <label>
+        Professor
+        <input id="taskTeacher" maxlength="60" placeholder="Ex.: Prof. Diego">
+      </label>
+      <label>
+        Prazo de entrega
+        <input id="taskDue" type="date" required>
+      </label>
+    </div>
+
+    <label>
+      Descrição / observação
+      <textarea id="taskDescription" maxlength="240"
+        placeholder="Ex.: Fazer as questões 1 a 10 da página 82."></textarea>
+    </label>
+
+    <label class="checkbox-line">
+      <input type="checkbox" id="taskIsToday" checked>
+      <span>Foi passada em sala</span>
+    </label>
+
+    <label id="taskAssignedWrap">
+      Data em que foi passada em sala
+      <input id="taskAssignedOn" type="date" required>
+    </label>
+
+    <div class="modal-actions">
+      <button type="button" class="secondary-btn" data-close="taskDialog">Cancelar</button>
+      <button class="primary-btn" id="taskSubmitBtn">Salvar atividade</button>
+    </div>
+  </form>
 </dialog>
 
+<dialog id="noticeDialog">
+  <form method="dialog" class="modal-form" id="noticeForm">
+    <button type="button" class="close-btn" data-close="noticeDialog">×</button>
+    <p class="eyebrow">NOVO AVISO</p>
+    <h2>Adicionar aviso</h2>
+
+    <label>
+      Mensagem
+      <input id="noticeTitle" required maxlength="120"
+        placeholder="Ex.: Prova de matemática sexta-feira">
+    </label>
+    <label>
+      Data
+      <input id="noticeDate" type="date">
+    </label>
+
+    <div class="modal-actions">
+      <button type="button" class="secondary-btn" data-close="noticeDialog">Cancelar</button>
+      <button class="primary-btn">Publicar aviso</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="detailDialog">
+  <div class="modal-form detail-form">
+    <button type="button" class="close-btn" data-close="detailDialog">×</button>
+    <p class="eyebrow" id="detailSubject">DISCIPLINA</p>
+    <h2 id="detailTitle">Atividade</h2>
+    <div class="detail-meta" id="detailMeta"></div>
+    <p class="detail-description" id="detailDescription"></p>
+    <div class="detail-changes" id="detailChanges" hidden></div>
+
+    <div class="detail-delivery">
+      <div>
+        <strong id="detailDeliveryStatus">Entrega não registrada</strong>
+        <small>Registro pessoal: esta página não envia a atividade ao professor.</small>
+      </div>
+      <button type="button" class="secondary-btn" id="detailDeliveryBtn">
+        Registrar entrega
+      </button>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="secondary-btn" id="detailEditBtn">Editar atividade</button>
+      <button type="button" class="secondary-btn" data-close="detailDialog">Fechar</button>
+      <button type="button" class="primary-btn" id="detailToggleBtn">
+        Marcar como concluída
+      </button>
+    </div>
+  </div>
+</dialog>
 
 <script>
-
 (() => {
+  const STORAGE_KEY = 'atlas-aluno-state-v4';
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-    const STORAGE_KEY =
-        'atlas-aluno-state-v4';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
+  function isoDate(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
 
-    const $ =
-        (selector, root = document) =>
-            root.querySelector(selector);
+  function addDays(date, days) {
+    const copy = new Date(date);
+    copy.setDate(copy.getDate() + days);
+    return copy;
+  }
 
-
-    const $$ =
-        (selector, root = document) =>
-            [...root.querySelectorAll(selector)];
-
-
-    const today =
-        new Date();
-
-    today.setHours(
-        0, 0, 0, 0
+  function daysBetween(a, b) {
+    return Math.round(
+      (new Date(a + 'T00:00:00') - new Date(b + 'T00:00:00')) / 86400000
     );
+  }
 
+  function formatDate(value) {
+    return new Date(value + 'T00:00:00').toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit'
+    });
+  }
 
-    function isoDate(date) {
+  function formatLongDate(value) {
+    return new Date(value + 'T00:00:00').toLocaleDateString('pt-BR', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long'
+    });
+  }
 
-        const y =
-            date.getFullYear();
+  function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
 
-        const m =
-            String(
-                date.getMonth() + 1
-            ).padStart(2, '0');
+  const seedTasks = [
+    {
+      id: uid(),
+      title: 'Lista de exercícios — Equação do 2º grau',
+      subject: 'Matemática',
+      teacher: 'Prof. Marcos',
+      due: isoDate(today),
+      created: isoDate(today),
+      description: 'Resolver as questões 1 a 10 e levar no início da próxima aula.',
+      status: 'pending',
+      inClass: true
+    },
+    {
+      id: uid(),
+      title: 'Criar rota de filtro da API',
+      subject: 'Desenvolvimento de Sistemas',
+      teacher: 'Prof. Diego',
+      due: isoDate(addDays(today, 2)),
+      created: isoDate(today),
+      description: 'Implementar os filtros pedidos na atividade do laboratório.',
+      status: 'progress',
+      inClass: true
+    },
+    {
+      id: uid(),
+      title: 'Resumo — Revolução Industrial',
+      subject: 'História',
+      teacher: 'Prof. Ana',
+      due: isoDate(addDays(today, 4)),
+      created: isoDate(today),
+      description: 'Resumo de uma página no caderno.',
+      status: 'pending',
+      inClass: false
+    },
+    {
+      id: uid(),
+      title: 'Exercícios de cinemática',
+      subject: 'Física',
+      teacher: 'Prof. Carlos',
+      due: isoDate(addDays(today, -2)),
+      created: isoDate(addDays(today, -5)),
+      description: 'Questões 4, 5, 7 e 9 da lista entregue em sala.',
+      status: 'pending',
+      inClass: false
+    },
+    {
+      id: uid(),
+      title: 'Produção textual — artigo de opinião',
+      subject: 'Língua Portuguesa',
+      teacher: 'Prof. Renata',
+      due: isoDate(addDays(today, 6)),
+      created: isoDate(addDays(today, -1)),
+      description: 'Produzir texto com introdução, desenvolvimento e conclusão.',
+      status: 'done',
+      inClass: false
+    },
+    {
+      id: uid(),
+      title: 'Trabalho sobre ligações químicas',
+      subject: 'Química',
+      teacher: 'Prof. Beatriz',
+      due: isoDate(addDays(today, 8)),
+      created: isoDate(addDays(today, -3)),
+      description: 'Trabalho em dupla apresentado em sala.',
+      status: 'pending',
+      inClass: false
+    },
+    {
+      id: uid(),
+      title: 'Atividade de funções',
+      subject: 'Matemática',
+      teacher: 'Prof. Marcos',
+      due: isoDate(addDays(today, 10)),
+      created: isoDate(addDays(today, -2)),
+      description: 'Questões 12 a 18 da apostila.',
+      status: 'pending',
+      inClass: false
+    }
+  ];
 
-        const d =
-            String(
-                date.getDate()
-            ).padStart(2, '0');
+  const seedNotices = [
+    {
+      id: uid(),
+      title: 'Amanhã haverá aula no laboratório 3.',
+      date: isoDate(today)
+    },
+    {
+      id: uid(),
+      title: 'A entrega do trabalho de Português foi prorrogada.',
+      date: isoDate(addDays(today, 1))
+    },
+    {
+      id: uid(),
+      title: 'Reunião de turma na sexta-feira, no último horário.',
+      date: isoDate(addDays(today, 3))
+    }
+  ];
 
-        return `${y}-${m}-${d}`;
+  function loadState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (
+        saved &&
+        Array.isArray(saved.tasks) &&
+        Array.isArray(saved.notices)
+      ) {
+        return saved;
+      }
+    } catch (_) {}
+
+    return {
+      tasks: seedTasks,
+      notices: seedNotices
+    };
+  }
+
+  let state = loadState();
+  let currentFilter = 'all';
+  let currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  let selectedDate = isoDate(today);
+  let selectedDetailId = null;
+  let editingTaskId = null;
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function statusInfo(task) {
+    if (task.status === 'done') {
+      return {
+        key: 'done',
+        label: 'Concluída',
+        className: 'status-done'
+      };
     }
 
+    const diff = daysBetween(task.due, isoDate(today));
 
-    function addDays(date, days) {
-
-        const copy =
-            new Date(date);
-
-        copy.setDate(
-            copy.getDate() + days
-        );
-
-        return copy;
+    if (diff < 0) {
+      return {
+        key: 'overdue',
+        label: 'Atrasada',
+        className: 'status-overdue'
+      };
     }
 
-
-    function daysBetween(a, b) {
-
-        return Math.round(
-            (
-                new Date(a + 'T00:00:00') -
-                new Date(b + 'T00:00:00')
-            ) / 86400000
-        );
-
+    if (diff <= 2) {
+      return {
+        key: 'soon',
+        label: diff === 0 ? 'Entrega hoje' : `Vence em ${diff}d`,
+        className: 'status-soon'
+      };
     }
 
-
-    function formatDate(value) {
-
-        return new Date(
-            value + 'T00:00:00'
-        ).toLocaleDateString(
-            'pt-BR',
-            {
-                day: '2-digit',
-                month: '2-digit'
-            }
-        );
-
+    if (task.status === 'progress') {
+      return {
+        key: 'progress',
+        label: 'Em andamento',
+        className: 'status-progress'
+      };
     }
 
-
-    function formatLongDate(value) {
-
-        return new Date(
-            value + 'T00:00:00'
-        ).toLocaleDateString(
-            'pt-BR',
-            {
-                weekday: 'long',
-                day: '2-digit',
-                month: 'long'
-            }
-        );
-
-    }
-
-
-    function uid() {
-
-        return Date.now().toString(36) +
-            Math.random()
-                .toString(36)
-                .slice(2, 7);
-
-    }
-
-
-    const seedTasks = [
-
-        {
-            id: uid(),
-            title: 'Lista de exercícios — Equação do 2º grau',
-            subject: 'Matemática',
-            teacher: 'Prof. Marcos',
-            due: isoDate(today),
-            created: isoDate(today),
-            description: 'Resolver as questões 1 a 10 e levar no início da próxima aula.',
-            status: 'pending',
-            inClass: true
-        },
-
-        {
-            id: uid(),
-            title: 'Criar rota de filtro da API',
-            subject: 'Desenvolvimento de Sistemas',
-            teacher: 'Prof. Diego',
-            due: isoDate(addDays(today, 2)),
-            created: isoDate(today),
-            description: 'Implementar os filtros pedidos na atividade do laboratório.',
-            status: 'progress',
-            inClass: true
-        },
-
-        {
-            id: uid(),
-            title: 'Resumo — Revolução Industrial',
-            subject: 'História',
-            teacher: 'Prof. Ana',
-            due: isoDate(addDays(today, 4)),
-            created: isoDate(today),
-            description: 'Resumo de uma página no caderno.',
-            status: 'pending',
-            inClass: false
-        },
-
-        {
-            id: uid(),
-            title: 'Exercícios de cinemática',
-            subject: 'Física',
-            teacher: 'Prof. Carlos',
-            due: isoDate(addDays(today, -2)),
-            created: isoDate(addDays(today, -5)),
-            description: 'Questões 4, 5, 7 e 9 da lista entregue em sala.',
-            status: 'pending',
-            inClass: false
-        },
-
-        {
-            id: uid(),
-            title: 'Produção textual — artigo de opinião',
-            subject: 'Língua Portuguesa',
-            teacher: 'Prof. Renata',
-            due: isoDate(addDays(today, 6)),
-            created: isoDate(addDays(today, -1)),
-            description: 'Produzir texto com introdução, desenvolvimento e conclusão.',
-            status: 'done',
-            inClass: false
-        },
-
-        {
-            id: uid(),
-            title: 'Trabalho sobre ligações químicas',
-            subject: 'Química',
-            teacher: 'Prof. Beatriz',
-            due: isoDate(addDays(today, 8)),
-            created: isoDate(addDays(today, -3)),
-            description: 'Trabalho em dupla apresentado em sala.',
-            status: 'pending',
-            inClass: false
-        },
-
-        {
-            id: uid(),
-            title: 'Atividade de funções',
-            subject: 'Matemática',
-            teacher: 'Prof. Marcos',
-            due: isoDate(addDays(today, 10)),
-            created: isoDate(addDays(today, -2)),
-            description: 'Questões 12 a 18 da apostila.',
-            status: 'pending',
-            inClass: false
-        }
-
-    ];
-
-
-    const seedNotices = [
-
-        {
-            id: uid(),
-            title: 'Amanhã haverá aula no laboratório 3.',
-            date: isoDate(today)
-        },
-
-        {
-            id: uid(),
-            title: 'A entrega do trabalho de Português foi prorrogada.',
-            date: isoDate(addDays(today, 1))
-        },
-
-        {
-            id: uid(),
-            title: 'Reunião de turma na sexta-feira, no último horário.',
-            date: isoDate(addDays(today, 3))
-        }
-
-    ];
-
-
-    function loadState() {
-
-        try {
-
-            const saved =
-                JSON.parse(
-                    localStorage.getItem(
-                        STORAGE_KEY
-                    )
-                );
-
-            if (
-                saved &&
-                Array.isArray(saved.tasks) &&
-                Array.isArray(saved.notices)
-            ) {
-                return saved;
-            }
-
-        } catch (_) {}
-
-        return {
-            tasks: seedTasks,
-            notices: seedNotices
-        };
-
-    }
-
-
-    let state =
-        loadState();
-
-
-    let currentFilter =
-        'all';
-
-
-    let currentMonth =
-        new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            1
-        );
-
-
-    let selectedDate =
-        isoDate(today);
-
-
-    let selectedDetailId =
-        null;
-
-
-    function saveState() {
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(state)
-        );
-
-    }
-
-
-    function statusInfo(task) {
-
-        if (
-            task.status === 'done'
-        ) {
-
-            return {
-                key: 'done',
-                label: 'Concluída',
-                className: 'status-done'
-            };
-
-        }
-
-
-        const diff =
-            daysBetween(
-                task.due,
-                isoDate(today)
-            );
-
-
-        if (diff < 0) {
-
-            return {
-                key: 'overdue',
-                label: 'Atrasada',
-                className: 'status-overdue'
-            };
-
-        }
-
-
-        if (diff <= 2) {
-
-            return {
-                key: 'soon',
-                label:
-                    diff === 0
-                        ? 'Entrega hoje'
-                        : `Vence em ${diff}d`,
-                className: 'status-soon'
-            };
-
-        }
-
-
-        if (
-            task.status === 'progress'
-        ) {
-
-            return {
-                key: 'progress',
-                label: 'Em andamento',
-                className: 'status-progress'
-            };
-
-        }
-
-
-        return {
-            key: 'pending',
-            label: 'Pendente',
-            className: 'status-pending'
-        };
-
-    }
-
-
-    function taskMatchesFilter(task) {
-
-        const status =
-            statusInfo(task).key;
-
-
-        if (
-            currentFilter === 'all'
-        ) {
-            return true;
-        }
-
-
-        if (
-            currentFilter === 'pending'
-        ) {
-            return status === 'pending';
-        }
-
-
-        if (
-            currentFilter === 'progress'
-        ) {
-            return task.status === 'progress';
-        }
-
-
-        if (
-            currentFilter === 'overdue'
-        ) {
-            return status === 'overdue';
-        }
-
-
-        if (
-            currentFilter === 'soon'
-        ) {
-            return status === 'soon';
-        }
-
-
-        if (
-            currentFilter === 'done'
-        ) {
-            return status === 'done';
-        }
-
-
-        return true;
-
-    }
-
-
-    function renderSubjects() {
-
-        const select =
-            $('#subjectFilter');
-
-
-        const current =
-            select.value;
-
-
-        const subjects =
-            [
-                ...new Set(
-                    state.tasks.map(
-                        task => task.subject
-                    )
-                )
-            ]
-            .sort(
-                (a, b) =>
-                    a.localeCompare(b)
-            );
-
-
-        select.innerHTML =
-            '<option value="all">Todas as disciplinas</option>' +
-            subjects
-                .map(
-                    subject =>
-                        `<option value="${escapeHtml(subject)}">${escapeHtml(subject)}</option>`
-                )
-                .join('');
-
-
-        select.value =
-            subjects.includes(current)
-                ? current
-                : 'all';
-
-    }
-
-
-    function getFilteredTasks() {
-
-        const subject =
-            $('#subjectFilter').value;
-
-
-        return state.tasks
-
-            .filter(
-                taskMatchesFilter
-            )
-
-            .filter(
-                task =>
-                    subject === 'all' ||
-                    task.subject === subject
-            )
-
-            .sort(
-                (a, b) => {
-
-                    if (
-                        a.status === 'done' &&
-                        b.status !== 'done'
-                    ) {
-                        return 1;
-                    }
-
-                    if (
-                        a.status !== 'done' &&
-                        b.status === 'done'
-                    ) {
-                        return -1;
-                    }
-
-                    return a.due.localeCompare(
-                        b.due
-                    );
-
-                }
-            );
-
-    }
-
-
-    /*
-        AGRUPAMENTO POR DISCIPLINA
-    */
-
-    function renderTasks() {
-
-        const tasks =
-            getFilteredTasks();
-
-
-        const list =
-            $('#taskList');
-
-
-        list.innerHTML =
-            '';
-
-
-        $('#taskEmpty').hidden =
-            tasks.length !== 0;
-
-
-        if (!tasks.length) {
-            return;
-        }
-
-
-        const groups = {};
-
-
-        tasks.forEach(
-            task => {
-
-                if (
-                    !groups[task.subject]
-                ) {
-                    groups[task.subject] =
-                        [];
-                }
-
-                groups[task.subject]
-                    .push(task);
-
-            }
-        );
-
-
-        Object.entries(groups)
-
-            .sort(
-                (a, b) =>
-                    a[0].localeCompare(
-                        b[0]
-                    )
-            )
-
-            .forEach(
-                ([subject, subjectTasks]) => {
-
-                    const group =
-                        document.createElement(
-                            'section'
-                        );
-
-
-                    group.className =
-                        'subject-group';
-
-
-                    group.innerHTML = `
-
-                        <div class="subject-group-title">
-
-                            <span>
-                                ${escapeHtml(subject)}
-                            </span>
-
-                            <small>
-                                ${subjectTasks.length}
-                                ${
-                                    subjectTasks.length === 1
-                                        ? 'atividade'
-                                        : 'atividades'
-                                }
-                            </small>
-
-                        </div>
-
-                    `;
-
-
-                    subjectTasks.forEach(
-                        task => {
-
-                            group.appendChild(
-                                taskElement(task)
-                            );
-
-                        }
-                    );
-
-
-                    list.appendChild(
-                        group
-                    );
-
-                }
-            );
-
-    }
-
-
-    function taskElement(task) {
-
-        const status =
-            statusInfo(task);
-
-
-        const article =
-            document.createElement(
-                'article'
-            );
-
-
-        article.className =
-            `task ${
-                task.status === 'done'
-                    ? 'done'
-                    : ''
-            }`;
-
-
-        article.dataset.id =
-            task.id;
-
-
-        article.innerHTML = `
-
-            <button
-                class="check"
-                type="button">
-
-                ${
-                    task.status === 'done'
-                        ? '✓'
-                        : ''
-                }
-
-            </button>
-
-
-            <div class="task-content">
-
-                <strong class="task-title">
-                    ${escapeHtml(task.title)}
-                </strong>
-
-                <div class="task-subject-line">
-
-                    ${
-                        task.teacher
-                            ? `<span>${escapeHtml(task.teacher)}</span>`
-                            : ''
-                    }
-
-                </div>
-
-            </div>
-
-
-            <div class="task-side">
-
-                <span
-                    class="status-pill ${status.className}">
-
-                    ${escapeHtml(status.label)}
-
-                </span>
-
-                <span class="task-due">
-
-                    ${
-                        task.status === 'done'
-                            ? 'Concluída'
-                            : formatDate(task.due)
-                    }
-
-                </span>
-
-            </div>
-
-
-            <button
-                class="delete-btn"
-                type="button">
-
-                ×
-
-            </button>
-
+    return {
+      key: 'pending',
+      label: 'Pendente',
+      className: 'status-pending'
+    };
+  }
+
+  function taskMatchesFilter(task, filter = currentFilter) {
+    const status = statusInfo(task).key;
+
+    if (filter === 'all') return true;
+    if (filter === 'pending') return status === 'pending';
+    if (filter === 'progress') return task.status === 'progress';
+    if (filter === 'overdue') return status === 'overdue';
+    if (filter === 'soon') return status === 'soon';
+    if (filter === 'done') return status === 'done';
+
+    return true;
+  }
+
+  function renderSubjects() {
+    const select = $('#subjectFilter');
+    const current = select.value;
+
+    const subjects = [
+      ...new Set(state.tasks.map(task => task.subject))
+    ].sort((a, b) => a.localeCompare(b));
+
+    select.innerHTML =
+      '<option value="all">Todas as disciplinas</option>' +
+      subjects
+        .map(subject =>
+          `<option value="${escapeHtml(subject)}">${escapeHtml(subject)}</option>`
+        )
+        .join('');
+
+    select.value = subjects.includes(current) ? current : 'all';
+  }
+
+  function getFilteredTasks() {
+    const subject = $('#subjectFilter').value;
+
+    return state.tasks
+      .filter(task => taskMatchesFilter(task))
+      .filter(task => subject === 'all' || task.subject === subject)
+      .sort((a, b) => {
+        if (a.status === 'done' && b.status !== 'done') return 1;
+        if (a.status !== 'done' && b.status === 'done') return -1;
+        return a.due.localeCompare(b.due);
+      });
+  }
+
+  function renderTasks() {
+    const tasks = getFilteredTasks();
+    const list = $('#taskList');
+
+    list.innerHTML = '';
+    $('#taskEmpty').hidden = tasks.length !== 0;
+
+    if (!tasks.length) return;
+
+    const groups = {};
+
+    tasks.forEach(task => {
+      if (!groups[task.subject]) groups[task.subject] = [];
+      groups[task.subject].push(task);
+    });
+
+    Object.entries(groups)
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .forEach(([subject, subjectTasks]) => {
+        const group = document.createElement('section');
+        group.className = 'subject-group';
+
+        group.innerHTML = `
+          <div class="subject-group-title">
+            <span>${escapeHtml(subject)}</span>
+            <small>
+              ${subjectTasks.length}
+              ${subjectTasks.length === 1 ? 'atividade' : 'atividades'}
+            </small>
+          </div>
         `;
 
-
-        $('.check', article)
-            .addEventListener(
-                'click',
-                event => {
-
-                    event.stopPropagation();
-
-                    toggleTask(
-                        task.id
-                    );
-
-                }
-            );
-
-
-        $('.delete-btn', article)
-            .addEventListener(
-                'click',
-                event => {
-
-                    event.stopPropagation();
-
-                    removeTask(
-                        task.id
-                    );
-
-                }
-            );
-
-
-        article.addEventListener(
-            'click',
-            () =>
-                openDetail(
-                    task.id
-                )
-        );
-
-
-        return article;
-
-    }
-
-
-    function toggleTask(id) {
-
-        const task =
-            state.tasks.find(
-                task =>
-                    task.id === id
-            );
-
-
-        if (!task) {
-            return;
-        }
-
-
-        task.status =
-            task.status === 'done'
-                ? 'pending'
-                : 'done';
-
-
-        saveState();
-
-        renderAll();
-
-
-        if (
-            selectedDetailId === id &&
-            $('#detailDialog').open
-        ) {
-            updateDetail(task);
-        }
-
-    }
-
-
-    function removeTask(id) {
-
-        state.tasks =
-            state.tasks.filter(
-                task =>
-                    task.id !== id
-            );
-
-
-        saveState();
-
-        renderAll();
-
-    }
-
-
-    function renderStats() {
-
-        const done =
-            state.tasks.filter(
-                task =>
-                    task.status === 'done'
-            ).length;
-
-
-        const pending =
-            state.tasks.filter(
-                task =>
-                    task.status !== 'done'
-            ).length;
-
-
-        const overdue =
-            state.tasks.filter(
-                task =>
-                    statusInfo(task).key === 'overdue'
-            ).length;
-
-
-        const soon =
-            state.tasks.filter(
-                task =>
-                    statusInfo(task).key === 'soon'
-            ).length;
-
-
-        $('#doneCount').textContent =
-            done;
-
-
-        $('#pendingCount').textContent =
-            pending;
-
-
-        $('#summaryOverdue').textContent =
-            overdue;
-
-
-        $('#summarySoon').textContent =
-            soon;
-
-
-        $('#summaryWeek').textContent =
-            weekTasks().length;
-
-    }
-
-
-    function weekTasks() {
-
-        const start =
-            new Date(today);
-
-
-        start.setDate(
-            start.getDate() -
-            start.getDay()
-        );
-
-
-        const end =
-            addDays(
-                start,
-                6
-            );
-
-
-        const startIso =
-            isoDate(start);
-
-
-        const endIso =
-            isoDate(end);
-
-
-        return state.tasks.filter(
-            task =>
-                task.due >= startIso &&
-                task.due <= endIso
-        );
-
-    }
-
-
-    /*
-        SEÇÃO "HOJE"
-    */
-
-    function renderToday() {
-
-        const todayIso =
-            isoDate(today);
-
-
-        const todayTasks =
-            state.tasks
-
-                .filter(
-                    task =>
-                        task.due === todayIso
-                )
-
-                .sort(
-                    (a, b) => {
-
-                        if (
-                            a.status === 'done' &&
-                            b.status !== 'done'
-                        ) {
-                            return 1;
-                        }
-
-                        if (
-                            a.status !== 'done' &&
-                            b.status === 'done'
-                        ) {
-                            return -1;
-                        }
-
-                        return a.title.localeCompare(
-                            b.title
-                        );
-
-                    }
-                );
-
-
-        $('#todayTitle').textContent =
-            new Date(
-                todayIso +
-                'T00:00:00'
-            ).toLocaleDateString(
-                'pt-BR',
-                {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'long'
-                }
-            );
-
-
-        $('#todayCount').textContent =
-            `${todayTasks.length} ${
-                todayTasks.length === 1
-                    ? 'atividade'
-                    : 'atividades'
-            }`;
-
-
-        const list =
-            $('#todayList');
-
-
-        list.innerHTML =
-            '';
-
-
-        $('#todayEmpty').hidden =
-            todayTasks.length !== 0;
-
-
-        todayTasks.forEach(
-            task => {
-
-                const status =
-                    statusInfo(task);
-
-
-                const item =
-                    document.createElement(
-                        'article'
-                    );
-
-
-                item.className =
-                    `today-task ${
-                        task.status === 'done'
-                            ? 'done'
-                            : ''
-                    }`;
-
-
-                item.innerHTML = `
-
-                    <button
-                        type="button"
-                        class="today-check">
-
-                        ${
-                            task.status === 'done'
-                                ? '✓'
-                                : ''
-                        }
-
-                    </button>
-
-
-                    <div class="today-task-main">
-
-                        <strong>
-                            ${escapeHtml(task.title)}
-                        </strong>
-
-
-                        <div class="today-task-meta">
-
-                            <span>
-                                ${escapeHtml(task.subject)}
-                            </span>
-
-                            ${
-                                task.teacher
-                                    ? `<span>• ${escapeHtml(task.teacher)}</span>`
-                                    : ''
-                            }
-
-                        </div>
-
-                    </div>
-
-
-                    <span
-                        class="status-pill ${status.className}">
-
-                        ${escapeHtml(status.label)}
-
-                    </span>
-
-                `;
-
-
-                $('.today-check', item)
-                    .addEventListener(
-                        'click',
-                        event => {
-
-                            event.stopPropagation();
-
-                            toggleTask(
-                                task.id
-                            );
-
-                        }
-                    );
-
-
-                item.addEventListener(
-                    'click',
-                    () =>
-                        openDetail(
-                            task.id
-                        )
-                );
-
-
-                list.appendChild(
-                    item
-                );
-
-            }
-        );
-
-    }
-
-
-    function renderCalendar() {
-
-        const label =
-            currentMonth.toLocaleDateString(
-                'pt-BR',
-                {
-                    month: 'long',
-                    year: 'numeric'
-                }
-            );
-
-
-        $('#monthLabel').textContent =
-            label
-                .charAt(0)
-                .toUpperCase() +
-            label.slice(1);
-
-
-        const calendar =
-            $('#calendar');
-
-
-        calendar.innerHTML =
-            '';
-
-
-        const first =
-            new Date(
-                currentMonth.getFullYear(),
-                currentMonth.getMonth(),
-                1
-            );
-
-
-        const totalDays =
-            new Date(
-                currentMonth.getFullYear(),
-                currentMonth.getMonth() + 1,
-                0
-            ).getDate();
-
-
-        for (
-            let i = 0;
-            i < first.getDay();
-            i++
-        ) {
-
-            const blank =
-                document.createElement(
-                    'span'
-                );
-
-            blank.className =
-                'day blank';
-
-            calendar.appendChild(
-                blank
-            );
-
-        }
-
-
-        for (
-            let day = 1;
-            day <= totalDays;
-            day++
-        ) {
-
-            const date =
-                new Date(
-                    currentMonth.getFullYear(),
-                    currentMonth.getMonth(),
-                    day
-                );
-
-
-            const dateIso =
-                isoDate(date);
-
-
-            const button =
-                document.createElement(
-                    'button'
-                );
-
-
-            button.type =
-                'button';
-
-
-            button.className =
-                'day';
-
-
-            button.textContent =
-                day;
-
-
-            if (
-                dateIso === isoDate(today)
-            ) {
-                button.classList.add(
-                    'today'
-                );
-            }
-
-
-            if (
-                dateIso === selectedDate
-            ) {
-                button.classList.add(
-                    'selected'
-                );
-            }
-
-
-            const hasEvent =
-                state.tasks.some(
-                    task =>
-                        task.due === dateIso
-                ) ||
-                state.notices.some(
-                    notice =>
-                        notice.date === dateIso
-                );
-
-
-            if (hasEvent) {
-
-                button.classList.add(
-                    'has-event'
-                );
-
-            }
-
-
-            button.addEventListener(
-                'click',
-                () => {
-
-                    selectedDate =
-                        dateIso;
-
-                    renderCalendar();
-
-                }
-            );
-
-
-            calendar.appendChild(
-                button
-            );
-
-        }
-
-
-        renderSelectedEvents();
-
-    }
-
-
-    function renderSelectedEvents() {
-
-        const container =
-            $('#selectedEvents');
-
-
-        const tasks =
-            state.tasks.filter(
-                task =>
-                    task.due === selectedDate
-            );
-
-
-        const notices =
-            state.notices.filter(
-                notice =>
-                    notice.date === selectedDate
-            );
-
-
-        if (
-            !tasks.length &&
-            !notices.length
-        ) {
-
-            container.innerHTML = `
-
-                <div class="selected-date-title">
-
-                    ${escapeHtml(
-                        formatLongDate(
-                            selectedDate
-                        )
-                    )}
-
-                </div>
-
-                <span>
-                    Nenhuma atividade ou aviso.
-                </span>
-
-            `;
-
-            return;
-
-        }
-
-
-        container.innerHTML = `
-
-            <div class="selected-date-title">
-
-                ${escapeHtml(
-                    formatLongDate(
-                        selectedDate
-                    )
-                )}
-
-            </div>
-
-        `;
-
-
-        tasks.forEach(
-            task => {
-
-                const button =
-                    document.createElement(
-                        'button'
-                    );
-
-
-                button.className =
-                    'calendar-event';
-
-
-                button.type =
-                    'button';
-
-
-                button.innerHTML = `
-
-                    <span
-                        class="event-bullet">
-                    </span>
-
-                    <span>
-                        ${escapeHtml(task.subject)}
-                        —
-                        ${escapeHtml(task.title)}
-                    </span>
-
-                `;
-
-
-                button.addEventListener(
-                    'click',
-                    () =>
-                        openDetail(
-                            task.id
-                        )
-                );
-
-
-                container.appendChild(
-                    button
-                );
-
-            }
-        );
-
-
-        notices.forEach(
-            notice => {
-
-                const item =
-                    document.createElement(
-                        'div'
-                    );
-
-
-                item.className =
-                    'calendar-event notice-event';
-
-
-                item.innerHTML = `
-
-                    <span
-                        class="event-bullet notice-bullet">
-                    </span>
-
-                    <span>
-                        ${escapeHtml(notice.title)}
-                    </span>
-
-                `;
-
-
-                container.appendChild(
-                    item
-                );
-
-            }
-        );
-
-    }
-
-
-    function renderNotices() {
-
-        const list =
-            $('#noticeList');
-
-
-        list.innerHTML =
-            '';
-
-
-        state.notices
-            .slice()
-            .sort(
-                (a, b) =>
-                    a.date.localeCompare(
-                        b.date
-                    )
-            )
-            .forEach(
-                notice => {
-
-                    const item =
-                        document.createElement(
-                            'article'
-                        );
-
-
-                    item.className =
-                        'notice';
-
-
-                    item.innerHTML = `
-
-                        <span class="pin">
-                            ●
-                        </span>
-
-
-                        <div class="notice-text">
-
-                            <strong>
-                                ${escapeHtml(notice.title)}
-                            </strong>
-
-                            <div class="notice-date">
-                                ${formatDate(notice.date)}
-                            </div>
-
-                        </div>
-
-
-                        <button
-                            class="notice-remove"
-                            type="button">
-
-                            ×
-
-                        </button>
-
-                    `;
-
-
-                    $('.notice-remove', item)
-                        .addEventListener(
-                            'click',
-                            () => {
-
-                                state.notices =
-                                    state.notices.filter(
-                                        current =>
-                                            current.id !==
-                                            notice.id
-                                    );
-
-
-                                saveState();
-
-                                renderAll();
-
-                            }
-                        );
-
-
-                    list.appendChild(
-                        item
-                    );
-
-                }
-            );
-
-    }
-
-
-    function openDetail(id) {
-
-        const task =
-            state.tasks.find(
-                task =>
-                    task.id === id
-            );
-
-
-        if (!task) {
-            return;
-        }
-
-
-        selectedDetailId =
-            id;
-
-
-        updateDetail(
-            task
-        );
-
-
-        $('#detailDialog')
-            .showModal();
-
-    }
-
-
-    function updateDetail(task) {
-
-        const status =
-            statusInfo(task);
-
-
-        $('#detailSubject').textContent =
-            task.subject.toUpperCase();
-
-
-        $('#detailTitle').textContent =
-            task.title;
-
-
-        $('#detailMeta').innerHTML = `
-
-            <span
-                class="status-pill ${status.className}">
-
-                ${escapeHtml(status.label)}
-
-            </span>
-
-
-            <span>
-                Prazo:
-                ${escapeHtml(
-                    formatLongDate(task.due)
-                )}
-            </span>
-
-
-            ${
-                task.teacher
-                    ? `<span>
-                        Professor:
-                        ${escapeHtml(task.teacher)}
-                    </span>`
-                    : ''
-            }
-
-
-            ${
-                task.inClass
-                    ? '<span>Passada em sala</span>'
-                    : ''
-            }
-
-        `;
-
-
-        $('#detailDescription').textContent =
-            task.description ||
-            'Nenhuma observação cadastrada.';
-
-
-        $('#detailToggleBtn').textContent =
-            task.status === 'done'
-                ? 'Marcar como pendente'
-                : 'Marcar como concluída';
-
-    }
-
-
-    function openDialog(id) {
-
-        const dialog =
-            $('#' + id);
-
-
-        if (
-            dialog &&
-            !dialog.open
-        ) {
-
-            dialog.showModal();
-
-        }
-
-    }
-
-
-    function closeDialog(id) {
-
-        const dialog =
-            $('#' + id);
-
-
-        if (
-            dialog &&
-            dialog.open
-        ) {
-
-            dialog.close();
-
-        }
-
-    }
-
-
-    function bindUI() {
-
-        /* TEMA */
-
-        $('#themeBtn')
-            .addEventListener(
-                'click',
-                () => {
-
-                    const html =
-                        document.documentElement;
-
-
-                    html.dataset.theme =
-                        html.dataset.theme === 'dark'
-                            ? 'light'
-                            : 'dark';
-
-
-                    localStorage.setItem(
-                        'atlas-theme',
-                        html.dataset.theme
-                    );
-
-                }
-            );
-
-
-        const savedTheme =
-            localStorage.getItem(
-                'atlas-theme'
-            );
-
-
-        if (savedTheme) {
-
-            document.documentElement
-                .dataset.theme =
-                    savedTheme;
-
-        }
-
-
-        /* PERFIL */
-
-        $('#profileBtn')
-            .addEventListener(
-                'click',
-                event => {
-
-                    event.stopPropagation();
-
-                    const menu =
-                        $('#profileMenu');
-
-
-                    menu.hidden =
-                        !menu.hidden;
-
-
-                    $('#profileBtn')
-                        .setAttribute(
-                            'aria-expanded',
-                            String(!menu.hidden)
-                        );
-
-                }
-            );
-
-
-        document.addEventListener(
-            'click',
-            event => {
-
-                if (
-                    !event.target.closest(
-                        '.top-actions'
-                    )
-                ) {
-
-                    $('#profileMenu').hidden =
-                        true;
-
-                    $('#profileBtn')
-                        .setAttribute(
-                            'aria-expanded',
-                            'false'
-                        );
-
-                }
-
-            }
-        );
-
-
-        /* BOTÕES */
-
-        $('#addTaskBtn')
-            .addEventListener(
-                'click',
-                () =>
-                    openDialog(
-                        'taskDialog'
-                    )
-            );
-
-
-        $('#emptyAddBtn')
-            .addEventListener(
-                'click',
-                () =>
-                    openDialog(
-                        'taskDialog'
-                    )
-            );
-
-
-        $('#addNoticeBtn')
-            .addEventListener(
-                'click',
-                () =>
-                    openDialog(
-                        'noticeDialog'
-                    )
-            );
-
-
-        $('#clearDoneBtn')
-            .addEventListener(
-                'click',
-                () => {
-
-                    state.tasks =
-                        state.tasks.filter(
-                            task =>
-                                task.status !==
-                                'done'
-                        );
-
-
-                    saveState();
-
-                    renderAll();
-
-                }
-            );
-
-
-        /* CALENDÁRIO */
-
-        $('#prevMonth')
-            .addEventListener(
-                'click',
-                () => {
-
-                    currentMonth =
-                        new Date(
-                            currentMonth.getFullYear(),
-                            currentMonth.getMonth() - 1,
-                            1
-                        );
-
-
-                    renderCalendar();
-
-                }
-            );
-
-
-        $('#nextMonth')
-            .addEventListener(
-                'click',
-                () => {
-
-                    currentMonth =
-                        new Date(
-                            currentMonth.getFullYear(),
-                            currentMonth.getMonth() + 1,
-                            1
-                        );
-
-
-                    renderCalendar();
-
-                }
-            );
-
-
-        /* FILTROS */
-
-        $('#subjectFilter')
-            .addEventListener(
-                'change',
-                renderTasks
-            );
-
-
-        $$('#statusFilters .filter-chip')
-            .forEach(
-                button => {
-
-                    button.addEventListener(
-                        'click',
-                        () => {
-
-                            $$('#statusFilters .filter-chip')
-                                .forEach(
-                                    item =>
-                                        item.classList.remove(
-                                            'active'
-                                        )
-                                );
-
-
-                            button.classList.add(
-                                'active'
-                            );
-
-
-                            currentFilter =
-                                button.dataset.filter;
-
-
-                            renderTasks();
-
-                        }
-                    );
-
-                }
-            );
-
-
-        /* FECHAR MODAIS */
-
-        $$('[data-close]')
-            .forEach(
-                button => {
-
-                    button.addEventListener(
-                        'click',
-                        () =>
-                            closeDialog(
-                                button.dataset.close
-                            )
-                    );
-
-                }
-            );
-
-
-        /* NOVA ATIVIDADE */
-
-        $('#taskForm')
-            .addEventListener(
-                'submit',
-                event => {
-
-                    event.preventDefault();
-
-
-                    const title =
-                        $('#taskTitle')
-                            .value
-                            .trim();
-
-
-                    const due =
-                        $('#taskDue')
-                            .value;
-
-
-                    if (
-                        !title ||
-                        !due
-                    ) {
-                        return;
-                    }
-
-
-                    state.tasks.push({
-
-                        id: uid(),
-
-                        title,
-
-                        subject:
-                            $('#taskSubject')
-                                .value,
-
-                        teacher:
-                            $('#taskTeacher')
-                                .value
-                                .trim(),
-
-                        due,
-
-                        created:
-                            isoDate(today),
-
-                        description:
-                            $('#taskDescription')
-                                .value
-                                .trim(),
-
-                        status:
-                            'pending',
-
-                        inClass:
-                            $('#taskIsToday')
-                                .checked
-
-                    });
-
-
-                    saveState();
-
-
-                    $('#taskForm')
-                        .reset();
-
-
-                    $('#taskDue').value =
-                        isoDate(
-                            addDays(
-                                today,
-                                1
-                            )
-                        );
-
-
-                    $('#taskIsToday')
-                        .checked =
-                            true;
-
-
-                    closeDialog(
-                        'taskDialog'
-                    );
-
-
-                    currentFilter =
-                        'all';
-
-
-                    $$('#statusFilters .filter-chip')
-                        .forEach(
-                            button =>
-                                button.classList.toggle(
-                                    'active',
-                                    button.dataset.filter ===
-                                        'all'
-                                )
-                        );
-
-
-                    renderAll();
-
-                }
-            );
-
-
-        /* NOVO AVISO */
-
-        $('#noticeForm')
-            .addEventListener(
-                'submit',
-                event => {
-
-                    event.preventDefault();
-
-
-                    const title =
-                        $('#noticeTitle')
-                            .value
-                            .trim();
-
-
-                    if (!title) {
-                        return;
-                    }
-
-
-                    state.notices.push({
-
-                        id: uid(),
-
-                        title,
-
-                        date:
-                            $('#noticeDate')
-                                .value ||
-                            isoDate(today)
-
-                    });
-
-
-                    saveState();
-
-
-                    $('#noticeForm')
-                        .reset();
-
-
-                    closeDialog(
-                        'noticeDialog'
-                    );
-
-
-                    renderAll();
-
-                }
-            );
-
-
-        /* DETALHE */
-
-        $('#detailToggleBtn')
-            .addEventListener(
-                'click',
-                () => {
-
-                    if (
-                        selectedDetailId
-                    ) {
-
-                        toggleTask(
-                            selectedDetailId
-                        );
-
-                    }
-
-                }
-            );
-
-
-        /* LIMPAR DADOS */
-
-        $('[data-action="clear-data"]')
-            .addEventListener(
-                'click',
-                () => {
-
-                    localStorage.removeItem(
-                        STORAGE_KEY
-                    );
-
-
-                    state = {
-                        tasks:
-                            seedTasks.map(
-                                task => ({
-                                    ...task
-                                })
-                            ),
-
-                        notices:
-                            seedNotices.map(
-                                notice => ({
-                                    ...notice
-                                })
-                            )
-                    };
-
-
-                    $('#profileMenu').hidden =
-                        true;
-
-
-                    renderAll();
-
-                }
-            );
-
-
-        $('#taskDue').value =
-            isoDate(
-                addDays(
-                    today,
-                    1
-                )
-            );
-
-
-        $('#noticeDate').value =
-            isoDate(today);
-
-    }
-
-
-    function renderAll() {
-
-        renderSubjects();
-
-        renderTasks();
-
-        renderStats();
-
-        renderToday();
-
-        renderCalendar();
-
-        renderNotices();
-
-    }
-
-
-    function escapeHtml(value) {
-
-        return String(value)
-            .replace(
-                /[&<>'"]/g,
-                char => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#039;',
-                    '"': '&quot;'
-                }[char])
-            );
-
-    }
-
-
-    bindUI();
-
+        subjectTasks.forEach(task => group.appendChild(taskElement(task)));
+        list.appendChild(group);
+      });
+  }
+
+  function unreadChanges(task) {
+    return (task.updates || []).filter(update => !update.seen);
+  }
+
+  function changeLabel(task) {
+    const fields = new Set(unreadChanges(task).map(update => update.field));
+    if (fields.has('due') && fields.has('description')) return 'Atividade atualizada';
+    if (fields.has('due')) return 'Prazo alterado';
+    if (fields.has('description')) return 'Descrição alterada';
+    return '';
+  }
+
+  function taskElement(task) {
+    const status = statusInfo(task);
+    const article = document.createElement('article');
+
+    article.className =
+      `task ${task.status === 'done' ? 'done' : ''} ${changeLabel(task) ? 'updated' : ''}`;
+    article.dataset.id = task.id;
+
+    article.innerHTML = `
+      <button class="check" type="button">
+        ${task.status === 'done' ? '✓' : ''}
+      </button>
+      <div class="task-content">
+        <span class="task-title">${escapeHtml(task.title)}</span>
+        <div class="task-subject-line">
+          ${task.submittedAt ? '<span>Entrega registrada</span>' : ''}
+          ${changeLabel(task)
+            ? `<span class="change-badge">${changeLabel(task)}</span>`
+            : ''}
+          ${task.teacher ? `<span>${escapeHtml(task.teacher)}</span>` : ''}
+        </div>
+      </div>
+      <div class="task-side">
+        <span class="status-pill ${status.className}">
+          ${escapeHtml(status.label)}
+        </span>
+        <span class="task-due">
+          ${task.status === 'done' ? 'Concluída' : formatDate(task.due)}
+        </span>
+      </div>
+      <button class="delete-btn" type="button">×</button>
+    `;
+
+    $('.check', article).addEventListener('click', event => {
+      event.stopPropagation();
+      toggleTask(task.id);
+    });
+
+    $('.delete-btn', article).addEventListener('click', event => {
+      event.stopPropagation();
+      removeTask(task.id);
+    });
+
+    article.addEventListener('click', () => openDetail(task.id));
+    return article;
+  }
+
+  function toggleTask(id) {
+    const task = state.tasks.find(task => task.id === id);
+    if (!task) return;
+
+    task.status = task.status === 'done' ? 'pending' : 'done';
+    saveState();
     renderAll();
 
+    if (selectedDetailId === id && $('#detailDialog').open) {
+      updateDetail(task);
+    }
+  }
+
+  function removeTask(id) {
+    state.tasks = state.tasks.filter(task => task.id !== id);
+    saveState();
+    renderAll();
+  }
+
+  function renderStats() {
+    const subject = $('#subjectFilter').value;
+    const tasks = state.tasks.filter(
+      task => subject === 'all' || task.subject === subject
+    );
+
+    $$('#statusFilters .filter-chip').forEach(button => {
+      const filter = button.dataset.filter;
+      const count = tasks.filter(task => taskMatchesFilter(task, filter)).length;
+      button.querySelector('.filter-count').textContent = count;
+    });
+  }
+
+  function weekTasks() {
+    const start = new Date(today);
+    start.setDate(start.getDate() - start.getDay());
+
+    const end = addDays(start, 6);
+    const startIso = isoDate(start);
+    const endIso = isoDate(end);
+
+    return state.tasks.filter(
+      task => task.due >= startIso && task.due <= endIso
+    );
+  }
+
+  function renderToday() {
+    const todayIso = isoDate(today);
+
+    const todayTasks = state.tasks
+      .filter(task => task.due === todayIso)
+      .sort((a, b) => {
+        if (a.status === 'done' && b.status !== 'done') return 1;
+        if (a.status !== 'done' && b.status === 'done') return -1;
+        return a.title.localeCompare(b.title);
+      });
+
+    $('#todayTitle').textContent =
+      new Date(todayIso + 'T00:00:00').toLocaleDateString('pt-BR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+      });
+
+    $('#todayCount').textContent =
+      `${todayTasks.length} ${todayTasks.length === 1 ? 'atividade' : 'atividades'}`;
+
+    const list = $('#todayList');
+    list.innerHTML = '';
+    $('#todayEmpty').hidden = todayTasks.length !== 0;
+
+    todayTasks.forEach(task => {
+      const status = statusInfo(task);
+      const item = document.createElement('article');
+
+      item.className = `today-task ${task.status === 'done' ? 'done' : ''}`;
+
+      item.innerHTML = `
+        <button type="button" class="today-check">
+          ${task.status === 'done' ? '✓' : ''}
+        </button>
+        <div class="today-task-main">
+          <strong class="today-task-subject">
+            ${escapeHtml(task.subject)}
+          </strong>
+          <span class="today-task-title">
+            ${escapeHtml(task.title)}
+          </span>
+          <div class="today-task-meta">
+            ${task.submittedAt ? '<span>Entrega registrada</span>' : ''}
+            ${changeLabel(task)
+              ? `<span class="change-badge">${changeLabel(task)}</span>`
+              : ''}
+            ${task.teacher ? `<span>• ${escapeHtml(task.teacher)}</span>` : ''}
+          </div>
+        </div>
+        <span class="status-pill ${status.className}">
+          ${escapeHtml(status.label)}
+        </span>
+      `;
+
+      $('.today-check', item).addEventListener('click', event => {
+        event.stopPropagation();
+        toggleTask(task.id);
+      });
+
+      item.addEventListener('click', () => openDetail(task.id));
+      list.appendChild(item);
+    });
+  }
+
+  function renderCalendar() {
+    const label = currentMonth.toLocaleDateString('pt-BR', {
+      month: 'long',
+      year: 'numeric'
+    });
+
+    $('#monthLabel').textContent =
+      label.charAt(0).toUpperCase() + label.slice(1);
+
+    const calendar = $('#calendar');
+    calendar.innerHTML = '';
+
+    const first = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      1
+    );
+
+    const totalDays = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth() + 1,
+      0
+    ).getDate();
+
+    for (let i = 0; i < first.getDay(); i++) {
+      const blank = document.createElement('span');
+      blank.className = 'day blank';
+      calendar.appendChild(blank);
+    }
+
+    for (let day = 1; day <= totalDays; day++) {
+      const date = new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth(),
+        day
+      );
+
+      const dateIso = isoDate(date);
+      const button = document.createElement('button');
+
+      button.type = 'button';
+      button.className = 'day';
+      button.textContent = day;
+
+      if (dateIso === isoDate(today)) button.classList.add('today');
+      if (dateIso === selectedDate) button.classList.add('selected');
+
+      const hasEvent =
+        state.tasks.some(task => task.due === dateIso) ||
+        state.notices.some(notice => notice.date === dateIso);
+
+      if (hasEvent) button.classList.add('has-event');
+
+      button.addEventListener('click', () => {
+        selectedDate = dateIso;
+        renderCalendar();
+      });
+
+      calendar.appendChild(button);
+    }
+
+    renderSelectedEvents();
+  }
+
+  function renderSelectedEvents() {
+    const container = $('#selectedEvents');
+    const isToday = selectedDate === isoDate(today);
+
+    $('#todaySection').hidden = !isToday;
+
+    const tasks = state.tasks.filter(
+      task => !isToday && task.due === selectedDate
+    );
+    const notices = state.notices.filter(
+      notice => notice.date === selectedDate
+    );
+
+    container.hidden = isToday && !notices.length;
+
+    if (container.hidden) {
+      container.innerHTML = '';
+      return;
+    }
+
+    if (!tasks.length && !notices.length) {
+      container.innerHTML = `
+        <div class="selected-date-title">
+          ${escapeHtml(formatLongDate(selectedDate))}
+        </div>
+        <span>Nenhuma atividade ou aviso.</span>
+      `;
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="selected-date-title">
+        ${isToday
+          ? 'Avisos de hoje'
+          : escapeHtml(formatLongDate(selectedDate))}
+      </div>
+    `;
+
+    tasks.forEach(task => {
+      const button = document.createElement('button');
+      button.className = 'calendar-event';
+      button.type = 'button';
+
+      button.innerHTML = `
+        <span class="event-bullet"></span>
+        <span class="calendar-event-text">
+          <strong>${escapeHtml(task.subject)}</strong>
+          <span>— ${escapeHtml(task.title)}</span>
+        </span>
+      `;
+
+      button.addEventListener('click', () => openDetail(task.id));
+      container.appendChild(button);
+    });
+
+    notices.forEach(notice => {
+      const item = document.createElement('div');
+      item.className = 'calendar-event notice-event';
+
+      item.innerHTML = `
+        <span class="event-bullet notice-bullet"></span>
+        <span>${escapeHtml(notice.title)}</span>
+      `;
+
+      container.appendChild(item);
+    });
+  }
+
+  function renderNotices() {
+    const list = $('#noticeList');
+    list.innerHTML = '';
+
+    state.notices
+      .slice()
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .forEach(notice => {
+        const item = document.createElement('article');
+        item.className = 'notice';
+
+        item.innerHTML = `
+          <span class="pin">●</span>
+          <div class="notice-text">
+            <strong>${escapeHtml(notice.title)}</strong>
+            <div class="notice-date">${formatDate(notice.date)}</div>
+          </div>
+          <button class="notice-remove" type="button">×</button>
+        `;
+
+        $('.notice-remove', item).addEventListener('click', () => {
+          state.notices = state.notices.filter(
+            current => current.id !== notice.id
+          );
+          saveState();
+          renderAll();
+        });
+
+        list.appendChild(item);
+      });
+  }
+
+  function openDetail(id) {
+    const task = state.tasks.find(task => task.id === id);
+    if (!task) return;
+
+    selectedDetailId = id;
+    updateDetail(task);
+    $('#detailDialog').showModal();
+  }
+
+  function updateDetail(task) {
+    const status = statusInfo(task);
+
+    $('#detailSubject').textContent = task.subject.toUpperCase();
+    $('#detailTitle').textContent = task.title;
+
+    $('#detailMeta').innerHTML = `
+      <span class="status-pill ${status.className}">
+        ${escapeHtml(status.label)}
+      </span>
+      <span>
+        Prazo: ${escapeHtml(formatLongDate(task.due))}
+      </span>
+      ${task.teacher
+        ? `<span>Professor: ${escapeHtml(task.teacher)}</span>`
+        : ''}
+      ${task.inClass
+        ? `<span>Passada em sala em ${escapeHtml(
+            formatDate(task.assignedOn || task.created || isoDate(today))
+          )}${task.teacher ? ` por ${escapeHtml(task.teacher)}` : ''}</span>`
+        : ''}
+    `;
+
+    $('#detailDescription').textContent =
+      task.description || 'Nenhuma observação cadastrada.';
+
+    $('#detailToggleBtn').textContent =
+      task.status === 'done'
+        ? 'Marcar como pendente'
+        : 'Marcar como concluída';
+
+    $('#detailDeliveryStatus').textContent = task.submittedAt
+      ? `Entrega registrada em ${formatDate(task.submittedAt)}`
+      : 'Entrega não registrada';
+
+    $('#detailDeliveryBtn').textContent = task.submittedAt
+      ? 'Desfazer registro'
+      : 'Registrar entrega';
+
+    const changes = unreadChanges(task);
+    const box = $('#detailChanges');
+
+    box.hidden = changes.length === 0;
+
+    box.innerHTML = changes.length
+      ? `
+        <strong>Alterações na atividade</strong>
+        ${changes.map(update => `
+          <p>${update.field === 'due'
+            ? `Prazo alterado de ${escapeHtml(formatDate(update.before))} para ${escapeHtml(formatDate(update.after))}.`
+            : `Descrição alterada em ${escapeHtml(formatDate(update.at.slice(0, 10)))}.`}</p>
+        `).join('')}
+        <button type="button" class="text-btn" id="acknowledgeChanges">
+          Marcar como lidas
+        </button>
+      `
+      : '';
+
+    if (changes.length) {
+      $('#acknowledgeChanges').addEventListener('click', () => {
+        changes.forEach(update => { update.seen = true; });
+        saveState();
+        renderAll();
+        updateDetail(task);
+      });
+    }
+  }
+
+  function setAssignedDateVisibility() {
+    const active = $('#taskIsToday').checked;
+    $('#taskAssignedWrap').hidden = !active;
+    $('#taskAssignedOn').required = active;
+  }
+
+  function openTaskForm(task = null) {
+    editingTaskId = task ? task.id : null;
+
+    $('#taskDialogTitle').textContent = task
+      ? 'Editar atividade'
+      : 'Anotar atividade passada em sala';
+
+    $('#taskSubmitBtn').textContent = task
+      ? 'Salvar alterações'
+      : 'Salvar atividade';
+
+    $('#taskForm').reset();
+    $('#taskTitle').value = task?.title || '';
+    $('#taskSubject').value = task?.subject || 'Língua Portuguesa';
+    $('#taskTeacher').value = task?.teacher || '';
+    $('#taskDue').value = task?.due || isoDate(addDays(today, 1));
+    $('#taskDescription').value = task?.description || '';
+    $('#taskIsToday').checked = task ? Boolean(task.inClass) : true;
+    $('#taskAssignedOn').value =
+      task?.assignedOn || task?.created || isoDate(today);
+
+    setAssignedDateVisibility();
+    openDialog('taskDialog');
+  }
+
+  function openDialog(id) {
+    const dialog = $('#' + id);
+    if (dialog && !dialog.open) dialog.showModal();
+  }
+
+  function closeDialog(id) {
+    const dialog = $('#' + id);
+    if (dialog && dialog.open) dialog.close();
+  }
+
+  function bindUI() {
+    $('#themeBtn').addEventListener('click', () => {
+      const html = document.documentElement;
+      html.dataset.theme =
+        html.dataset.theme === 'dark' ? 'light' : 'dark';
+
+      localStorage.setItem('atlas-theme', html.dataset.theme);
+    });
+
+    const savedTheme = localStorage.getItem('atlas-theme');
+    if (savedTheme) {
+      document.documentElement.dataset.theme = savedTheme;
+    }
+
+    $('#profileBtn').addEventListener('click', event => {
+      event.stopPropagation();
+      const menu = $('#profileMenu');
+
+      menu.hidden = !menu.hidden;
+      $('#profileBtn').setAttribute('aria-expanded', String(!menu.hidden));
+    });
+
+    document.addEventListener('click', event => {
+      if (!event.target.closest('.top-actions')) {
+        $('#profileMenu').hidden = true;
+        $('#profileBtn').setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    $('#addTaskBtn').addEventListener('click', () => openTaskForm());
+    $('#emptyAddBtn').addEventListener('click', () => openTaskForm());
+    $('#addNoticeBtn').addEventListener(
+      'click',
+      () => openDialog('noticeDialog')
+    );
+
+    $('#clearDoneBtn').addEventListener('click', () => {
+      state.tasks = state.tasks.filter(task => task.status !== 'done');
+      saveState();
+      renderAll();
+    });
+
+    $('#prevMonth').addEventListener('click', () => {
+      currentMonth = new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth() - 1,
+        1
+      );
+      selectedDate = isoDate(currentMonth);
+      renderCalendar();
+    });
+
+    $('#nextMonth').addEventListener('click', () => {
+      currentMonth = new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth() + 1,
+        1
+      );
+      selectedDate = isoDate(currentMonth);
+      renderCalendar();
+    });
+
+    $('#subjectFilter').addEventListener('change', () => {
+      renderTasks();
+      renderStats();
+    });
+
+    $$('#statusFilters .filter-chip').forEach(button => {
+      button.addEventListener('click', () => {
+        $$('#statusFilters .filter-chip').forEach(item =>
+          item.classList.remove('active')
+        );
+
+        button.classList.add('active');
+        currentFilter = button.dataset.filter;
+        renderTasks();
+      });
+    });
+
+    $$('[data-close]').forEach(button => {
+      button.addEventListener(
+        'click',
+        () => closeDialog(button.dataset.close)
+      );
+    });
+
+    $('#taskIsToday').addEventListener(
+      'change',
+      setAssignedDateVisibility
+    );
+
+    $('#taskForm').addEventListener('submit', event => {
+      event.preventDefault();
+
+      const title = $('#taskTitle').value.trim();
+      const due = $('#taskDue').value;
+      if (!title || !due) return;
+
+      const fields = {
+        title,
+        subject: $('#taskSubject').value,
+        teacher: $('#taskTeacher').value.trim(),
+        due,
+        description: $('#taskDescription').value.trim(),
+        inClass: $('#taskIsToday').checked,
+        assignedOn: $('#taskIsToday').checked
+          ? $('#taskAssignedOn').value
+          : ''
+      };
+
+      if (fields.inClass && !fields.assignedOn) return;
+
+      if (editingTaskId) {
+        const task = state.tasks.find(item => item.id === editingTaskId);
+        if (!task) return;
+
+        const now = new Date().toISOString();
+        task.updates ||= [];
+
+        for (const field of ['due', 'description']) {
+          if ((task[field] || '') !== fields[field]) {
+            task.updates.push({
+              field,
+              before: task[field] || '',
+              after: fields[field],
+              at: now,
+              seen: false
+            });
+          }
+        }
+
+        Object.assign(task, fields);
+      } else {
+        state.tasks.push({
+          id: uid(),
+          ...fields,
+          created: isoDate(today),
+          status: 'pending',
+          submittedAt: '',
+          updates: []
+        });
+
+        currentFilter = 'all';
+
+        $$('#statusFilters .filter-chip').forEach(button =>
+          button.classList.toggle(
+            'active',
+            button.dataset.filter === 'all'
+          )
+        );
+      }
+
+      saveState();
+      closeDialog('taskDialog');
+      renderAll();
+
+      if (editingTaskId && $('#detailDialog').open) {
+        const task = state.tasks.find(
+          item => item.id === editingTaskId
+        );
+        if (task) updateDetail(task);
+      }
+
+      editingTaskId = null;
+    });
+
+    $('#noticeForm').addEventListener('submit', event => {
+      event.preventDefault();
+
+      const title = $('#noticeTitle').value.trim();
+      if (!title) return;
+
+      state.notices.push({
+        id: uid(),
+        title,
+        date: $('#noticeDate').value || isoDate(today)
+      });
+
+      saveState();
+      $('#noticeForm').reset();
+      closeDialog('noticeDialog');
+      renderAll();
+    });
+
+    $('#detailEditBtn').addEventListener('click', () => {
+      const task = state.tasks.find(
+        item => item.id === selectedDetailId
+      );
+
+      if (task) {
+        closeDialog('detailDialog');
+        openTaskForm(task);
+      }
+    });
+
+    $('#detailDeliveryBtn').addEventListener('click', () => {
+      const task = state.tasks.find(
+        item => item.id === selectedDetailId
+      );
+
+      if (!task) return;
+
+      task.submittedAt = task.submittedAt ? '' : isoDate(today);
+      saveState();
+      renderAll();
+      updateDetail(task);
+    });
+
+    $('#detailToggleBtn').addEventListener('click', () => {
+      if (selectedDetailId) toggleTask(selectedDetailId);
+    });
+
+    $('[data-action="clear-data"]').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+
+      state = {
+        tasks: seedTasks.map(task => ({ ...task })),
+        notices: seedNotices.map(notice => ({ ...notice }))
+      };
+
+      $('#profileMenu').hidden = true;
+      renderAll();
+    });
+
+    $('#taskAssignedOn').value = isoDate(today);
+    setAssignedDateVisibility();
+    $('#taskDue').value = isoDate(addDays(today, 1));
+    $('#noticeDate').value = isoDate(today);
+  }
+
+  function renderAll() {
+    renderSubjects();
+    renderTasks();
+    renderStats();
+    renderToday();
+    renderCalendar();
+    renderNotices();
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>'"]/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#039;',
+      '"': '&quot;'
+    }[char]));
+  }
+
+  bindUI();
+  renderAll();
 })();
-
 </script>
-
 </body>
 </html>
