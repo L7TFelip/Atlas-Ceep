@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atlas CEEP — Administrador</title>
+  <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+<svg class="logo-filter-defs" aria-hidden="true" focusable="false" width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="atlasDarkGreen" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="
+        0 0 0 0 0.2353
+        0 0 0 0 0.7020
+        0 0 0 0 0.4431
+        0.2 2.8 0.25 0 -0.08" />
+    </filter>
+    <filter id="atlasFooterWhite" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="
+        0 0 0 0 1
+        0 0 0 0 1
+        0 0 0 0 1
+        0.2 2.8 0.25 0 -0.08" />
+    </filter>
+  </defs>
+</svg>
+
+<div class="app-shell">
+
+  <!-- ==================== TOPO ==================== -->
+  <header class="topbar">
+
+    <div class="top-actions">
+
+      <button class="icon-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema">
+        ☼
+      </button>
+
+      <button class="profile-btn" id="profileBtn" aria-expanded="false" aria-controls="profileMenu">
+        <span class="avatar">AD</span>
+        <span class="profile-name">Administrador</span>
+        <span class="chevron">⌄</span>
+      </button>
+
+      <div class="profile-menu" id="profileMenu" hidden>
+        <div class="profile-menu-head">
+          <strong>Administrador</strong>
+          <span>Administração · CEEP</span>
+        </div>
+
+        <button type="button">Meu perfil</button>
+        <button type="button" id="clearDataBtn">
+          Atualizar dados
+        </button>
+        <button type="button" id="logoutBtn">Sair</button>
+      </div>
+
+    </div>
+
+  </header>
+
+  <!-- ==================== CONTEÚDO ==================== -->
+  <main class="dashboard">
+
+    <!-- BOAS-VINDAS -->
+    <section class="welcome">
+      <div class="welcome-main">
+        <div class="brand">
+          <span class="brand-logo-frame">
+            <img class="brand-logo" src="../static/assets/Logo.png" alt="Atlas">
+          </span>
+        </div>
+        <div class="welcome-copy">
+          <p class="eyebrow">PAINEL DO ADMINISTRADOR</p>
+          <h1>Olá, administrador.</h1>
+          <p class="muted">Gerencie os eventos e informações gerais exibidos para os alunos.</p>
+        </div>
+      </div>
+      <button class="primary-btn" id="newEventBtn">＋ Criar evento</button>
+    </section>
+
+    <!-- ==================== GRID PRINCIPAL ==================== -->
+    <section class="main-grid">
+
+      <!-- ==================== EVENTOS ==================== -->
+      <div class="left-column">
+
+        <article class="panel">
+
+          <div class="panel-head panel-head-wrap">
+
+            <div>
+              <p class="eyebrow">AGENDA INSTITUCIONAL</p>
+              <h2>Eventos publicados</h2>
+            </div>
+
+            <button class="ghost-btn" id="newEventBtn2">
+              ＋ Novo evento
+            </button>
+
+          </div>
+
+          <!-- FILTROS -->
+          <div class="filters-row">
+
+            <div class="filter-scroll" id="typeFilters">
+
+              <button
+                class="filter-chip active"
+                data-type="all">
+                Todos <span class="filter-count" data-count="all">0</span>
+</button>
+
+              <button
+                class="filter-chip"
+                data-type="evento">
+                Eventos <span class="filter-count" data-count="evento">0</span>
+</button>
+
+              <button
+                class="filter-chip"
+                data-type="reuniao">
+                Reuniões <span class="filter-count" data-count="reuniao">0</span>
+</button>
+
+              <button
+                class="filter-chip"
+                data-type="comemoracao">
+                Comemorações <span class="filter-count" data-count="comemoracao">0</span>
+</button>
+
+              <button
+                class="filter-chip"
+                data-type="aviso">
+                Avisos <span class="filter-count" data-count="aviso">0</span>
+</button>
+
+            </div>
+
+            <div class="select-row">
+
+              <select
+                id="audienceFilter"
+                class="compact-select">
+
+                <option value="all">
+                  Todos os públicos
+                </option>
+
+                <option value="alunos">
+                  Alunos
+                </option>
+
+                <option value="professores">
+                  Professores
+                </option>
+
+                <option value="todos">
+                  Toda a escola
+                </option>
+
+              </select>
+
+              <select
+                id="monthFilter"
+                class="compact-select">
+
+                <option value="all">
+                  Todos os meses
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+          <!-- LISTA -->
+          <div
+            class="event-list"
+            id="eventList">
+          </div>
+
+          <!-- VAZIO -->
+          <div
+            class="empty-state"
+            id="eventEmpty">
+
+            <span>◌</span>
+
+            <p>
+              Nenhum evento encontrado.
+            </p>
+
+            <button
+              class="text-btn"
+              id="emptyCreateBtn">
+              Criar evento
+            </button>
+
+          </div>
+
+        </article>
+
+      </div>
+
+      <!-- ==================== LATERAL ==================== -->
+      <div class="right-column">
+
+        <!-- PRÓXIMOS -->
+        <article class="panel">
+
+          <div class="panel-head">
+
+            <div>
+              <p class="eyebrow">CALENDÁRIO</p>
+              <h2>Próximos eventos</h2>
+            </div>
+
+          </div>
+
+          <div
+            class="upcoming-list"
+            id="upcomingList">
+          </div>
+
+        </article>
+
+        <!-- CATEGORIAS -->
+        <article class="panel">
+
+          <div class="panel-head">
+
+            <div>
+              <p class="eyebrow">VISÃO GERAL</p>
+              <h2>Tipos de evento</h2>
+            </div>
+
+          </div>
+
+          <div
+            class="category-list"
+            id="categoryList">
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <a href="https://github.com/L7TFelip/Atlas-Ceep" target="_blank" rel="noopener noreferrer">
+      <svg class="site-footer-github" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.86c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+      </svg>
+      <span>github dos colaboradores</span>
+    </a>
+    <span class="site-footer-credit">
+      <span class="site-footer-logo-frame" aria-hidden="true">
+        <img src="/static/assets/Logo.png" alt="">
+      </span>
+      <span>@projetoatlas 2026</span>
+    </span>
+    <span class="site-footer-class">3°C DS CEEP</span>
+  </footer>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- MODAL — CRIAR / EDITAR EVENTO -->
+<!-- ========================================================= -->
+
+<dialog id="eventDialog">
+
+  <form
+    class="modal-form"
+    id="eventForm">
+
+    <button
+      type="button"
+      class="close-btn"
+      id="closeEventBtn">
+      ×
+    </button>
+
+    <p
+      class="eyebrow"
+      id="formEyebrow">
+      NOVO EVENTO
+    </p>
+
+    <h2 id="formTitle">
+      Criar evento
+    </h2>
+
+    <input
+      type="hidden"
+      id="editingId">
+
+    <!-- TÍTULO -->
+    <label>
+
+      Título
+
+      <input
+        type="text"
+        id="eventTitle"
+        maxlength="100"
+        required
+        placeholder="Ex.: Feira de profissões">
+
+    </label>
+
+    <!-- TIPO + PÚBLICO -->
+    <div class="modal-grid-two">
+
+      <label>
+
+        Tipo
+
+        <select
+          id="eventType"
+          required>
+
+          <option value="evento">
+            Evento
+          </option>
+
+          <option value="reuniao">
+            Reunião
+          </option>
+
+          <option value="comemoracao">
+            Comemoração
+          </option>
+
+          <option value="aviso">
+            Aviso
+          </option>
+
+        </select>
+
+      </label>
+
+      <label>
+
+        Público
+
+        <select
+          id="eventAudience"
+          required>
+
+          <option value="todos">
+            Toda a escola
+          </option>
+
+          <option value="alunos">
+            Alunos
+          </option>
+
+          <option value="professores">
+            Professores
+          </option>
+
+        </select>
+
+      </label>
+
+    </div>
+
+    <!-- DATA + HORÁRIO -->
+    <div class="modal-grid-two">
+
+      <label>
+
+        Data
+
+        <input
+          type="date"
+          id="eventDate"
+          required>
+
+      </label>
+
+      <label>
+
+        Horário
+
+        <input
+          type="time"
+          id="eventTime">
+
+      </label>
+
+    </div>
+
+    <!-- LOCAL -->
+    <label>
+
+      Local
+
+      <input
+        type="text"
+        id="eventLocation"
+        maxlength="120"
+        placeholder="Ex.: Auditório do CEEP">
+
+    </label>
+
+    <!-- DESCRIÇÃO -->
+    <label>
+
+      Descrição
+
+      <textarea
+        id="eventDescription"
+        maxlength="700"
+        placeholder="Explique os detalhes do evento para os alunos e professores."></textarea>
+
+    </label>
+
+    <!-- AÇÕES -->
+    <div class="modal-actions">
+
+      <button
+        type="button"
+        class="secondary-btn"
+        id="cancelEventBtn">
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="primary-btn"
+        id="saveEventBtn">
+        Publicar evento
+      </button>
+
+    </div>
+
+  </form>
+
+</dialog>
+
+<!-- ========================================================= -->
+<!-- MODAL — EXCLUSÃO -->
+<!-- ========================================================= -->
+
+<dialog id="deleteDialog">
+
+  <div class="modal-form">
+
+    <button
+      type="button"
+      class="close-btn"
+      id="closeDeleteBtn">
+      ×
+    </button>
+
+    <p class="eyebrow">
+      EXCLUIR EVENTO
+    </p>
+
+    <h2>
+      Excluir evento?
+    </h2>
+
+    <p class="delete-message">
+      Esse evento será removido da área do administrador e não
+      aparecerá mais na agenda institucional.
+    </p>
+
+    <div class="modal-actions">
+
+      <button
+        type="button"
+        class="secondary-btn"
+        id="cancelDeleteBtn">
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="danger-btn"
+        id="confirmDeleteBtn">
+        Excluir
+      </button>
+
+    </div>
+
+  </div>
+
+</dialog>
+
+  <script src="../static/js/main.js"></script>
+  <script src="../static/js/adm.js"></script>
+</body>
+
+</html>

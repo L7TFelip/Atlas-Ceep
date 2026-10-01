@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Atlas CEEP — Professor</title>
+
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+<svg class="logo-filter-defs" aria-hidden="true" focusable="false" width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="atlasDarkGreen" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="
+        0 0 0 0 0.2353
+        0 0 0 0 0.7020
+        0 0 0 0 0.4431
+        0.2 2.8 0.25 0 -0.08" />
+    </filter>
+    <filter id="atlasFooterWhite" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="
+        0 0 0 0 1
+        0 0 0 0 1
+        0 0 0 0 1
+        0.2 2.8 0.25 0 -0.08" />
+    </filter>
+  </defs>
+</svg>
+
+<div class="app-shell">
+
+    <!-- =========================
+         TOPO
+    ========================== -->
+
+    <header class="topbar">
+
+    <div class="top-actions">
+
+            <button
+                class="icon-btn"
+                id="themeBtn"
+                title="Alternar tema" aria-label="Alternar tema">
+
+                ☼
+
+            </button>
+
+            <button
+                class="profile-btn"
+                id="profileBtn" aria-expanded="false" aria-controls="profileMenu">
+
+                <span class="avatar">
+                    DS
+                </span>
+
+                <span class="profile-name">
+                    Diego
+                </span>
+
+                <span class="chevron">
+                    ⌄
+                </span>
+
+            </button>
+
+            <div
+                class="profile-menu"
+                id="profileMenu"
+                hidden>
+
+                <div class="profile-menu-head">
+
+                    <strong>
+                        Diego da Silva
+                    </strong>
+
+                    <span>
+                        Professor · CEEP
+                    </span>
+
+                </div>
+
+                <button type="button">
+                    Meu perfil
+                </button>
+
+                <button
+                    type="button"
+                    id="clearDataBtn">
+
+                    Atualizar dados
+
+                </button>
+        <button type="button" id="logoutBtn">Sair</button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <main class="dashboard">
+
+        <!-- =========================
+             CABEÇALHO
+        ========================== -->
+
+        <section class="welcome">
+            <div class="welcome-main">
+                <div class="brand">
+                    <span class="brand-logo-frame">
+                        <img class="brand-logo" src="../static/assets/Logo.png" alt="Atlas">
+                    </span>
+                </div>
+                <div class="welcome-copy">
+                    <p class="eyebrow">PAINEL DO PROFESSOR</p>
+                    <h1>Olá, Diego.</h1>
+                    <p class="muted">Publique conteúdos, atividades e avisos para as suas turmas.</p>
+                </div>
+            </div>
+            <button class="primary-btn" id="newContentBtn">＋ Publicar conteúdo</button>
+        </section>
+
+        <!-- =========================
+             CONTEÚDO PRINCIPAL
+        ========================== -->
+
+        <section class="main-grid">
+
+            <!-- =========================
+                 PUBLICAÇÕES
+            ========================== -->
+
+            <div class="left-column">
+
+                <article class="panel">
+
+                    <div class="panel-head panel-head-wrap">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                PUBLICAÇÕES
+                            </p>
+
+                            <h2>
+                                Conteúdos publicados
+                            </h2>
+
+                        </div>
+
+                        <button
+                            class="ghost-btn"
+                            id="newContentBtn2">
+
+                            ＋ Novo conteúdo
+
+                        </button>
+
+                    </div>
+
+                    <!-- FILTROS -->
+
+                    <div class="filters-row">
+
+                        <div
+                            class="filter-scroll"
+                            id="typeFilters">
+
+                            <button
+                                class="filter-chip active"
+                                data-type="all">
+
+                                Todos <span class="filter-count" data-count="all">0</span>
+</button>
+
+                            <button
+                                class="filter-chip"
+                                data-type="atividade">
+
+                                Atividades <span class="filter-count" data-count="atividade">0</span>
+</button>
+
+                            <button
+                                class="filter-chip"
+                                data-type="material">
+
+                                Materiais <span class="filter-count" data-count="material">0</span>
+</button>
+
+                            <button
+                                class="filter-chip"
+                                data-type="aviso">
+
+                                Avisos <span class="filter-count" data-count="aviso">0</span>
+</button>
+
+                        </div>
+
+                        <div class="select-row">
+
+                            <select
+                                id="classFilter"
+                                class="compact-select">
+
+                                <option value="all">
+                                    Todas as turmas
+                                </option>
+
+                            </select>
+
+                            <select
+                                id="subjectFilter"
+                                class="compact-select">
+
+                                <option value="all">
+                                    Todas as disciplinas
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <!-- LISTA -->
+
+                    <div
+                        class="content-list"
+                        id="contentList">
+                    </div>
+
+                    <div
+                        class="empty-state"
+                        id="contentEmpty">
+
+                        <span>
+                            ◌
+                        </span>
+
+                        <p>
+                            Nenhum conteúdo encontrado.
+                        </p>
+
+                        <button
+                            class="text-btn"
+                            id="emptyCreateBtn">
+
+                            Publicar conteúdo
+
+                        </button>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+            <!-- =========================
+                 LATERAL
+            ========================== -->
+
+            <div class="right-column">
+
+                <!-- TURMAS -->
+
+                <article class="panel classes-panel">
+
+                    <div class="panel-head">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                TURMAS
+                            </p>
+
+                            <h2>
+                                Minhas turmas
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="class-list"
+                        id="classList">
+                    </div>
+
+                </article>
+
+                <!-- ATIVIDADE RECENTE -->
+
+                <article class="panel">
+
+                    <div class="panel-head">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                ATIVIDADE
+                            </p>
+
+                            <h2>
+                                Publicações recentes
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="recent-list"
+                        id="recentList">
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+  <footer class="site-footer">
+    <a href="https://github.com/L7TFelip/Atlas-Ceep" target="_blank" rel="noopener noreferrer">
+      <svg class="site-footer-github" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.86c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+      </svg>
+      <span>github dos colaboradores</span>
+    </a>
+    <span class="site-footer-credit">
+      <span class="site-footer-logo-frame" aria-hidden="true">
+        <img src="/static/assets/Logo.png" alt="">
+      </span>
+      <span>@projetoatlas 2026</span>
+    </span>
+    <span class="site-footer-class">3°C DS CEEP</span>
+  </footer>
+
+</div>
+
+<!-- =========================
+     MODAL PUBLICAR / EDITAR
+========================== -->
+
+<dialog id="contentDialog">
+
+    <form
+        class="modal-form"
+        id="contentForm">
+
+        <button
+            type="button"
+            class="close-btn"
+            id="closeContentBtn">
+
+            ×
+
+        </button>
+
+        <p class="eyebrow" id="formEyebrow">
+            NOVA PUBLICAÇÃO
+        </p>
+
+        <h2 id="formTitle">
+            Publicar conteúdo
+        </h2>
+
+        <input
+            type="hidden"
+            id="editingId">
+
+        <!-- TÍTULO -->
+
+        <label>
+
+            Título
+
+            <input
+                type="text"
+                id="contentTitle"
+                maxlength="100"
+                required
+                placeholder="Ex.: Atividade — API REST">
+
+        </label>
+
+        <!-- DISCIPLINA + TIPO -->
+
+        <div class="modal-grid-two">
+
+            <label>
+
+                Disciplina
+
+                <select
+                    id="contentSubject"
+                    required>
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option>
+                        Programação no Desenvolvimento de Sistemas
+                    </option>
+
+                    <option>
+                        Banco de Dados
+                    </option>
+
+                    <option>
+                        Engenharia de Software
+                    </option>
+
+                    <option>
+                        Matemática
+                    </option>
+
+                    <option>
+                        Língua Portuguesa
+                    </option>
+
+                    <option>
+                        História
+                    </option>
+
+                    <option>
+                        Física
+                    </option>
+
+                    <option>
+                        Química
+                    </option>
+
+                </select>
+
+            </label>
+
+            <label>
+
+                Tipo
+
+                <select
+                    id="contentType"
+                    required>
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="atividade">
+                        Atividade
+                    </option>
+
+                    <option value="material">
+                        Material
+                    </option>
+
+                    <option value="aviso">
+                        Aviso
+                    </option>
+
+                </select>
+
+            </label>
+
+        </div>
+
+        <!-- TURMA + DATA -->
+
+        <div class="modal-grid-two">
+
+            <label>
+
+                Turma
+
+                <select
+                    id="contentClass"
+                    required>
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option>
+                        1º Desenvolvimento de Sistemas
+                    </option>
+
+                    <option>
+                        2º Desenvolvimento de Sistemas
+                    </option>
+
+                    <option>
+                        3º Desenvolvimento de Sistemas
+                    </option>
+
+                </select>
+
+            </label>
+
+            <label>
+
+                Data de publicação
+
+                <input
+                    type="date"
+                    id="contentDate"
+                    required>
+
+            </label>
+
+        </div>
+
+        <!-- PRAZO -->
+
+        <label id="deadlineField">
+
+            Prazo de entrega
+
+            <input
+                type="date"
+                id="contentDeadline">
+
+        </label>
+
+        <!-- DESCRIÇÃO -->
+
+        <label>
+
+            Descrição
+
+            <textarea
+                id="contentDescription"
+                maxlength="700"
+                placeholder="Explique o conteúdo, atividade ou aviso para os alunos."></textarea>
+
+        </label>
+
+        <!-- AÇÕES -->
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="secondary-btn"
+                id="cancelContentBtn">
+
+                Cancelar
+
+            </button>
+
+            <button
+                type="submit"
+                class="primary-btn"
+                id="saveContentBtn">
+
+                Publicar conteúdo
+
+            </button>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+<!-- =========================
+     MODAL CONFIRMAÇÃO
+========================== -->
+
+<dialog id="deleteDialog">
+
+    <div class="modal-form">
+
+        <button
+            type="button"
+            class="close-btn"
+            id="closeDeleteBtn">
+
+            ×
+
+        </button>
+
+        <p class="eyebrow">
+            EXCLUIR PUBLICAÇÃO
+        </p>
+
+        <h2>
+            Excluir conteúdo?
+        </h2>
+
+        <p class="delete-message">
+            Essa publicação será removida da sua
+            área do professor.
+        </p>
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="secondary-btn"
+                id="cancelDeleteBtn">
+
+                Cancelar
+
+            </button>
+
+            <button
+                type="button"
+                class="danger-btn"
+                id="confirmDeleteBtn">
+
+                Excluir
+
+            </button>
+
+        </div>
+
+    </div>
+
+</dialog>
+
+  <script src="../static/js/main.js"></script>
+  <script src="../static/js/professor.js"></script>
+</body>
+
+</html>

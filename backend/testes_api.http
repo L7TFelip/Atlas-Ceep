@@ -1,0 +1,33 @@
+### LOGIN ADM
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "login": "admin",
+    "senha": "atlas123",
+    "tipo": "equipe",
+    "lembrar": true
+}
+
+### CRIAR PROFESSOR
+POST http://localhost:5000/api/professores
+Content-Type: application/json
+
+{
+    "nome": "Carlos Oliveira",
+    "telefone": "45988887777",
+    "atributo": "Professor de Desenvolvimento de Sistemas",
+    "login": "carlos",
+    "senha": "123456"
+}
+
+### LOGIN PROFESSOR
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "login": "carlos",
+    "senha": "123456",
+    "tipo": "equipe",
+    "lembrar": true
+}
