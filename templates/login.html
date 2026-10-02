@@ -68,34 +68,17 @@
         </div>
 
 
-        <!-- TIPO DE ACESSO -->
-        <div class="access-type">
-          <span class="field-label">Tipo de acesso</span>
-
-          <div class="filter-scroll">
-            <button type="button" class="filter-chip active" id="studentOption" data-role="aluno">
-              Aluno
-            </button>
-
-            <button type="button" class="filter-chip" id="adminOption" data-role="adm">
-              Equipe
-            </button>
-          </div>
-        </div>
-
-
         <!-- FORMULÁRIO -->
         <form class="form-stack" id="loginForm" novalidate>
 
           <div class="form-group">
-            <label for="loginUser" id="userLabel">CGM</label>
+            <label for="loginEmail">E-mail</label>
             <input
-              type="text"
-              id="loginUser"
-              name="loginUser"
-              placeholder="Digite seu CGM"
-              autocomplete="username"
-              inputmode="numeric"
+              type="email"
+              id="loginEmail"
+              name="email"
+              placeholder="Digite seu e-mail"
+              autocomplete="email"
               required
             >
           </div>
@@ -133,7 +116,7 @@
           </label>
 
           <button type="submit" class="primary-btn" id="loginButton">
-            <span id="loginButtonText">Entrar como aluno</span>
+            <span id="loginButtonText">Entrar</span>
             <span aria-hidden="true">→</span>
           </button>
 

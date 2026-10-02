@@ -9,16 +9,10 @@
 
     const password = $("#password");
     const passwordToggle = $("#passwordToggle");
-    const loginUser = $("#loginUser");
-    const studentOption = $("#studentOption");
-    const teamOption = $("#adminOption");
-    const loginButtonText = $("#loginButtonText");
-    const userLabel = $("#userLabel");
+    const loginEmail = $("#loginEmail");
     const message = $("#loginMessage");
     const remember = $("#remember");
     const forgotPassword = $("#forgotPassword");
-
-    let selectedRole = localStorage.getItem("atlas-login-role") === "equipe" ? "equipe" : "aluno";
 
     function showMessage(text, type = "error") {
       message.hidden = false;
@@ -32,28 +26,6 @@
       message.className = "login-message";
     }
 
-    function selectRole(role) {
-      selectedRole = role;
-      studentOption?.classList.toggle("active", role === "aluno");
-      teamOption?.classList.toggle("active", role === "equipe");
-
-      if (role === "aluno") {
-        userLabel.textContent = "CGM";
-        loginUser.placeholder = "Digite seu CGM";
-        loginUser.inputMode = "numeric";
-        loginButtonText.textContent = "Entrar como aluno";
-      } else {
-        userLabel.textContent = "Usuário da equipe";
-        loginUser.placeholder = "Digite seu usuário";
-        loginUser.inputMode = "text";
-        loginButtonText.textContent = "Entrar como equipe";
-      }
-      hideMessage();
-    }
-
-    studentOption?.addEventListener("click", () => selectRole("aluno"));
-    teamOption?.addEventListener("click", () => selectRole("equipe"));
-
     passwordToggle?.addEventListener("click", () => {
       const showing = password.type === "text";
       password.type = showing ? "password" : "text";
@@ -63,26 +35,24 @@
       passwordToggle.setAttribute("aria-label", label);
     });
 
-    const savedLogin = localStorage.getItem("atlas-login-user");
+    const savedLogin = localStorage.getItem("atlas-login-email");
     if (savedLogin) {
-      loginUser.value = savedLogin;
+      loginEmail.value = savedLogin;
       remember.checked = true;
     }
-
-    selectRole(selectedRole);
 
     form.addEventListener("submit", async event => {
       event.preventDefault();
       hideMessage();
 
-      const user = loginUser.value.trim();
+      const email = loginEmail.value.trim();
       const pass = password.value;
-      if (!user || !pass) {
-        showMessage(selectedRole === "aluno" ? "Digite seu CGM e sua senha." : "Digite seu usuário e sua senha.");
+      if (!email || !pass) {
+        showMessage("Digite seu e-mail e sua senha.");
         return;
       }
-      if (selectedRole === "aluno" && !/^\d+$/.test(user)) {
-        showMessage("O CGM deve conter apenas números.");
+      if (!loginEmail.validity.valid) {
+        showMessage("Digite um endereço de e-mail válido.");
         return;
       }
 
@@ -93,19 +63,16 @@
         const data = await api("/api/auth/login", {
           method: "POST",
           body: JSON.stringify({
-            login: user,
+            email,
             senha: pass,
-            tipo: selectedRole,
             lembrar: remember.checked
           })
         });
 
         if (remember.checked) {
-          localStorage.setItem("atlas-login-user", user);
-          localStorage.setItem("atlas-login-role", selectedRole);
+          localStorage.setItem("atlas-login-email", email);
         } else {
-          localStorage.removeItem("atlas-login-user");
-          localStorage.removeItem("atlas-login-role");
+          localStorage.removeItem("atlas-login-email");
         }
 
         showMessage("Login realizado. Abrindo o painel...", "success");

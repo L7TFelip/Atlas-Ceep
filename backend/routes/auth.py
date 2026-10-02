@@ -55,31 +55,24 @@ def cadastro():
 @bp.post("/auth/login")
 def login():
     dados = request.get_json(silent=True) or {}
-    login_informado = str(dados.get("login", "")).strip()
+    email_informado = str(dados.get("email", "")).strip().lower()
     senha = str(dados.get("senha", ""))
-    tipo = dados.get("tipo", "aluno")
 
-    if not login_informado or not senha:
-        return jsonify({"erro": "Informe usuário e senha."}), 400
-
-    if tipo not in {"aluno", "equipe"}:
-        return jsonify({"erro": "Tipo de acesso inválido."}), 400
+    if not email_informado or not senha:
+        return jsonify({"erro": "Informe e-mail e senha."}), 400
 
     conexao = conectar_banco()
     try:
         cursor = conexao.cursor()
-        if tipo == "aluno":
-            cursor.execute(
-                "SELECT * FROM usuarios WHERE login = ? AND papel = 'aluno'",
-                (login_informado,),
-            )
-        else:
-            cursor.execute(
-                "SELECT * FROM usuarios WHERE login = ? AND papel IN ('professor', 'adm')",
-                (login_informado,),
-            )
-
-        usuario = cursor.fetchone()
+        cursor.execute("""
+            SELECT DISTINCT u.*
+            FROM usuarios u
+            LEFT JOIN aluno a
+                ON u.papel = 'aluno' AND a.id_aluno = u.id_referencia
+            WHERE lower(u.login) = ? OR lower(a.email) = ?
+        """, (email_informado, email_informado))
+        usuarios = cursor.fetchall()
+        usuario = usuarios[0] if len(usuarios) == 1 else None
         if not usuario or not check_password_hash(usuario["senha_hash"], senha):
             return jsonify({"erro": "Usuário ou senha incorretos."}), 401
 
