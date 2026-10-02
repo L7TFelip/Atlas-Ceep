@@ -37,17 +37,11 @@
     ========================== -->
 
     <header class="topbar">
-
-    <div class="top-actions">
-
-            <button
-                class="icon-btn"
-                id="themeBtn"
-                title="Alternar tema" aria-label="Alternar tema">
-
-                ☼
-
-            </button>
+        <nav class="primary-nav" aria-label="Navegação principal">
+            <a href="#classesSection">Turmas</a>
+            <a href="#calendarSection">Calendário</a>
+        </nav>
+        <div class="top-actions">
 
             <button
                 class="profile-btn"
@@ -83,6 +77,10 @@
                     </span>
 
                 </div>
+
+                <button type="button" class="theme-menu-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema">
+                    <span data-theme-icon aria-hidden="true">☼</span><span data-theme-label>Modo claro</span>
+                </button>
 
                 <button type="button">
                     Meu perfil
@@ -268,7 +266,7 @@
 
                 <!-- TURMAS -->
 
-                <article class="panel classes-panel">
+                <article class="panel classes-panel" id="classesSection">
 
                     <div class="panel-head">
 
@@ -295,18 +293,18 @@
 
                 <!-- ATIVIDADE RECENTE -->
 
-                <article class="panel">
+                <article class="panel" id="calendarSection">
 
                     <div class="panel-head">
 
                         <div>
 
                             <p class="eyebrow">
-                                ATIVIDADE
+                                CALENDÁRIO
                             </p>
 
                             <h2>
-                                Publicações recentes
+                                Calendário de publicações
                             </h2>
 
                         </div>

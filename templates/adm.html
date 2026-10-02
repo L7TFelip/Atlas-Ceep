@@ -31,13 +31,12 @@
 
   <!-- ==================== TOPO ==================== -->
   <header class="topbar">
+    <nav class="primary-nav" aria-label="Navegação principal">
+      <a href="#eventsSection">Eventos</a>
+      <a href="#dashboard">Painel de controle</a>
+    </nav>
 
     <div class="top-actions">
-
-      <button class="icon-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema">
-        ☼
-      </button>
-
       <button class="profile-btn" id="profileBtn" aria-expanded="false" aria-controls="profileMenu">
         <span class="avatar">AD</span>
         <span class="profile-name">Administrador</span>
@@ -49,6 +48,10 @@
           <strong>Administrador</strong>
           <span>Administração · CEEP</span>
         </div>
+
+        <button type="button" class="theme-menu-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema">
+          <span data-theme-icon aria-hidden="true">☼</span><span data-theme-label>Modo claro</span>
+        </button>
 
         <button type="button">Meu perfil</button>
         <button type="button" id="clearDataBtn">
@@ -62,7 +65,7 @@
   </header>
 
   <!-- ==================== CONTEÚDO ==================== -->
-  <main class="dashboard">
+  <main class="dashboard" id="dashboard">
 
     <!-- BOAS-VINDAS -->
     <section class="welcome">
@@ -87,7 +90,7 @@
       <!-- ==================== EVENTOS ==================== -->
       <div class="left-column">
 
-        <article class="panel">
+        <article class="panel" id="eventsSection">
 
           <div class="panel-head panel-head-wrap">
 

@@ -66,8 +66,17 @@
     else if (!root.dataset.theme) root.dataset.theme = "dark";
 
     const refresh = () => {
+      const nextTheme = root.dataset.theme === "dark" ? "claro" : "escuro";
       const icon = root.dataset.theme === "dark" ? "☼" : "☾";
-      buttons.forEach(button => { button.textContent = icon; });
+      buttons.forEach(button => {
+        const iconNode = button.querySelector("[data-theme-icon]");
+        const labelNode = button.querySelector("[data-theme-label]");
+        if (iconNode) iconNode.textContent = icon;
+        else button.textContent = icon;
+        if (labelNode) labelNode.textContent = `Modo ${nextTheme}`;
+        button.title = `Ativar modo ${nextTheme}`;
+        button.setAttribute("aria-label", `Ativar modo ${nextTheme}`);
+      });
     };
 
     buttons.forEach(button => button.addEventListener("click", () => {

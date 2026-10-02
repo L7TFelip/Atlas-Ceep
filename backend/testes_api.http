@@ -3,31 +3,62 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-    "login": "admin",
-    "senha": "atlas123",
-    "tipo": "equipe",
-    "lembrar": true
+  "email": "admin@atlas.com",
+  "senha": "atlas123",
+  "lembrar": true
 }
 
-### CRIAR PROFESSOR
-POST http://localhost:5000/api/professores
+### CRIAR USUARIO DE TESTE - ALUNO
+POST http://localhost:5000/api/alunos
 Content-Type: application/json
 
 {
-    "nome": "Carlos Oliveira",
-    "telefone": "45988887777",
-    "atributo": "Professor de Desenvolvimento de Sistemas",
-    "login": "carlos",
-    "senha": "123456"
+  "nome": "Aluno Teste",
+  "email": "aluno.teste@atlas.com",
+  "telefone": "45999990001",
+  "data_nascimento": "2008-05-12",
+  "cgm": "999000001",
+  "senha": "AlunoTeste123"
 }
 
-### LOGIN PROFESSOR
+### LOGIN ALUNO DE TESTE
 POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-    "login": "carlos",
-    "senha": "123456",
-    "tipo": "equipe",
-    "lembrar": true
+  "email": "aluno.teste@atlas.com",
+  "senha": "AlunoTeste123",
+  "lembrar": true
+}
+
+### LOGIN ADM NOVAMENTE
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@atlas.com",
+  "senha": "atlas123",
+  "lembrar": true
+}
+
+### CRIAR USUARIO DE TESTE - PROFESSOR
+POST http://localhost:5000/api/professores
+Content-Type: application/json
+
+{
+  "nome": "Professor Teste",
+  "telefone": "45999990002",
+  "atributo": "Professor de Desenvolvimento de Sistemas",
+  "login": "professor.teste@atlas.com",
+  "senha": "ProfessorTeste123"
+}
+
+### LOGIN PROFESSOR DE TESTE
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "professor.teste@atlas.com",
+  "senha": "ProfessorTeste123",
+  "lembrar": true
 }

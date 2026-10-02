@@ -28,8 +28,12 @@
 </svg>
 <div class="app-shell">
   <header class="topbar">
+    <nav class="primary-nav" aria-label="Navegação principal">
+      <a href="#disciplineSection">Disciplinas</a>
+      <a href="#calendarPanel">Calendário</a>
+      <a href="#noticesPanel">Avisos</a>
+    </nav>
     <div class="top-actions">
-      <button class="icon-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema">☼</button>
       <button class="profile-btn" id="profileBtn" aria-expanded="false" aria-controls="profileMenu">
         <span class="avatar">FN</span>
         <span class="profile-name">Felipe</span>
@@ -40,6 +44,9 @@
           <strong>Felipe N.</strong>
           <span>2º DS · CEEP</span>
         </div>
+        <button type="button" class="theme-menu-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema">
+          <span data-theme-icon aria-hidden="true">☼</span><span data-theme-label>Modo claro</span>
+        </button>
         <button type="button" id="logoutBtn">Sair</button>
       </div>
     </div>
@@ -67,7 +74,7 @@
 
     <section class="main-grid">
       <div class="left-column">
-        <article class="panel tasks-panel">
+        <article class="panel tasks-panel" id="disciplineSection">
           <div class="panel-head panel-head-wrap">
             <div>
               <p class="eyebrow">ATIVIDADES</p>
@@ -114,7 +121,7 @@
       </div>
 
       <div class="right-column">
-        <article class="panel calendar-panel">
+        <article class="panel calendar-panel" id="calendarPanel">
           <div class="panel-head">
             <div>
               <p class="eyebrow">AGENDA</p>
@@ -154,7 +161,7 @@
           <div class="selected-events" id="selectedEvents"></div>
         </article>
 
-        <article class="panel notices-panel">
+        <article class="panel notices-panel" id="noticesPanel">
           <div class="panel-head">
             <div>
               <p class="eyebrow">MURAL</p>
