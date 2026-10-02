@@ -4,10 +4,13 @@ Mantém as tabelas originais do projeto e acrescenta as estruturas necessárias
 para autenticação, publicações do professor e agenda persistente do aluno.
 """
 
-from pathlib import Path
 import sqlite3
+from pathlib import Path
+from werkzeug.security import generate_password_hash
 
 DB_PATH = Path(__file__).resolve().parent / "atlas.db"
+ADMIN_BOOTSTRAP_EMAIL = "admin@atlas.com"
+ADMIN_BOOTSTRAP_PASSWORD = "atlas123"
 
 
 def conectar_banco():
@@ -37,13 +40,38 @@ def _garantir_coluna(cursor, tabela, coluna, definicao):
 
 
 def _seed_dados(cursor):
-    """Insere apenas o registro inicial de administrador, se necessário."""
+    """Garante o administrador inicial e sua conta de acesso."""
     cursor.execute("SELECT COUNT(*) FROM adm")
     if cursor.fetchone()[0] == 0:
         cursor.execute(
             "INSERT INTO adm (nome, telefone, nivel_acesso) VALUES (?, ?, ?)",
             ("Administrador", None, "total"),
         )
+
+    cursor.execute("SELECT id_administrado FROM adm ORDER BY id_administrado LIMIT 1")
+    id_administrador = cursor.fetchone()[0]
+    cursor.execute(
+        "SELECT 1 FROM usuarios WHERE papel = 'adm' AND id_referencia = ?",
+        (id_administrador,),
+    )
+    if cursor.fetchone():
+        return
+
+    cursor.execute("SELECT 1 FROM usuarios WHERE lower(login) = ?", (ADMIN_BOOTSTRAP_EMAIL,))
+    if cursor.fetchone():
+        raise ValueError(
+            f"O login inicial {ADMIN_BOOTSTRAP_EMAIL!r} já está associado a outra conta."
+        )
+
+    cursor.execute(
+        """INSERT INTO usuarios (login, senha_hash, papel, id_referencia)
+           VALUES (?, ?, 'adm', ?)""",
+        (
+            ADMIN_BOOTSTRAP_EMAIL,
+            generate_password_hash(ADMIN_BOOTSTRAP_PASSWORD),
+            id_administrador,
+        ),
+    )
 
 
 def criar_banco():
