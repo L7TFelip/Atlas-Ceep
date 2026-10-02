@@ -1,9 +1,11 @@
 (() => {
   "use strict";
 
+  // Atalhos para selecionar um elemento ou uma lista de elementos no DOM.
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
+  // Codifica caracteres especiais para evitar que valores sejam interpretados como HTML.
   function escapeHtml(value = "") {
     return String(value).replace(/[&<>'"]/g, c => ({
       "&": "&amp;",
@@ -14,6 +16,7 @@
     })[c]);
   }
 
+  // Envia requisições à API e trata respostas JSON e erros HTTP.
   async function api(path, options = {}) {
     const headers = new Headers(options.headers || {});
     if (options.body && !(options.body instanceof FormData) && !headers.has("Content-Type")) {
@@ -21,6 +24,7 @@
     }
 
     const response = await fetch(path, {
+      // Mantém os cookies da sessão nas chamadas feitas para este mesmo site.
       credentials: "same-origin",
       ...options,
       headers
@@ -43,6 +47,7 @@
     return data;
   }
 
+  // Acessa o armazenamento local sem interromper a página se ele estiver indisponível.
   function readStorage(key) {
     try { return localStorage.getItem(key); } catch { return null; }
   }
@@ -51,6 +56,7 @@
     try { localStorage.setItem(key, value); } catch {}
   }
 
+  // Aplica o tema salvo e permite alternar entre claro e escuro.
   function initTheme() {
     const root = document.documentElement;
     const buttons = $$("#themeBtn, [data-theme-toggle]");
@@ -73,6 +79,7 @@
     refresh();
   }
 
+  // Abre o menu do perfil e fecha o menu ao clicar fora dele.
   function initProfileMenu() {
     const button = $("#profileBtn");
     const menu = $("#profileMenu");
@@ -92,6 +99,7 @@
     });
   }
 
+  // Gera até duas iniciais para exibir no avatar do usuário.
   function initials(name = "") {
     return name
       .trim()
@@ -101,6 +109,7 @@
       .join("") || "AT";
   }
 
+  // Atualiza nome, avatar e identificação do usuário na página atual.
   function applyUserToPage(user) {
     if (!user) return;
 
@@ -123,6 +132,7 @@
     }
   }
 
+  // Busca a sessão atual na API e, quando solicitado, redireciona se ela expirou.
   async function currentUser({ redirectOn401 = false } = {}) {
     try {
       const data = await api("/api/auth/me");
@@ -134,6 +144,7 @@
     }
   }
 
+  // Encerra a sessão no servidor e volta à página de login.
   async function logout() {
     try {
       await api("/api/auth/logout", { method: "POST" });
@@ -142,16 +153,19 @@
     }
   }
 
+  // Liga o botão de sair à função de encerramento da sessão.
   function initLogout() {
     $("#logoutBtn")?.addEventListener("click", logout);
   }
 
+  // Liga o atalho da página ao formulário de login.
   function initProfileShortcut() {
     $("#loginPageBtn")?.addEventListener("click", () => {
       window.location.href = "/login";
     });
   }
 
+  // Expõe funções compartilhadas para os demais scripts do frontend.
   window.Atlas = {
     $,
     $$,
@@ -163,6 +177,7 @@
     initials
   };
 
+  // Inicializa os recursos comuns usados pelas páginas.
   function init() {
     initTheme();
     initProfileMenu();
@@ -170,6 +185,7 @@
     initProfileShortcut();
   }
 
+  // Aguarda o DOM estar pronto antes de configurar os controles da página.
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();

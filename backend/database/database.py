@@ -6,9 +6,6 @@ para autenticação, publicações do professor e agenda persistente do aluno.
 
 from pathlib import Path
 import sqlite3
-from datetime import date
-
-from werkzeug.security import generate_password_hash
 
 DB_PATH = Path(__file__).resolve().parent / "atlas.db"
 
@@ -40,100 +37,17 @@ def _garantir_coluna(cursor, tabela, coluna, definicao):
 
 
 def _seed_dados(cursor):
-    """Insere dados mínimos apenas quando necessário para testar a integração."""
+    """Insere apenas o registro inicial de administrador, se necessário."""
     cursor.execute("SELECT COUNT(*) FROM adm")
     if cursor.fetchone()[0] == 0:
         cursor.execute(
             "INSERT INTO adm (nome, telefone, nivel_acesso) VALUES (?, ?, ?)",
             ("Administrador", None, "total"),
         )
-    cursor.execute("SELECT id_administrado FROM adm ORDER BY id_administrado LIMIT 1")
-    id_admin = cursor.fetchone()[0]
-
-    cursor.execute("SELECT COUNT(*) FROM professor")
-    if cursor.fetchone()[0] == 0:
-        cursor.execute(
-            "INSERT INTO professor (nome, data_contratacao, telefone, atributo) VALUES (?, ?, ?, ?)",
-            ("Diego da Silva", str(date.today()), None, "Professor"),
-        )
-    cursor.execute("SELECT id_professor FROM professor ORDER BY id_professor LIMIT 1")
-    id_professor = cursor.fetchone()[0]
-
-    cursor.execute("SELECT COUNT(*) FROM turmas")
-    if cursor.fetchone()[0] == 0:
-        for nome, sala, ano in [
-            ("1º Desenvolvimento de Sistemas", "DS1", 1),
-            ("2º Desenvolvimento de Sistemas", "DS2", 2),
-            ("3º Desenvolvimento de Sistemas", "DS3", 3),
-        ]:
-            cursor.execute(
-                "INSERT INTO turmas (nome, sala, ano, semestre, id_administrado) VALUES (?, ?, ?, ?, ?)",
-                (nome, sala, ano, 1, id_admin),
-            )
-
-    cursor.execute("SELECT COUNT(*) FROM materias")
-    if cursor.fetchone()[0] == 0:
-        nomes = [
-            "Programação no Desenvolvimento de Sistemas",
-            "Banco de Dados",
-            "Engenharia de Software",
-            "Matemática",
-            "Língua Portuguesa",
-            "História",
-            "Física",
-            "Química",
-        ]
-        for nome in nomes:
-            cursor.execute(
-                "INSERT INTO materias (nome, descricao, carga_horaria, ementa, id_administrado) VALUES (?, ?, ?, ?, ?)",
-                (nome, None, None, None, id_admin),
-            )
-
-    cursor.execute("SELECT id_turma FROM turmas ORDER BY ano, id_turma")
-    ids_turmas = [row[0] for row in cursor.fetchall()]
-    turma_aluno = ids_turmas[1] if len(ids_turmas) > 1 else (ids_turmas[0] if ids_turmas else None)
-
-    cursor.execute("SELECT COUNT(*) FROM aluno")
-    if cursor.fetchone()[0] == 0:
-        cursor.execute(
-            "INSERT INTO aluno (nome, email, telefone, data_nascimento, id_turma) VALUES (?, ?, ?, ?, ?)",
-            ("Felipe N.", None, None, None, turma_aluno),
-        )
-    cursor.execute("SELECT id_aluno FROM aluno ORDER BY id_aluno LIMIT 1")
-    id_aluno = cursor.fetchone()[0]
-
-    # Relacionamentos do professor para o protótipo funcionar logo de início.
-    for id_turma in ids_turmas:
-        cursor.execute(
-            "INSERT OR IGNORE INTO professor_turma (id_professor, id_turma) VALUES (?, ?)",
-            (id_professor, id_turma),
-        )
-    cursor.execute("SELECT id_materia FROM materias")
-    for (id_materia,) in cursor.fetchall():
-        cursor.execute(
-            "INSERT OR IGNORE INTO professor_materia (id_professor, id_materia) VALUES (?, ?)",
-            (id_professor, id_materia),
-        )
-
-    # Usuários de desenvolvimento. Não substituem usuários já existentes.
-    cursor.execute("SELECT COUNT(*) FROM usuarios")
-    if cursor.fetchone()[0] == 0:
-        senha = generate_password_hash("atlas123")
-        cursor.execute(
-            "INSERT INTO usuarios (login, senha_hash, papel, id_referencia) VALUES (?, ?, ?, ?)",
-            ("1234567890", senha, "aluno", id_aluno),
-        )
-        cursor.execute(
-            "INSERT INTO usuarios (login, senha_hash, papel, id_referencia) VALUES (?, ?, ?, ?)",
-            ("diego", senha, "professor", id_professor),
-        )
-        cursor.execute(
-            "INSERT INTO usuarios (login, senha_hash, papel, id_referencia) VALUES (?, ?, ?, ?)",
-            ("admin", senha, "adm", id_admin),
-        )
 
 
 def criar_banco():
+    # Cria toda a estrutura do banco, sem popular tabelas com dados de exemplo.
     conexao = conectar_banco()
     cursor = conexao.cursor()
 
@@ -337,6 +251,13 @@ def criar_banco():
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_publicacoes_professor ON publicacoes(id_professor)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_eventos_data ON eventos(data_evento)")
 
+    # Em uma instalação nova, somente adm recebe um registro inicial.
+    # Dados já existentes não são apagados por esta inicialização.
     _seed_dados(cursor)
     conexao.commit()
     conexao.close()
+
+
+if __name__ == "__main__":
+    # Permite inicializar o banco executando este arquivo diretamente.
+    criar_banco()

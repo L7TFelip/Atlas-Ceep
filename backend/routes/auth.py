@@ -1,12 +1,55 @@
 """Autenticação por sessão (cookie HttpOnly do Flask)."""
 
 from flask import Blueprint, jsonify, request, session
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from ..database.database import conectar_banco
 from ..auth_utils import usuario_atual
 
 bp = Blueprint("auth", __name__)
+
+
+@bp.post("/auth/cadastro")
+def cadastro():
+    """Cadastra publicamente um aluno e sua conta de acesso."""
+    dados = request.get_json(silent=True) or {}
+    nome = str(dados.get("nome", "")).strip()
+    cgm = str(dados.get("cgm", "")).strip()
+    email = str(dados.get("email", "")).strip() or None
+    senha = str(dados.get("senha", ""))
+
+    if not nome:
+        return jsonify({"erro": "Informe seu nome completo."}), 400
+    if not cgm.isdigit() or not 4 <= len(cgm) <= 20:
+        return jsonify({"erro": "O CGM deve conter de 4 a 20 números."}), 400
+    if len(senha) < 8:
+        return jsonify({"erro": "A senha deve ter pelo menos 8 caracteres."}), 400
+
+    conexao = conectar_banco()
+    try:
+        cursor = conexao.cursor()
+        cursor.execute("SELECT 1 FROM usuarios WHERE login = ?", (cgm,))
+        if cursor.fetchone():
+            return jsonify({"erro": "Este CGM já possui uma conta."}), 409
+
+        # Cria o perfil e a conta na mesma transação para evitar cadastros parciais.
+        cursor.execute(
+            "INSERT INTO aluno (nome, email) VALUES (?, ?)",
+            (nome, email),
+        )
+        id_aluno = cursor.lastrowid
+        cursor.execute(
+            """INSERT INTO usuarios (login, senha_hash, papel, id_referencia)
+               VALUES (?, ?, 'aluno', ?)""",
+            (cgm, generate_password_hash(senha), id_aluno),
+        )
+        conexao.commit()
+        return jsonify({"mensagem": "Cadastro realizado com sucesso."}), 201
+    except Exception:
+        conexao.rollback()
+        return jsonify({"erro": "Não foi possível concluir o cadastro."}), 500
+    finally:
+        conexao.close()
 
 
 @bp.post("/auth/login")

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Crie sua conta de aluno no Atlas CEEP.">
+  <title>Atlas CEEP — Cadastro</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <svg class="logo-filter-defs" aria-hidden="true" focusable="false" width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="atlasDarkGreen" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0.2353 0 0 0 0 0.7020 0 0 0 0 0.4431 0.2 2.8 0.25 0 -0.08" /></filter>
+      <filter id="atlasFooterWhite" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.2 2.8 0.25 0 -0.08" /></filter>
+    </defs>
+  </svg>
+
+  <div class="app-shell">
+    <main class="dashboard auth-layout">
+      <section class="auth-intro">
+        <div class="brand">
+          <span class="brand-logo-frame"><img class="brand-logo" src="/static/assets/Logo.png" alt="Atlas CEEP"></span>
+        </div>
+        <h1>Sua rotina escolar,<span>em um só lugar.</span></h1>
+        <p class="muted">Acompanhe atividades passadas em sala, prazos, calendário e avisos com mais organização.</p>
+      </section>
+
+      <section class="panel auth-card" aria-labelledby="registerTitle">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">CADASTRO DE ALUNO</p>
+            <h2 id="registerTitle">Crie sua conta.</h2>
+            <p class="muted">Preencha seus dados para acessar o Atlas.</p>
+          </div>
+        </div>
+
+        <form class="form-stack" id="registerForm" novalidate>
+          <div class="form-group">
+            <label for="fullName">Nome completo</label>
+            <input type="text" id="fullName" name="nome" autocomplete="name" maxlength="150" required>
+          </div>
+          <div class="form-group">
+            <label for="cgm">CGM</label>
+            <input type="text" id="cgm" name="cgm" inputmode="numeric" autocomplete="username" minlength="4" maxlength="20" pattern="[0-9]{4,20}" placeholder="Digite seu CGM" required>
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail <span class="muted">(opcional)</span></label>
+            <input type="email" id="email" name="email" autocomplete="email" maxlength="150" placeholder="voce@exemplo.com">
+          </div>
+          <div class="form-group">
+            <label for="password">Senha</label>
+            <div class="input-wrapper">
+              <input type="password" id="password" name="senha" autocomplete="new-password" minlength="8" required>
+              <button type="button" class="password-toggle" id="passwordToggle" aria-label="Mostrar senha" title="Mostrar senha">◉</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirme a senha</label>
+            <input type="password" id="confirmPassword" name="confirmar_senha" autocomplete="new-password" minlength="8" required>
+          </div>
+          <button type="submit" class="primary-btn" id="registerButton">
+            <span>Criar conta</span><span aria-hidden="true">→</span>
+          </button>
+          <div class="login-message" id="registerMessage" role="status" aria-live="polite" hidden></div>
+          <p class="muted" style="text-align:center; margin:0; font-size:13px;">
+            Já tem uma conta? <a href="/login" style="color:var(--accent); font-weight:700;">Entrar</a>
+          </p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a href="https://github.com/L7TFelip/Atlas-Ceep" target="_blank" rel="noopener noreferrer">
+        <svg class="site-footer-github" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.86c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" /></svg>
+        <span>github dos colaboradores</span>
+      </a>
+      <span class="site-footer-credit"><span class="site-footer-logo-frame" aria-hidden="true"><img src="/static/assets/Logo.png" alt=""></span><span>@projetoatlas 2026</span></span>
+      <span class="site-footer-class">3°C DS CEEP</span>
+    </footer>
+  </div>
+
+  <script src="/static/js/main.js"></script>
+  <script src="/static/js/cadastro.js"></script>
+</body>
+</html>

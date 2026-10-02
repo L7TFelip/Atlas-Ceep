@@ -75,6 +75,12 @@ def create_app():
 
         return render_template("login.html")
 
+    @app.get("/cadastro")
+    def pagina_cadastro():
+        if session.get("papel"):
+            return redirect(pagina_para_papel(session.get("papel")))
+        return render_template("cadastro.html")
+
     @app.get("/aluno")
     def pagina_aluno():
         if session.get("papel") != "aluno":
