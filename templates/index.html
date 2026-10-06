@@ -106,9 +106,8 @@
           <div class="task-list" id="taskList"></div>
 
           <div class="empty-state" id="taskEmpty" hidden>
-            <span>✓</span>
+            <span>◌</span>
             <p>Nenhuma atividade encontrada.</p>
-            <button class="text-btn" id="emptyAddBtn">Anotar atividade</button>
           </div>
         </article>
       </div>
@@ -142,12 +141,9 @@
               <span class="today-count" id="todayCount">0 atividades</span>
             </div>
             <div class="today-list" id="todayList"></div>
-            <div class="today-empty" id="todayEmpty" hidden>
-              <span>✓</span>
-              <div>
-                <strong>Hoje você não tem atividades para entregar.</strong>
-                <p>Seu dia está livre de prazos.</p>
-              </div>
+            <div class="empty-state" id="todayEmpty" hidden>
+              <span>◌</span>
+              <p>Nenhuma atividade para hoje.</p>
             </div>
           </section>
 
@@ -160,7 +156,6 @@
               <p class="eyebrow">MURAL</p>
               <h2>Avisos</h2>
             </div>
-            <button class="ghost-btn" id="addNoticeBtn">＋ Aviso</button>
           </div>
           <div class="notice-list" id="noticeList"></div>
         </article>
@@ -187,8 +182,8 @@
 <dialog id="taskDialog">
   <form method="dialog" class="modal-form" id="taskForm">
     <button type="button" class="close-btn" data-close="taskDialog">×</button>
-    <p class="eyebrow">NOVA ATIVIDADE</p>
-    <h2 id="taskDialogTitle">Anotar atividade passada em sala</h2>
+    <p class="eyebrow">EDITAR ATIVIDADE</p>
+    <h2 id="taskDialogTitle">Editar atividade</h2>
 
     <div class="modal-grid-two">
       <label>
@@ -240,30 +235,7 @@
 
     <div class="modal-actions">
       <button type="button" class="secondary-btn" data-close="taskDialog">Cancelar</button>
-      <button class="primary-btn" id="taskSubmitBtn">Salvar atividade</button>
-    </div>
-  </form>
-</dialog>
-
-<dialog id="noticeDialog">
-  <form method="dialog" class="modal-form" id="noticeForm">
-    <button type="button" class="close-btn" data-close="noticeDialog">×</button>
-    <p class="eyebrow">NOVO AVISO</p>
-    <h2>Adicionar aviso</h2>
-
-    <label>
-      Mensagem
-      <input id="noticeTitle" required maxlength="120"
-        placeholder="Ex.: Prova de matemática sexta-feira">
-    </label>
-    <label>
-      Data
-      <input id="noticeDate" type="date">
-    </label>
-
-    <div class="modal-actions">
-      <button type="button" class="secondary-btn" data-close="noticeDialog">Cancelar</button>
-      <button class="primary-btn">Publicar aviso</button>
+      <button class="primary-btn" id="taskSubmitBtn">Salvar alterações</button>
     </div>
   </form>
 </dialog>

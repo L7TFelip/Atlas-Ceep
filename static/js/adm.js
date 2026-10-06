@@ -63,7 +63,9 @@
     $("#todaySection").hidden = !isToday;
     $("#todayTitle").textContent = formatLongDate(selectedDate);
     $("#todayCount").textContent = `${events.length} ${events.length === 1 ? "evento" : "eventos"}`;
-    $("#todayList").innerHTML = events.map(eventMarkup).join("");
+    const todayList = $("#todayList");
+    todayList.innerHTML = events.map(eventMarkup).join("");
+    todayList.hidden = events.length === 0;
     $("#todayEmpty").hidden = events.length !== 0;
 
     const selected = $("#selectedEvents");
@@ -146,6 +148,7 @@
     const items = getFiltered();
     const list = $("#eventList");
     list.innerHTML = "";
+    list.hidden = items.length === 0;
     $("#eventEmpty").hidden = items.length > 0;
 
     items.forEach(item => {

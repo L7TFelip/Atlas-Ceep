@@ -343,6 +343,32 @@ button {
   color: var(--text);
 }
 
+.task-side .ghost-btn,
+.task-side .danger-btn {
+  width: 78px;
+  height: 37px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 37px;
+  padding: 0 10px;
+}
+
+.task-side .danger-btn {
+  border: 1px solid rgba(228,107,107,.45);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--danger);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.task-side .danger-btn:hover {
+  border-color: var(--danger);
+  background: rgba(228,107,107,.1);
+}
+
 .profile-menu {
   position: absolute;
   top: calc(100% + 9px);
@@ -446,9 +472,65 @@ button {
   border-top: 1px solid var(--border);
 }
 
+.calendar-panel .today-section {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.calendar-panel .today-header {
+  flex: none;
+}
+
+.calendar-panel > .weekdays,
+.calendar-panel > .calendar {
+  flex: none;
+}
+
+.right-column #calendarPanel > .panel-head {
+  margin-bottom: 14px;
+}
+
+.right-column #calendarPanel > .today-section {
+  margin-top: 12px;
+  padding-top: 10px;
+}
+
+.right-column #calendarPanel .today-header {
+  margin-bottom: 10px;
+}
+
+.right-column #calendarPanel > .calendar {
+  gap: 3px;
+}
+
+.right-column #calendarPanel .day {
+  min-height: 30px;
+}
+
+.calendar-panel .today-list[hidden] {
+  display: none;
+}
+
+.calendar-panel .today-list,
+.calendar-panel .selected-events {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.calendar-panel .calendar-event {
+  flex: 0 0 auto;
+}
+
 .today-section[hidden],
-.selected-events[hidden],
-.today-empty[hidden] {
+.selected-events[hidden] {
   display: none;
 }
 
@@ -476,121 +558,8 @@ button {
   gap: 8px;
 }
 
-.today-task {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 8px 11px;
-  min-height: 65px;
-  padding: 11px 13px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface-2);
-  cursor: pointer;
-  transition: border-color .2s ease, transform .2s ease;
-}
-
-.today-task:hover {
-  border-color: rgba(60,179,113,.35);
-  transform: translateY(-1px);
-}
-
-.today-task.done {
-  opacity: .7;
-}
-
-.today-check {
-  width: 22px;
-  height: 22px;
-  display: grid;
-  place-items: center;
-  border: 2px solid var(--muted);
-  border-radius: 6px;
-  background: transparent;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.today-task.done .today-check {
-  border-color: var(--success);
-  background: var(--success);
-}
-
-.today-task-main {
-  min-width: 0;
-}
-
-.today-task-subject {
-  display: block;
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 800;
-  line-height: 1.3;
-  overflow-wrap: anywhere;
-}
-
-.today-task-title {
-  display: block;
-  margin-top: 3px;
-  font-size: 13px;
-  font-weight: 400;
-  overflow-wrap: anywhere;
-}
-
-.today-task.done .today-task-title {
-  text-decoration: line-through;
-}
-
-.today-task .status-pill {
-  grid-column: 2;
-  justify-self: start;
-}
-
-.today-task-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-.today-empty {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 15px;
-  border-radius: 11px;
-  background: var(--surface-2);
-  color: var(--muted);
-}
-
-.today-empty > span {
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--success);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.today-empty strong {
-  display: block;
-  color: var(--text);
-  font-size: 13px;
-}
-
-.today-empty p {
-  margin-top: 2px;
-  font-size: 11px;
-}
-
 .main-grid {
+  --dashboard-section-height: 740px;
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(350px, .95fr);
   gap: 22px;
@@ -605,7 +574,7 @@ button {
 .left-column {
   display: flex;
   min-height: 0;
-  height: 100%;
+  height: var(--dashboard-section-height);
   align-self: stretch;
 }
 
@@ -615,12 +584,31 @@ button {
   flex-direction: column;
   height: 100%;
   min-height: 0;
+  overflow: hidden;
 }
 
 .right-column {
   display: flex;
+  height: var(--dashboard-section-height);
+  min-height: 0;
   flex-direction: column;
   gap: 22px;
+}
+
+.right-column > .panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.right-column #calendarPanel {
+  flex: 2.8;
+}
+
+.right-column #noticesPanel {
+  flex: 1;
 }
 
 .panel {
@@ -721,31 +709,25 @@ button {
   border-color: var(--accent);
 }
 
-.task-list {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 20px;
-  min-height: 0;
-  max-height: max(180px, calc(100dvh - 360px));
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-}
-
+.task-list,
 .content-list,
 .event-list {
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: 12px;
+  height: 0;
   min-height: 0;
-  max-height: max(180px, calc(100dvh - 360px));
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
+}
+
+.task-list[hidden],
+.content-list[hidden],
+.event-list[hidden] {
+  display: none;
 }
 
 .subject-group {
@@ -919,11 +901,21 @@ button {
 }
 
 .empty-state {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
   padding: 40px 20px;
   border: 1px dashed var(--border);
   border-radius: 13px;
   text-align: center;
   color: var(--muted);
+}
+
+.empty-state[hidden] {
+  display: none;
 }
 
 .empty-state > span {
@@ -1086,8 +1078,14 @@ button {
 
 .notice-list {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 9px;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
 }
 
 .notice {
@@ -1355,14 +1353,6 @@ dialog::backdrop {
     grid-template-columns: 1fr;
   }
 
-  .today-task {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-
-  .today-task .status-pill {
-    grid-column: 2;
-    justify-self: start;
-  }
 }
 
 @media (max-width: 600px) {

@@ -248,7 +248,7 @@
 
             <div class="right-column">
 
-                <article class="panel" id="calendarSection">
+                <article class="panel calendar-panel" id="calendarSection">
 
                     <div class="panel-head">
                         <div>
@@ -277,12 +277,9 @@
                             <span class="today-count" id="todayCount">0 publicações</span>
                         </div>
                         <div class="today-list" id="todayList"></div>
-                        <div class="today-empty" id="todayEmpty" hidden>
-                            <span>✓</span>
-                            <div>
-                                <strong>Você não tem publicações para hoje.</strong>
-                                <p>Não há publicações ou prazos nesta data.</p>
-                            </div>
+                        <div class="empty-state" id="todayEmpty" hidden>
+                            <span>◌</span>
+                            <p>Nenhuma publicação para hoje.</p>
                         </div>
                     </section>
 

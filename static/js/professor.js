@@ -69,6 +69,7 @@
     $("#todayCount").textContent = `${items.length} ${items.length === 1 ? "item" : "itens"}`;
     const todayList = $("#todayList");
     todayList.innerHTML = items.map(calendarItemMarkup).join("");
+    todayList.hidden = items.length === 0;
     bindCalendarItems(todayList);
     $("#todayEmpty").hidden = items.length !== 0;
 
@@ -187,6 +188,7 @@
     const list = $("#contentList");
     const items = getFiltered();
     list.innerHTML = "";
+    list.hidden = items.length === 0;
     $("#contentEmpty").hidden = items.length > 0;
 
     items.forEach(item => {

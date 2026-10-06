@@ -130,6 +130,7 @@
     const tasks = getFilteredTasks();
     const list = $("#taskList");
     list.innerHTML = "";
+    list.hidden = tasks.length === 0;
     $("#taskEmpty").hidden = tasks.length !== 0;
     if (!tasks.length) return;
 
@@ -167,38 +168,35 @@
     const tasks = state.tasks
       .filter(task => task.due === todayIso)
       .sort((a, b) => a.title.localeCompare(b.title));
+    const notices = state.notices.filter(notice => notice.date === todayIso);
+    const events = state.events.filter(event => event.data_evento === todayIso);
+    const itemCount = tasks.length + notices.length + events.length;
 
     $("#todayTitle").textContent = new Date(`${todayIso}T00:00:00`).toLocaleDateString("pt-BR", {
       weekday: "long", day: "numeric", month: "long"
     });
-    $("#todayCount").textContent = `${tasks.length} ${tasks.length === 1 ? "atividade" : "atividades"}`;
+    $("#todayCount").textContent = `${itemCount} ${itemCount === 1 ? "item" : "itens"}`;
 
     const list = $("#todayList");
-    list.innerHTML = "";
-    $("#todayEmpty").hidden = tasks.length !== 0;
-
-    tasks.forEach(task => {
-      const status = statusInfo(task);
-      const item = document.createElement("article");
-      item.className = `today-task ${task.status === "done" ? "done" : ""}`;
-      item.innerHTML = `
-        <button type="button" class="today-check">${task.status === "done" ? "✓" : ""}</button>
-        <div class="today-task-main">
-          <strong class="today-task-subject">${escapeHtml(task.subject)}</strong>
-          <span class="today-task-title">${escapeHtml(task.title)}</span>
-          <div class="today-task-meta">
-            ${task.submittedAt ? "<span>Entrega registrada</span>" : ""}
-            ${task.teacher ? `<span>• ${escapeHtml(task.teacher)}</span>` : ""}
-          </div>
-        </div>
-        <span class="status-pill ${status.className}">${escapeHtml(status.label)}</span>
-      `;
-      $(".today-check", item).addEventListener("click", event => {
-        event.stopPropagation();
-        toggleTask(task);
-      });
-      item.addEventListener("click", () => openDetail(task.id));
-      list.appendChild(item);
+    list.innerHTML = [
+      ...tasks.map(task => `
+      <button type="button" class="calendar-event" data-task-id="${escapeHtml(task.id)}">
+        <span class="event-bullet" aria-hidden="true"></span>
+        <span class="calendar-event-text"><strong>${escapeHtml(task.subject)}</strong>
+        <span>${escapeHtml(task.title)}</span></span>
+      </button>
+      `),
+      ...notices.map(notice => `
+        <div class="calendar-event"><span class="event-bullet notice-bullet" aria-hidden="true"></span><span class="calendar-event-text"><strong>Aviso</strong><span>${escapeHtml(notice.title)}</span></span></div>
+      `),
+      ...events.map(event => `
+        <div class="calendar-event"><span class="event-bullet" aria-hidden="true"></span><span class="calendar-event-text"><strong>${escapeHtml(event.tipo || "Evento")}</strong><span>${escapeHtml(event.nome)}${event.horario ? ` · ${escapeHtml(event.horario)}` : ""}</span></span></div>
+      `)
+    ].join("");
+    $("#todayEmpty").hidden = itemCount !== 0;
+    list.hidden = itemCount === 0;
+    $$('[data-task-id]', list).forEach(button => {
+      button.addEventListener("click", () => openDetail(button.dataset.taskId));
     });
   }
 
@@ -233,6 +231,8 @@
       if (dateIso === isoDate(today)) button.classList.add("today");
       if (dateIso === selectedDate) button.classList.add("selected");
       if (dateHasEvent(dateIso)) button.classList.add("has-event");
+      button.setAttribute("aria-label", formatLongDate(dateIso));
+      button.setAttribute("aria-pressed", String(dateIso === selectedDate));
       button.addEventListener("click", () => {
         selectedDate = dateIso;
         renderCalendar();
@@ -248,13 +248,19 @@
     const isToday = selectedDate === isoDate(today);
     $("#todaySection").hidden = !isToday;
 
-    const tasks = state.tasks.filter(task => !isToday && task.due === selectedDate);
+    if (isToday) {
+      container.hidden = true;
+      container.innerHTML = "";
+      return;
+    }
+
+    const tasks = state.tasks.filter(task => task.due === selectedDate);
     const notices = state.notices.filter(notice => notice.date === selectedDate);
     const events = state.events.filter(event => event.data_evento === selectedDate);
 
     if (!tasks.length && !notices.length && !events.length) {
       container.hidden = false;
-      container.innerHTML = isToday ? "" : `
+      container.innerHTML = `
         <div class="selected-date-title">${escapeHtml(formatLongDate(selectedDate))}</div>
         <p class="muted">Nenhum item nesta data.</p>
       `;
@@ -265,18 +271,18 @@
     container.innerHTML = `
       <div class="selected-date-title">${escapeHtml(formatLongDate(selectedDate))}</div>
       ${tasks.map(task => `
-        <button type="button" class="selected-event-item" data-task-id="${escapeHtml(task.id)}">
-          <strong>${escapeHtml(task.subject)}</strong>
-          <span>${escapeHtml(task.title)}</span>
+        <button type="button" class="calendar-event" data-task-id="${escapeHtml(task.id)}">
+          <span class="event-bullet" aria-hidden="true"></span>
+          <span class="calendar-event-text"><strong>${escapeHtml(task.subject)}</strong><span>${escapeHtml(task.title)}</span></span>
         </button>
       `).join("")}
       ${notices.map(notice => `
-        <div class="selected-event-item"><strong>Aviso</strong><span>${escapeHtml(notice.title)}</span></div>
+        <div class="calendar-event"><span class="event-bullet notice-bullet" aria-hidden="true"></span><span class="calendar-event-text"><strong>Aviso</strong><span>${escapeHtml(notice.title)}</span></span></div>
       `).join("")}
       ${events.map(event => `
-        <div class="selected-event-item">
-          <strong>${escapeHtml(event.tipo || "Evento")}</strong>
-          <span>${escapeHtml(event.nome)}${event.horario ? ` · ${escapeHtml(event.horario)}` : ""}</span>
+        <div class="calendar-event">
+          <span class="event-bullet" aria-hidden="true"></span>
+          <span class="calendar-event-text"><strong>${escapeHtml(event.tipo || "Evento")}</strong><span>${escapeHtml(event.nome)}${event.horario ? ` · ${escapeHtml(event.horario)}` : ""}</span></span>
         </div>
       `).join("")}
     `;
@@ -362,17 +368,17 @@
   }
 
   function openTaskForm(task = null) {
-    if (task && !task.editable) return;
-    editingTaskId = task ? task.id : null;
-    $("#taskDialogTitle").textContent = task ? "Editar atividade" : "Anotar atividade passada em sala";
-    $("#taskSubmitBtn").textContent = task ? "Salvar alterações" : "Salvar atividade";
+    if (!task?.editable) return;
+    editingTaskId = task.id;
+    $("#taskDialogTitle").textContent = "Editar atividade";
+    $("#taskSubmitBtn").textContent = "Salvar alterações";
     $("#taskForm").reset();
     $("#taskTitle").value = task?.title || "";
     $("#taskSubject").value = task?.subject || "Língua Portuguesa";
     $("#taskTeacher").value = task?.teacher || "";
     $("#taskDue").value = task?.due || isoDate(addDays(today, 1));
     $("#taskDescription").value = task?.description || "";
-    $("#taskIsToday").checked = task ? Boolean(task.inClass) : true;
+    $("#taskIsToday").checked = Boolean(task.inClass);
     $("#taskAssignedOn").value = task?.assignedOn || task?.created || isoDate(today);
     setAssignedDateVisibility();
     openDialog("taskDialog");
@@ -455,9 +461,6 @@
   }
 
   function bindUI() {
-    $("#emptyAddBtn")?.addEventListener("click", () => openTaskForm());
-    $("#addNoticeBtn")?.addEventListener("click", () => openDialog("noticeDialog"));
-
     $("#prevMonth")?.addEventListener("click", () => {
       currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
       selectedDate = isoDate(currentMonth);
@@ -501,30 +504,14 @@
       if (!payload.titulo || !payload.disciplina || !payload.prazo) return;
 
       try {
-        const editing = editingTaskId ? state.tasks.find(task => task.id === editingTaskId) : null;
-        await api(editing ? `/api/aluno/atividades/${editing.sourceId}` : "/api/aluno/atividades", {
-          method: editing ? "PUT" : "POST",
+        const editing = state.tasks.find(task => task.id === editingTaskId);
+        if (!editing?.editable) return;
+        await api(`/api/aluno/atividades/${editing.sourceId}`, {
+          method: "PUT",
           body: JSON.stringify(payload)
         });
         editingTaskId = null;
         closeDialog("taskDialog");
-        await loadData();
-      } catch (error) {
-        alert(error.message);
-      }
-    });
-
-    $("#noticeForm")?.addEventListener("submit", async event => {
-      event.preventDefault();
-      const titulo = $("#noticeTitle").value.trim();
-      if (!titulo) return;
-      try {
-        await api("/api/aluno/avisos", {
-          method: "POST",
-          body: JSON.stringify({ titulo, data: $("#noticeDate").value || isoDate(today) })
-        });
-        $("#noticeForm").reset();
-        closeDialog("noticeDialog");
         await loadData();
       } catch (error) {
         alert(error.message);
@@ -550,7 +537,6 @@
 
     $("#taskAssignedOn").value = isoDate(today);
     $("#taskDue").value = isoDate(addDays(today, 1));
-    $("#noticeDate").value = isoDate(today);
     setAssignedDateVisibility();
   }
 
