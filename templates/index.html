@@ -28,11 +28,6 @@
 </svg>
 <div class="app-shell">
   <header class="topbar">
-    <nav class="primary-nav" aria-label="Navegação principal">
-      <a href="#disciplineSection">Disciplinas</a>
-      <a href="#calendarPanel">Calendário</a>
-      <a href="#noticesPanel">Avisos</a>
-    </nav>
     <div class="top-actions">
       <button class="profile-btn" id="profileBtn" aria-expanded="false" aria-controls="profileMenu">
         <span class="avatar">FN</span>
@@ -52,7 +47,7 @@
     </div>
   </header>
 
-  <main class="dashboard">
+  <main class="dashboard" id="dashboard">
     <section class="welcome">
       <div class="welcome-main">
         <div class="brand">
@@ -69,7 +64,6 @@
           </p>
         </div>
       </div>
-      <button class="primary-btn" id="addTaskBtn">＋ Anotar atividade</button>
     </section>
 
     <section class="main-grid">
@@ -80,7 +74,6 @@
               <p class="eyebrow">ATIVIDADES</p>
               <h2>O que você precisa fazer</h2>
             </div>
-            <button class="ghost-btn" id="clearDoneBtn">Limpar concluídas</button>
           </div>
 
           <div class="filters-row">

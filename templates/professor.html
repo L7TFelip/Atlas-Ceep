@@ -37,10 +37,6 @@
     ========================== -->
 
     <header class="topbar">
-        <nav class="primary-nav" aria-label="Navegação principal">
-            <a href="#classesSection">Turmas</a>
-            <a href="#calendarSection">Calendário</a>
-        </nav>
         <div class="top-actions">
 
             <button
@@ -82,18 +78,7 @@
                     <span data-theme-icon aria-hidden="true">☼</span><span data-theme-label>Modo claro</span>
                 </button>
 
-                <button type="button">
-                    Meu perfil
-                </button>
-
-                <button
-                    type="button"
-                    id="clearDataBtn">
-
-                    Atualizar dados
-
-                </button>
-        <button type="button" id="logoutBtn">Sair</button>
+                <button type="button" id="logoutBtn">Sair</button>
 
             </div>
 
@@ -101,7 +86,7 @@
 
     </header>
 
-    <main class="dashboard">
+    <main class="dashboard" id="dashboard">
 
         <!-- =========================
              CABEÇALHO
@@ -120,7 +105,6 @@
                     <p class="muted">Publique conteúdos, atividades e avisos para as suas turmas.</p>
                 </div>
             </div>
-            <button class="primary-btn" id="newContentBtn">＋ Publicar conteúdo</button>
         </section>
 
         <!-- =========================
@@ -152,10 +136,10 @@
                         </div>
 
                         <button
-                            class="ghost-btn"
+                            class="primary-btn"
                             id="newContentBtn2">
 
-                            ＋ Novo conteúdo
+                            ＋ Publicar conteúdo
 
                         </button>
 
@@ -264,57 +248,45 @@
 
             <div class="right-column">
 
-                <!-- TURMAS -->
-
-                <article class="panel classes-panel" id="classesSection">
-
-                    <div class="panel-head">
-
-                        <div>
-
-                            <p class="eyebrow">
-                                TURMAS
-                            </p>
-
-                            <h2>
-                                Minhas turmas
-                            </h2>
-
-                        </div>
-
-                    </div>
-
-                    <div
-                        class="class-list"
-                        id="classList">
-                    </div>
-
-                </article>
-
-                <!-- ATIVIDADE RECENTE -->
-
                 <article class="panel" id="calendarSection">
 
                     <div class="panel-head">
-
                         <div>
-
-                            <p class="eyebrow">
-                                CALENDÁRIO
-                            </p>
-
-                            <h2>
-                                Calendário de publicações
-                            </h2>
-
+                            <p class="eyebrow">AGENDA</p>
+                            <h2>Calendário de publicações</h2>
                         </div>
-
+                        <div class="calendar-nav">
+                            <button class="small-btn" id="prevMonth" aria-label="Mês anterior">‹</button>
+                            <span id="monthLabel"></span>
+                            <button class="small-btn" id="nextMonth" aria-label="Próximo mês">›</button>
+                        </div>
                     </div>
 
-                    <div
-                        class="recent-list"
-                        id="recentList">
+                    <div class="weekdays">
+                        <span>DOM</span><span>SEG</span><span>TER</span><span>QUA</span>
+                        <span>QUI</span><span>SEX</span><span>SÁB</span>
                     </div>
+                    <div class="calendar" id="calendar"></div>
+
+                    <section class="today-section" id="todaySection">
+                        <div class="today-header">
+                            <div>
+                                <p class="eyebrow">HOJE</p>
+                                <h2 id="todayTitle">Hoje</h2>
+                            </div>
+                            <span class="today-count" id="todayCount">0 publicações</span>
+                        </div>
+                        <div class="today-list" id="todayList"></div>
+                        <div class="today-empty" id="todayEmpty" hidden>
+                            <span>✓</span>
+                            <div>
+                                <strong>Você não tem publicações para hoje.</strong>
+                                <p>Não há publicações ou prazos nesta data.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="selected-events" id="selectedEvents"></div>
 
                 </article>
 

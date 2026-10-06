@@ -455,20 +455,8 @@
   }
 
   function bindUI() {
-    $("#addTaskBtn")?.addEventListener("click", () => openTaskForm());
     $("#emptyAddBtn")?.addEventListener("click", () => openTaskForm());
     $("#addNoticeBtn")?.addEventListener("click", () => openDialog("noticeDialog"));
-
-    $("#clearDoneBtn")?.addEventListener("click", async () => {
-      const personalDone = state.tasks.filter(task => task.editable && task.status === "done");
-      if (!personalDone.length) return;
-      try {
-        await Promise.all(personalDone.map(task => api(`/api/aluno/atividades/${task.sourceId}`, { method: "DELETE" })));
-        await loadData();
-      } catch (error) {
-        alert(error.message);
-      }
-    });
 
     $("#prevMonth")?.addEventListener("click", () => {
       currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);

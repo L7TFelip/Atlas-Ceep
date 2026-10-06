@@ -9,10 +9,115 @@
   let editingId = null;
   let deletingId = null;
   let activeType = "all";
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  let currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  let selectedDate = isoDate(today);
+
+  function isoDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
 
   function formatDate(value) {
     if (!value) return "Sem data";
     return new Date(`${value}T00:00:00`).toLocaleDateString("pt-BR");
+  }
+
+  function formatLongDate(value) {
+    if (!value) return "Sem data";
+    return new Date(`${value}T00:00:00`).toLocaleDateString("pt-BR", {
+      weekday: "long", day: "2-digit", month: "long"
+    });
+  }
+
+  function publicationsForDate(date) {
+    const items = [];
+    state.forEach(publication => {
+      const context = [publication.className, publication.subject].filter(Boolean).join(" · ");
+      if (publication.date === date) {
+        items.push({ ...publication, calendarLabel: "Publicação", calendarContext: context });
+      }
+      if (publication.type === "atividade" && publication.deadline === date && publication.deadline !== publication.date) {
+        items.push({ ...publication, calendarLabel: "Prazo", calendarContext: context });
+      }
+    });
+    return items;
+  }
+
+  function calendarItemMarkup(item) {
+    return `<button type="button" class="calendar-event" data-publication-id="${item.id}">
+      <span class="event-bullet" aria-hidden="true"></span>
+      <span class="calendar-event-text"><strong>${escapeHtml(item.title)}</strong>
+      <span>${escapeHtml(item.calendarLabel)}${item.calendarContext ? ` · ${escapeHtml(item.calendarContext)}` : ""}</span></span>
+    </button>`;
+  }
+
+  function bindCalendarItems(container) {
+    container.querySelectorAll("[data-publication-id]").forEach(button => {
+      button.addEventListener("click", () => openForm(Number(button.dataset.publicationId)));
+    });
+  }
+
+  function renderSelectedPublications() {
+    const items = publicationsForDate(selectedDate);
+    const isToday = selectedDate === isoDate(today);
+    $("#todaySection").hidden = !isToday;
+    $("#todayTitle").textContent = formatLongDate(selectedDate);
+    $("#todayCount").textContent = `${items.length} ${items.length === 1 ? "item" : "itens"}`;
+    const todayList = $("#todayList");
+    todayList.innerHTML = items.map(calendarItemMarkup).join("");
+    bindCalendarItems(todayList);
+    $("#todayEmpty").hidden = items.length !== 0;
+
+    const selected = $("#selectedEvents");
+    if (isToday) {
+      selected.hidden = true;
+      selected.innerHTML = "";
+      return;
+    }
+
+    selected.hidden = false;
+    selected.innerHTML = `<div class="selected-date-title">${escapeHtml(formatLongDate(selectedDate))}</div>
+      ${items.length ? items.map(calendarItemMarkup).join("") : '<p class="muted">Nenhum item nesta data.</p>'}`;
+    bindCalendarItems(selected);
+  }
+
+  function renderCalendar() {
+    const label = currentMonth.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    $("#monthLabel").textContent = label.charAt(0).toUpperCase() + label.slice(1);
+    const calendar = $("#calendar");
+    calendar.innerHTML = "";
+    const first = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+    const totalDays = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
+
+    for (let index = 0; index < first.getDay(); index++) {
+      const blank = document.createElement("span");
+      blank.className = "day blank";
+      calendar.appendChild(blank);
+    }
+
+    for (let day = 1; day <= totalDays; day++) {
+      const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+      const dateIso = isoDate(date);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "day";
+      button.textContent = day;
+      if (dateIso === isoDate(today)) button.classList.add("today");
+      if (dateIso === selectedDate) button.classList.add("selected");
+      if (publicationsForDate(dateIso).length) button.classList.add("has-event");
+      button.setAttribute("aria-label", formatLongDate(dateIso));
+      button.setAttribute("aria-pressed", String(dateIso === selectedDate));
+      button.addEventListener("click", () => {
+        selectedDate = dateIso;
+        renderCalendar();
+      });
+      calendar.appendChild(button);
+    }
+    renderSelectedPublications();
   }
 
   function normalize(item) {
@@ -110,19 +215,7 @@
       list.appendChild(article);
     });
 
-    const recent = $("#recentList");
-    recent.innerHTML = state.slice()
-      .sort((a, b) => (b.date || "").localeCompare(a.date || ""))
-      .slice(0, 4)
-      .map(i => `<div class="recent-item"><strong>${escapeHtml(i.title)}</strong><span>${formatDate(i.date)}</span></div>`)
-      .join("");
-
-    const classList = $("#classList");
-    const counts = {};
-    state.forEach(item => { counts[item.className] = (counts[item.className] || 0) + 1; });
-    classList.innerHTML = Object.entries(counts)
-      .map(([name, count]) => `<div class="class-item"><strong>${escapeHtml(name)}</strong><span>${count} publicação${count === 1 ? "" : "ões"}</span></div>`)
-      .join("");
+    renderCalendar();
   }
 
   function updateDeadlineVisibility() {
@@ -191,7 +284,6 @@
   }
 
   function bind() {
-    $("#newContentBtn")?.addEventListener("click", () => openForm());
     $("#newContentBtn2")?.addEventListener("click", () => openForm());
     $("#emptyCreateBtn")?.addEventListener("click", () => openForm());
     $("#closeContentBtn")?.addEventListener("click", closeForm);
@@ -199,7 +291,15 @@
     $("#contentType")?.addEventListener("change", updateDeadlineVisibility);
     $("#closeDeleteBtn")?.addEventListener("click", closeDelete);
     $("#cancelDeleteBtn")?.addEventListener("click", closeDelete);
-    $("#clearDataBtn")?.addEventListener("click", loadData);
+
+    $("#prevMonth")?.addEventListener("click", () => {
+      currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+      renderCalendar();
+    });
+    $("#nextMonth")?.addEventListener("click", () => {
+      currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+      renderCalendar();
+    });
 
     $("#confirmDeleteBtn")?.addEventListener("click", async () => {
       if (!deletingId) return closeDelete();

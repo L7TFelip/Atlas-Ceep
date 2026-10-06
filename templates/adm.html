@@ -53,10 +53,6 @@
           <span data-theme-icon aria-hidden="true">☼</span><span data-theme-label>Modo claro</span>
         </button>
 
-        <button type="button">Meu perfil</button>
-        <button type="button" id="clearDataBtn">
-          Atualizar dados
-        </button>
         <button type="button" id="logoutBtn">Sair</button>
       </div>
 
@@ -81,7 +77,6 @@
           <p class="muted">Gerencie os eventos e informações gerais exibidos para os alunos.</p>
         </div>
       </div>
-      <button class="primary-btn" id="newEventBtn">＋ Criar evento</button>
     </section>
 
     <!-- ==================== GRID PRINCIPAL ==================== -->
@@ -99,8 +94,8 @@
               <h2>Eventos publicados</h2>
             </div>
 
-            <button class="ghost-btn" id="newEventBtn2">
-              ＋ Novo evento
+            <button class="primary-btn" id="newEventBtn2">
+              ＋ Publicar evento
             </button>
 
           </div>
@@ -213,40 +208,46 @@
       <div class="right-column">
 
         <!-- PRÓXIMOS -->
-        <article class="panel">
+        <article class="panel calendar-panel" id="calendarSection">
 
           <div class="panel-head">
 
             <div>
-              <p class="eyebrow">CALENDÁRIO</p>
-              <h2>Próximos eventos</h2>
+              <p class="eyebrow">AGENDA</p>
+              <h2>Calendário de eventos</h2>
             </div>
-
-          </div>
-
-          <div
-            class="upcoming-list"
-            id="upcomingList">
-          </div>
-
-        </article>
-
-        <!-- CATEGORIAS -->
-        <article class="panel">
-
-          <div class="panel-head">
-
-            <div>
-              <p class="eyebrow">VISÃO GERAL</p>
-              <h2>Tipos de evento</h2>
+            <div class="calendar-nav">
+              <button class="small-btn" id="prevMonth" aria-label="Mês anterior">‹</button>
+              <span id="monthLabel"></span>
+              <button class="small-btn" id="nextMonth" aria-label="Próximo mês">›</button>
             </div>
-
           </div>
 
-          <div
-            class="category-list"
-            id="categoryList">
+          <div class="weekdays">
+            <span>DOM</span><span>SEG</span><span>TER</span><span>QUA</span>
+            <span>QUI</span><span>SEX</span><span>SÁB</span>
           </div>
+          <div class="calendar" id="calendar"></div>
+
+          <section class="today-section" id="todaySection">
+            <div class="today-header">
+              <div>
+                <p class="eyebrow">HOJE</p>
+                <h2 id="todayTitle">Hoje</h2>
+              </div>
+              <span class="today-count" id="todayCount">0 eventos</span>
+            </div>
+            <div class="today-list" id="todayList"></div>
+            <div class="today-empty" id="todayEmpty" hidden>
+              <span>✓</span>
+              <div>
+                <strong>Você não tem eventos para hoje.</strong>
+                <p>Não há eventos cadastrados nesta data.</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="selected-events" id="selectedEvents"></div>
 
         </article>
 
