@@ -561,7 +561,7 @@ button {
 .main-grid {
   --dashboard-section-height: 740px;
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(350px, .95fr);
+  grid-template-columns: minmax(0, 1.45fr) minmax(350px, 1.05fr);
   gap: 22px;
   align-items: stretch;
 }
@@ -569,6 +569,15 @@ button {
 .left-column,
 .right-column {
   min-width: 0;
+}
+
+#managementPeopleGrid {
+  --dashboard-section-height: 580px;
+}
+
+#classManagementSection {
+  margin-top: 22px;
+  --dashboard-section-height: 580px;
 }
 
 .left-column {
@@ -1260,6 +1269,14 @@ dialog::backdrop {
   margin-top: 4px;
 }
 
+#classSubjectsFieldsWrap .primary-btn,
+#classSubjectsFieldsWrap .danger-btn {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
 .detail-form {
   gap: 13px;
 }
@@ -1328,7 +1345,7 @@ dialog::backdrop {
   }
 
   .main-grid {
-    grid-template-columns: minmax(0, 1.3fr) minmax(300px, .95fr);
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1.05fr);
   }
 }
 

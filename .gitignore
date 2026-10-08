@@ -4,6 +4,7 @@ venv/
 atlasvenv/
 
 *.md
+!README.md
 
 # Banco de dados local
 *.db

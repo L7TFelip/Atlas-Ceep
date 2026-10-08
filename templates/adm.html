@@ -32,8 +32,8 @@
   <!-- ==================== TOPO ==================== -->
   <header class="topbar">
     <nav class="primary-nav" aria-label="Navegação principal">
-      <a href="#eventsSection">Eventos</a>
-      <a href="#dashboard">Painel de controle</a>
+      <a href="#eventsSection" id="eventsNavLink">Eventos</a>
+      <a href="#managementSection" id="managementNavLink">Painel de controle</a>
     </nav>
 
     <div class="top-actions">
@@ -80,6 +80,7 @@
     </section>
 
     <!-- ==================== GRID PRINCIPAL ==================== -->
+    <div id="eventsView">
     <section class="main-grid">
 
       <!-- ==================== EVENTOS ==================== -->
@@ -251,6 +252,43 @@
       </div>
 
     </section>
+    </div>
+
+    <!-- ==================== GERENCIAMENTO DE PESSOAS ==================== -->
+    <div id="managementSection" hidden>
+    <section class="main-grid" id="managementPeopleGrid">
+      <div class="left-column">
+        <article class="panel">
+          <div class="panel-head panel-head-wrap">
+            <div><p class="eyebrow">CADASTROS</p><h2>Alunos</h2></div>
+            <button class="primary-btn" type="button" id="newStudentBtn">＋ Novo aluno</button>
+          </div>
+          <div class="event-list" id="studentList"></div>
+          <div class="empty-state" id="studentEmpty" hidden><span>◌</span><p>Nenhum aluno cadastrado.</p></div>
+        </article>
+      </div>
+      <div class="right-column">
+        <article class="panel">
+          <div class="panel-head panel-head-wrap">
+            <div><p class="eyebrow">CADASTROS</p><h2>Professores</h2></div>
+            <button class="primary-btn" type="button" id="newTeacherBtn">＋ Novo professor</button>
+          </div>
+          <div class="event-list" id="teacherList"></div>
+          <div class="empty-state" id="teacherEmpty" hidden><span>◌</span><p>Nenhum professor cadastrado.</p></div>
+        </article>
+      </div>
+    </section>
+    <section class="left-column" id="classManagementSection">
+      <article class="panel">
+        <div class="panel-head panel-head-wrap">
+          <div><p class="eyebrow">ORGANIZAÇÃO ESCOLAR</p><h2>Turmas</h2></div>
+          <button class="primary-btn" type="button" id="newClassBtn">＋ Nova turma</button>
+        </div>
+        <div class="event-list" id="classList"></div>
+        <div class="empty-state" id="classEmpty" hidden><span>◌</span><p>Nenhuma turma cadastrada.</p></div>
+      </article>
+    </section>
+    </div>
 
   </main>
 
@@ -498,8 +536,98 @@
 
 </dialog>
 
+<!-- ========================================================= -->
+<!-- MODAL — CADASTRO DE ALUNO OU PROFESSOR -->
+<!-- ========================================================= -->
+<dialog id="personDialog">
+  <form class="modal-form" id="personForm">
+    <button type="button" class="close-btn" id="closePersonBtn">×</button>
+    <p class="eyebrow" id="personFormEyebrow">CADASTRO</p>
+    <h2 id="personFormTitle">Novo cadastro</h2>
+    <label>Nome<input type="text" id="personName" maxlength="150" required></label>
+    <label data-person-field="student">E-mail<input type="email" id="studentEmail" maxlength="150"></label>
+    <label>Telefone<input type="tel" id="personPhone" maxlength="20"></label>
+    <div data-person-field="student">
+      <div class="modal-grid-two">
+        <label>Data de nascimento<input type="date" id="studentBirth"></label>
+        <label>Turma<select id="studentClass"><option value="">Sem turma</option></select></label>
+      </div>
+      <div class="modal-grid-two" data-create-only>
+        <label>CGM (opcional)<input type="text" id="studentCgm" maxlength="120"></label>
+        <label>Senha inicial<input type="password" id="studentPassword" placeholder="Padrão: atlas123"></label>
+      </div>
+    </div>
+    <div data-person-field="teacher">
+      <div class="modal-grid-two">
+        <label>Data de contratação<input type="date" id="teacherHireDate"></label>
+        <label>Atributo<input type="text" id="teacherAttribute" maxlength="100" placeholder="Ex.: Matemática"></label>
+      </div>
+      <div class="modal-grid-two" data-create-only>
+        <label>Login<input type="text" id="teacherLogin" maxlength="120" required></label>
+        <label>Senha<input type="password" id="teacherPassword" required></label>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="secondary-btn" id="cancelPersonBtn">Cancelar</button>
+      <button type="submit" class="primary-btn" id="savePersonBtn">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="personDeleteDialog">
+  <div class="modal-form">
+    <button type="button" class="close-btn" id="closePersonDeleteBtn">×</button>
+    <p class="eyebrow">EXCLUIR CADASTRO</p>
+    <h2>Excluir pessoa?</h2>
+    <p class="delete-message" id="personDeleteMessage">O cadastro será removido.</p>
+    <div class="modal-actions">
+      <button type="button" class="secondary-btn" id="cancelPersonDeleteBtn">Cancelar</button>
+      <button type="button" class="danger-btn" id="confirmPersonDeleteBtn">Excluir</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="classDialog">
+  <form class="modal-form" id="classForm">
+    <button type="button" class="close-btn" id="closeClassBtn">×</button>
+    <p class="eyebrow" id="classFormEyebrow">NOVA TURMA</p>
+    <h2 id="classFormTitle">Criar turma</h2>
+    <label>Nome<input type="text" id="className" maxlength="100" required placeholder="Ex.: 3º DS"></label>
+    <div class="modal-grid-two">
+      <label>Sala<input type="text" id="classRoom" maxlength="20"></label>
+      <label>Ano<input type="number" id="classYear" min="1" max="9999"></label>
+    </div>
+    <section id="classSubjectsFieldsWrap">
+      <p class="eyebrow">MATÉRIAS</p>
+      <div id="classSubjectsFields"></div>
+      <div class="modal-actions">
+        <button class="primary-btn" type="button" id="addClassSubjectBtn">＋ Adicionar matéria</button>
+        <button class="danger-btn" type="button" id="removeClassSubjectBtn" disabled>− Remover matéria</button>
+      </div>
+    </section>
+    <div class="modal-actions">
+      <button type="button" class="secondary-btn" id="cancelClassBtn">Cancelar</button>
+      <button type="submit" class="primary-btn" id="saveClassBtn">Criar turma</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="academicDeleteDialog">
+  <div class="modal-form">
+    <button type="button" class="close-btn" id="closeAcademicDeleteBtn">×</button>
+    <p class="eyebrow" id="academicDeleteEyebrow">EXCLUIR VÍNCULO</p>
+    <h2>Confirmar exclusão?</h2>
+    <p class="delete-message" id="academicDeleteMessage"></p>
+    <div class="modal-actions">
+      <button type="button" class="secondary-btn" id="cancelAcademicDeleteBtn">Cancelar</button>
+      <button type="button" class="danger-btn" id="confirmAcademicDeleteBtn">Excluir</button>
+    </div>
+  </div>
+</dialog>
+
   <script src="../static/js/main.js"></script>
   <script src="../static/js/adm.js"></script>
+  <script src="../static/js/adm_people.js"></script>
 </body>
 
 </html>

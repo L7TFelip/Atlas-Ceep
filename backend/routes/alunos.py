@@ -7,6 +7,25 @@ from ..auth_utils import roles_required
 bp = Blueprint("alunos", __name__)
 
 
+@bp.route("/alunos", methods=["GET"])
+@roles_required("adm")
+def listar_alunos():
+    conexao = conectar_banco()
+    try:
+        cursor = conexao.cursor()
+        cursor.execute("""
+            SELECT a.*, t.nome AS turma, u.login AS cgm
+            FROM aluno a
+            LEFT JOIN turmas t ON t.id_turma = a.id_turma
+            LEFT JOIN usuarios u
+                ON u.papel = 'aluno' AND u.id_referencia = a.id_aluno
+            ORDER BY a.nome COLLATE NOCASE
+        """)
+        return jsonify({"alunos": [dict(linha) for linha in cursor.fetchall()]}), 200
+    finally:
+        conexao.close()
+
+
 @bp.route("/alunos", methods=["POST"])
 @roles_required("adm")
 def criar_aluno():
@@ -120,5 +139,52 @@ def criar_aluno():
             "detalhes": str(erro),
         }), 500
 
+    finally:
+        conexao.close()
+
+
+@bp.route("/alunos/<int:id_aluno>", methods=["PUT"])
+@roles_required("adm")
+def atualizar_aluno(id_aluno):
+    dados = request.get_json(silent=True) or {}
+    nome = str(dados.get("nome", "")).strip()
+    if not nome:
+        return jsonify({"erro": "O campo 'nome' é obrigatório!"}), 400
+
+    id_turma = dados.get("id_turma") or None
+    conexao = conectar_banco()
+    try:
+        cursor = conexao.cursor()
+        if not registro_existe(cursor, "aluno", "id_aluno", id_aluno):
+            return jsonify({"erro": "Aluno não encontrado!"}), 404
+        if id_turma is not None and not registro_existe(cursor, "turmas", "id_turma", id_turma):
+            return jsonify({"erro": "Turma informada não existe!"}), 400
+
+        cursor.execute("""
+            UPDATE aluno
+            SET nome = ?, email = ?, telefone = ?, data_nascimento = ?, id_turma = ?
+            WHERE id_aluno = ?
+        """, (nome, dados.get("email"), dados.get("telefone"),
+              dados.get("data_nascimento"), id_turma, id_aluno))
+        conexao.commit()
+        return jsonify({"mensagem": "Aluno atualizado com sucesso!"}), 200
+    finally:
+        conexao.close()
+
+
+@bp.route("/alunos/<int:id_aluno>", methods=["DELETE"])
+@roles_required("adm")
+def excluir_aluno(id_aluno):
+    conexao = conectar_banco()
+    try:
+        cursor = conexao.cursor()
+        if not registro_existe(cursor, "aluno", "id_aluno", id_aluno):
+            return jsonify({"erro": "Aluno não encontrado!"}), 404
+
+        cursor.execute("DELETE FROM aluno_materia WHERE id_aluno = ?", (id_aluno,))
+        cursor.execute("DELETE FROM usuarios WHERE papel = 'aluno' AND id_referencia = ?", (id_aluno,))
+        cursor.execute("DELETE FROM aluno WHERE id_aluno = ?", (id_aluno,))
+        conexao.commit()
+        return jsonify({"mensagem": "Aluno excluído com sucesso!"}), 200
     finally:
         conexao.close()

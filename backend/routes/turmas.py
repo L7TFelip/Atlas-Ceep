@@ -17,7 +17,14 @@ def listar_turmas():
     conexao = conectar_banco()
     try:
         cursor = conexao.cursor()
-        cursor.execute("SELECT * FROM turmas")
+        cursor.execute("""
+            SELECT t.*, GROUP_CONCAT(m.nome, ', ') AS materias
+            FROM turmas t
+            LEFT JOIN turma_materia tm ON tm.id_turma = t.id_turma
+            LEFT JOIN materias m ON m.id_materia = tm.id_materia
+            GROUP BY t.id_turma
+            ORDER BY t.nome COLLATE NOCASE
+        """)
         linhas = cursor.fetchall()
         return jsonify({"turmas": [linha_para_dict(l) for l in linhas]}), 200
     finally:
@@ -45,9 +52,22 @@ def buscar_turma(id_turma):
 @roles_required("adm")
 def criar_turma():
     dados = request.get_json(silent=True) or {}
-    nome = dados.get("nome")
+    nome = str(dados.get("nome", "")).strip()
     if not nome:
         return jsonify({"erro": "O campo 'nome' é obrigatório!"}), 400
+
+    materias = dados.get("materias", [])
+    if not isinstance(materias, list):
+        return jsonify({"erro": "O campo 'materias' deve ser uma lista."}), 400
+
+    materias_validadas = []
+    for materia in materias:
+        if not isinstance(materia, dict):
+            return jsonify({"erro": "Cada matéria deve ser um objeto."}), 400
+        nome_materia = str(materia.get("nome", "")).strip()
+        if not nome_materia:
+            return jsonify({"erro": "Toda matéria precisa ter um nome."}), 400
+        materias_validadas.append((nome_materia, materia.get("carga_horaria")))
 
     id_administrado = dados.get("id_administrado")
     conexao = conectar_banco()
@@ -60,8 +80,18 @@ def criar_turma():
             "INSERT INTO turmas (nome, sala, ano, semestre, id_administrado) VALUES (?, ?, ?, ?, ?)",
             (nome, dados.get("sala"), dados.get("ano"), dados.get("semestre"), id_administrado)
         )
+        id_turma = cursor.lastrowid
+        for nome_materia, carga_horaria in materias_validadas:
+            cursor.execute(
+                "INSERT INTO materias (nome, carga_horaria, id_administrado) VALUES (?, ?, ?)",
+                (nome_materia, carga_horaria, id_administrado)
+            )
+            cursor.execute(
+                "INSERT INTO turma_materia (id_turma, id_materia) VALUES (?, ?)",
+                (id_turma, cursor.lastrowid)
+            )
         conexao.commit()
-        return jsonify({"mensagem": "Turma criada com sucesso!", "id": cursor.lastrowid}), 201
+        return jsonify({"mensagem": "Turma criada com sucesso!", "id": id_turma}), 201
     finally:
         conexao.close()
 
@@ -104,6 +134,8 @@ def excluir_turma(id_turma):
         if not registro_existe(cursor, "turmas", "id_turma", id_turma):
             return jsonify({"erro": "Turma não encontrada!"}), 404
 
+        # Preserva os alunos cadastrados e remove apenas o vínculo com a turma.
+        cursor.execute("UPDATE aluno SET id_turma = NULL WHERE id_turma = ?", (id_turma,))
         cursor.execute("DELETE FROM turmas WHERE id_turma = ?", (id_turma,))
         conexao.commit()
         return jsonify({"mensagem": "Turma excluída com sucesso!"}), 200
