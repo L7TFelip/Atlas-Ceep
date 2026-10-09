@@ -43,6 +43,30 @@
     });
   }
 
+  function imageCardsMarkup(images = []) {
+    if (!images.length) return "";
+    return `<div class="publication-image-grid">${images.map(image => `
+      <button type="button" class="publication-image-card"
+        data-publication-image="${escapeHtml(image.url)}"
+        data-image-name="${escapeHtml(image.nome || "Imagem da publicação")}">
+        <img src="${escapeHtml(image.url)}" alt="${escapeHtml(image.nome || "Imagem da publicação")}" loading="lazy">
+        <span>${escapeHtml(image.nome || "Abrir imagem")}</span>
+      </button>
+    `).join("")}</div>`;
+  }
+
+  function bindImageCards(container) {
+    $$('[data-publication-image]', container).forEach(button => {
+      button.addEventListener("click", event => {
+        event.stopPropagation();
+        $("#expandedPublicationImage").src = button.dataset.publicationImage;
+        $("#expandedPublicationImage").alt = button.dataset.imageName;
+        $("#expandedPublicationImageName").textContent = button.dataset.imageName;
+        openDialog("publicationImageDialog");
+      });
+    });
+  }
+
   function statusInfo(task) {
     if (task.status === "done") return { key: "done", label: "Concluída", className: "status-done" };
     const diff = daysBetween(task.due, isoDate(today));
@@ -111,11 +135,12 @@
       <button class="check" type="button">${task.status === "done" ? "✓" : ""}</button>
       <div class="task-content">
         <span class="task-title">${escapeHtml(task.title)}</span>
-        <div class="task-subject-line">
+      <div class="task-subject-line">
           ${task.submittedAt ? "<span>Entrega registrada</span>" : ""}
           ${task.teacher ? `<span>${escapeHtml(task.teacher)}</span>` : ""}
           ${task.source === "professor" ? '<span class="change-badge">Professor</span>' : ""}
         </div>
+        ${task.source === "professor" ? imageCardsMarkup(task.images) : ""}
       </div>
       <div class="task-side">
         <span class="status-pill ${status.className}">${escapeHtml(status.label)}</span>
@@ -134,6 +159,7 @@
       removeTask(task);
     });
 
+    bindImageCards(article);
     article.addEventListener("click", () => openDetail(task.id));
     return article;
   }
@@ -313,16 +339,17 @@
     list.innerHTML = [
       ...state.notices.map(notice => `
         <article class="notice-item">
-          <div>
+          <div class="notice-item-content">
             <strong>${escapeHtml(notice.title)}</strong>
             <span>${formatDate(notice.date)}</span>
+            ${imageCardsMarkup(notice.images)}
           </div>
           ${notice.editable ? `<button type="button" class="delete-btn" data-notice-id="${notice.sourceId}">×</button>` : ""}
         </article>
       `),
       ...upcomingEvents.map(event => `
-        <article class="notice-item">
-          <div>
+      <article class="notice-item">
+          <div class="notice-item-content">
             <strong>${escapeHtml(event.nome)}</strong>
             <span>${formatDate(event.data_evento)}${event.local ? ` · ${escapeHtml(event.local)}` : ""}</span>
           </div>
@@ -333,6 +360,7 @@
     $$('[data-notice-id]', list).forEach(button => {
       button.addEventListener("click", () => removeNotice(Number(button.dataset.noticeId)));
     });
+    bindImageCards(list);
   }
 
   function openDialog(id) {
@@ -364,6 +392,10 @@
       ${task.inClass ? `<span>Passada em sala em ${escapeHtml(formatDate(task.assignedOn || task.created))}</span>` : ""}
     `;
     $("#detailDescription").textContent = task.description || "Nenhuma observação cadastrada.";
+    const imageList = $("#detailImages");
+    imageList.innerHTML = imageCardsMarkup(task.images);
+    imageList.hidden = !(task.images || []).length;
+    bindImageCards(imageList);
     $("#detailToggleBtn").textContent = task.status === "done" ? "Marcar como pendente" : "Marcar como concluída";
     $("#detailDeliveryStatus").textContent = task.submittedAt
       ? `Entrega registrada em ${formatDate(task.submittedAt)}`

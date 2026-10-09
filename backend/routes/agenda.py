@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, request
 
 from ..auth_utils import roles_required, usuario_atual
 from ..database.database import conectar_banco
+from .publicacoes import imagens_por_publicacao
 
 bp = Blueprint("agenda", __name__)
 STATUS_VALIDOS = {"pending", "progress", "done"}
@@ -14,7 +15,7 @@ def _aluno_id():
     return usuario_atual()["id_referencia"]
 
 
-def _tarefa_publicacao(linha):
+def _tarefa_publicacao(linha, imagens=None):
     return {
         "id": f"pub:{linha['id_publicacao']}",
         "source": "professor",
@@ -30,6 +31,7 @@ def _tarefa_publicacao(linha):
         "inClass": True,
         "assignedOn": linha["data_publicacao"],
         "editable": False,
+        "images": imagens or [],
     }
 
 
@@ -49,6 +51,7 @@ def _tarefa_pessoal(linha):
         "inClass": bool(linha["foi_passada_em_sala"]),
         "assignedOn": linha["data_passada"] or "",
         "editable": True,
+        "images": [],
     }
 
 
@@ -88,9 +91,11 @@ def agenda_aluno():
                 WHERE p.id_turma = ?
                 ORDER BY p.data_publicacao DESC, p.id_publicacao DESC
             """, (id_aluno, id_turma))
-            for linha in cursor.fetchall():
+            publicacoes = cursor.fetchall()
+            imagens = imagens_por_publicacao(cursor, publicacoes)
+            for linha in publicacoes:
                 if linha["tipo"] == "atividade":
-                    tarefas.append(_tarefa_publicacao(linha))
+                    tarefas.append(_tarefa_publicacao(linha, imagens.get(linha["id_publicacao"])))
                 elif linha["tipo"] in {"aviso", "material"}:
                     prefixo = "Material: " if linha["tipo"] == "material" else ""
                     avisos.append({
@@ -100,6 +105,7 @@ def agenda_aluno():
                         "title": prefixo + linha["titulo"],
                         "date": linha["data_publicacao"],
                         "editable": False,
+                        "images": imagens.get(linha["id_publicacao"], []),
                     })
 
         cursor.execute(

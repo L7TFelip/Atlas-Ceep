@@ -71,8 +71,8 @@ Sem `ATLAS_SECRET_KEY`, o app usa uma chave fixa de desenvolvimento definida em 
 
 - `/login`: autenticação.
 - `/aluno`: atividades, prazos, calendário e avisos do aluno.
-- `/professor`: publicação e gerenciamento de atividades, materiais e avisos para turmas e matérias.
-- `/adm`: eventos escolares e gerenciamento de alunos, professores, turmas e matérias.
+- `/professor`: publicação e gerenciamento de atividades, materiais e avisos para turmas e disciplinas. Publicações podem incluir até cinco imagens por envio, de até 5 MB cada, nos formatos PNG, JPEG, GIF ou WebP.
+- `/adm`: eventos escolares e gerenciamento de alunos, professores, turmas e disciplinas.
 - `/`: redireciona usuários autenticados para a página correspondente ao papel; sem sessão, direciona para o login.
 
 ### API
@@ -81,9 +81,9 @@ As rotas são registradas sob `/api`. Entre os principais grupos estão:
 
 - `/api/auth`: login, consulta da sessão atual (`/me`) e logout.
 - `/api/alunos`, `/api/professores`, `/api/adms`: cadastros e operações de perfil.
-- `/api/turmas` e `/api/materias`: turmas, matérias e vínculos entre elas.
+- `/api/turmas` e `/api/materias`: turmas, disciplinas e vínculos entre elas. `/api/materias` é o nome técnico atual da rota.
 - `/api/eventos`: agenda institucional.
-- `/api/professor/publicacoes`: publicações feitas por professores.
+- `/api/professor/publicacoes`: publicações feitas por professores. Os alunos veem publicações da própria turma; imagens são exibidas como cards e podem ser abertas em tamanho ampliado. A rota de imagem exige sessão e limita o acesso ao professor autor ou a alunos da turma da publicação.
 - `/api/aluno/agenda`: dados da agenda do aluno, atividades pessoais e avisos.
 
 As operações protegidas verificam a sessão e o papel necessário no backend. Para conferir os caminhos e exemplos de requisição, consulte `backend/testes_api.http`.
@@ -109,6 +109,7 @@ requirements.txt         Dependências Python fixadas
 ## Dados e desenvolvimento
 
 - O banco é criado automaticamente ao iniciar o app. A inicialização preserva os dados existentes e cria o administrador inicial quando necessário.
+- As disciplinas de teste, contas de alunos e professores e publicações presentes no banco local de desenvolvimento foram adicionadas manualmente; uma instalação nova não as cria automaticamente. As contas de teste usam `atlas123` como senha.
 - O arquivo SQLite, ambientes virtuais, caches Python e arquivos `.env` estão listados no `.gitignore`.
 - Não há pipeline de build nem suíte de testes automatizada configurada. `backend/testes_api.http` contém exemplos para uso manual com um cliente HTTP.
 - `python -m backend.app` inicia o servidor de desenvolvimento do Flask, que usa modo debug. Não exponha esse servidor diretamente na internet.

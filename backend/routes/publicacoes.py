@@ -1,13 +1,97 @@
 """Publicações criadas pelo professor para uma turma/matéria."""
 
 from datetime import date
-from flask import Blueprint, jsonify, request
+from io import BytesIO
+from pathlib import PurePath
+from flask import Blueprint, jsonify, request, send_file
+from werkzeug.utils import secure_filename
 
 from ..auth_utils import roles_required, usuario_atual
 from ..database.database import conectar_banco, registro_existe
 
 bp = Blueprint("publicacoes", __name__)
 TIPOS = {"atividade", "material", "aviso"}
+MAX_IMAGENS_PUBLICACAO = 5
+MAX_BYTES_IMAGEM = 5 * 1024 * 1024
+
+
+def _dados_requisicao():
+    if request.mimetype == "multipart/form-data":
+        return request.form
+    return request.get_json(silent=True) or {}
+
+
+def _detectar_imagem(dados):
+    if dados.startswith(b"\x89PNG\r\n\x1a\n"):
+        return "image/png"
+    if dados.startswith(b"\xff\xd8\xff"):
+        return "image/jpeg"
+    if dados.startswith((b"GIF87a", b"GIF89a")):
+        return "image/gif"
+    if len(dados) >= 12 and dados[:4] == b"RIFF" and dados[8:12] == b"WEBP":
+        return "image/webp"
+    return None
+
+
+def _preparar_imagens(arquivos):
+    selecionados = [arquivo for arquivo in arquivos if arquivo and arquivo.filename]
+    if len(selecionados) > MAX_IMAGENS_PUBLICACAO:
+        return None, f"Anexe no máximo {MAX_IMAGENS_PUBLICACAO} imagens por envio."
+
+    imagens = []
+    for arquivo in selecionados:
+        dados = arquivo.stream.read(MAX_BYTES_IMAGEM + 1)
+        if not dados:
+            return None, "Uma das imagens está vazia."
+        if len(dados) > MAX_BYTES_IMAGEM:
+            return None, "Cada imagem pode ter no máximo 5 MB."
+        mime_type = _detectar_imagem(dados)
+        if not mime_type:
+            return None, "Formato não suportado. Use PNG, JPEG, GIF ou WebP."
+        nome_original = secure_filename(PurePath(arquivo.filename).name) or "imagem"
+        imagens.append({"dados": dados, "mime_type": mime_type, "nome_original": nome_original})
+    return imagens, None
+
+
+def _salvar_imagens(cursor, id_publicacao, imagens):
+    if not imagens:
+        return
+    cursor.execute(
+        "SELECT COALESCE(MAX(ordem), -1) + 1 FROM publicacao_imagens WHERE id_publicacao = ?",
+        (id_publicacao,),
+    )
+    primeira_ordem = cursor.fetchone()[0]
+    cursor.executemany("""
+        INSERT INTO publicacao_imagens
+            (id_publicacao, nome_original, mime_type, dados, ordem)
+        VALUES (?, ?, ?, ?, ?)
+    """, [
+        (id_publicacao, imagem["nome_original"], imagem["mime_type"], imagem["dados"], primeira_ordem + ordem)
+        for ordem, imagem in enumerate(imagens)
+    ])
+
+
+def imagens_por_publicacao(cursor, publicacoes):
+    ids = [item["id_publicacao"] for item in publicacoes]
+    resultado = {id_publicacao: [] for id_publicacao in ids}
+    if not ids:
+        return resultado
+
+    placeholders = ",".join("?" for _ in ids)
+    cursor.execute(f"""
+        SELECT id_imagem, id_publicacao, nome_original, mime_type
+        FROM publicacao_imagens
+        WHERE id_publicacao IN ({placeholders})
+        ORDER BY ordem, id_imagem
+    """, ids)
+    for linha in cursor.fetchall():
+        resultado[linha["id_publicacao"]].append({
+            "id": linha["id_imagem"],
+            "nome": linha["nome_original"],
+            "mime_type": linha["mime_type"],
+            "url": f"/api/publicacoes/{linha['id_publicacao']}/imagens/{linha['id_imagem']}",
+        })
+    return resultado
 
 
 def _listar_do_professor(cursor, id_professor):
@@ -24,7 +108,11 @@ def _listar_do_professor(cursor, id_professor):
         WHERE p.id_professor = ?
         ORDER BY p.data_publicacao DESC, p.id_publicacao DESC
     """, (id_professor,))
-    return [dict(linha) for linha in cursor.fetchall()]
+    publicacoes = [dict(linha) for linha in cursor.fetchall()]
+    imagens = imagens_por_publicacao(cursor, publicacoes)
+    for publicacao in publicacoes:
+        publicacao["imagens"] = imagens[publicacao["id_publicacao"]]
+    return publicacoes
 
 
 def _validar_publicacao(cursor, dados, id_professor):
@@ -107,7 +195,10 @@ def listar_publicacoes_professor():
 def criar_publicacao():
     professor = usuario_atual()
     id_professor = professor["id_referencia"]
-    dados = request.get_json(silent=True) or {}
+    dados = _dados_requisicao()
+    imagens, erro_imagens = _preparar_imagens(request.files.getlist("imagens"))
+    if erro_imagens:
+        return jsonify({"erro": erro_imagens}), 400
 
     conexao = conectar_banco()
     try:
@@ -132,8 +223,10 @@ def criar_publicacao():
             dados.get("id_turma"),
             dados.get("id_materia"),
         ))
+        id_publicacao = cursor.lastrowid
+        _salvar_imagens(cursor, id_publicacao, imagens)
         conexao.commit()
-        return jsonify({"mensagem": "Publicação criada.", "id": cursor.lastrowid}), 201
+        return jsonify({"mensagem": "Publicação criada.", "id": id_publicacao, "imagens": len(imagens)}), 201
     finally:
         conexao.close()
 
@@ -143,7 +236,10 @@ def criar_publicacao():
 def atualizar_publicacao(id_publicacao):
     professor = usuario_atual()
     id_professor = professor["id_referencia"]
-    dados = request.get_json(silent=True) or {}
+    dados = _dados_requisicao()
+    imagens, erro_imagens = _preparar_imagens(request.files.getlist("imagens"))
+    if erro_imagens:
+        return jsonify({"erro": erro_imagens}), 400
 
     conexao = conectar_banco()
     try:
@@ -176,8 +272,9 @@ def atualizar_publicacao(id_publicacao):
             id_publicacao,
             id_professor,
         ))
+        _salvar_imagens(cursor, id_publicacao, imagens)
         conexao.commit()
-        return jsonify({"mensagem": "Publicação atualizada."})
+        return jsonify({"mensagem": "Publicação atualizada.", "imagens": len(imagens)})
     finally:
         conexao.close()
 
@@ -197,5 +294,41 @@ def excluir_publicacao(id_publicacao):
             return jsonify({"erro": "Publicação não encontrada."}), 404
         conexao.commit()
         return jsonify({"mensagem": "Publicação excluída."})
+    finally:
+        conexao.close()
+
+
+@bp.get("/publicacoes/<int:id_publicacao>/imagens/<int:id_imagem>")
+@roles_required("professor", "aluno")
+def servir_imagem_publicacao(id_publicacao, id_imagem):
+    usuario = usuario_atual()
+    conexao = conectar_banco()
+    try:
+        cursor = conexao.cursor()
+        cursor.execute("""
+            SELECT i.nome_original, i.mime_type, i.dados,
+                   p.id_professor, p.id_turma
+            FROM publicacao_imagens i
+            JOIN publicacoes p ON p.id_publicacao = i.id_publicacao
+            WHERE p.id_publicacao = ? AND i.id_imagem = ?
+        """, (id_publicacao, id_imagem))
+        imagem = cursor.fetchone()
+        if not imagem:
+            return jsonify({"erro": "Imagem não encontrada."}), 404
+
+        if usuario["papel"] == "professor" and imagem["id_professor"] != usuario["id_referencia"]:
+            return jsonify({"erro": "Imagem não encontrada."}), 404
+        if usuario["papel"] == "aluno" and imagem["id_turma"] != usuario.get("id_turma"):
+            return jsonify({"erro": "Imagem não encontrada."}), 404
+
+        resposta = send_file(
+            BytesIO(imagem["dados"]),
+            mimetype=imagem["mime_type"],
+            download_name=imagem["nome_original"],
+            as_attachment=False,
+        )
+        resposta.headers["Cache-Control"] = "private, max-age=3600"
+        resposta.headers["X-Content-Type-Options"] = "nosniff"
+        return resposta
     finally:
         conexao.close()

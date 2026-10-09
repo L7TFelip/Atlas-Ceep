@@ -234,6 +234,22 @@ def criar_banco():
     """)
 
     cursor.execute("""
+        CREATE TABLE IF NOT EXISTS publicacao_imagens (
+            id_imagem INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_publicacao INTEGER NOT NULL,
+            nome_original VARCHAR(255) NOT NULL,
+            mime_type VARCHAR(50) NOT NULL,
+            dados BLOB NOT NULL,
+            ordem INTEGER NOT NULL DEFAULT 0,
+            FOREIGN KEY (id_publicacao) REFERENCES publicacoes(id_publicacao) ON DELETE CASCADE
+        )
+    """)
+    cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_publicacao_imagens_publicacao
+        ON publicacao_imagens(id_publicacao, ordem)
+    """)
+
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS aluno_publicacao (
             id_aluno INTEGER NOT NULL,
             id_publicacao INTEGER NOT NULL,

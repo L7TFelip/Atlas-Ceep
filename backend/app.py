@@ -2,7 +2,8 @@ from datetime import timedelta
 from pathlib import Path
 import os
 
-from flask import Flask, redirect, render_template, session
+from flask import Flask, jsonify, redirect, render_template, session
+from werkzeug.exceptions import RequestEntityTooLarge
 
 
 # Pasta raiz do projeto: Atlas-Ceep/
@@ -38,6 +39,7 @@ def create_app():
             "ATLAS_SECRET_KEY",
             "atlas-dev-change-this-key"
         ),
+        MAX_CONTENT_LENGTH=26 * 1024 * 1024,
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
         PERMANENT_SESSION_LIFETIME=timedelta(days=30),
@@ -49,6 +51,10 @@ def create_app():
 
     # Registra as rotas da API
     registrar_rotas(app)
+
+    @app.errorhandler(RequestEntityTooLarge)
+    def arquivo_muito_grande(_erro):
+        return jsonify({"erro": "O envio excede o limite total de 26 MB."}), 413
 
     def pagina_para_papel(papel):
         return {

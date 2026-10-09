@@ -132,7 +132,8 @@
       classId: item.id_turma,
       className: item.turma,
       subjectId: item.id_materia,
-      subject: item.materia
+      subject: item.materia,
+      images: item.imagens || []
     };
   }
 
@@ -205,6 +206,7 @@
             <span>• ${formatDate(item.date)}</span>
             ${item.deadline ? `<span>• Prazo: ${formatDate(item.deadline)}</span>` : ""}
           </div>
+          ${item.images.length ? `<small class="publication-image-count">${item.images.length} ${item.images.length === 1 ? "imagem anexada" : "imagens anexadas"}</small>` : ""}
         </div>
         <div class="task-side">
           <button type="button" class="ghost-btn edit-btn">Editar</button>
@@ -239,6 +241,10 @@
     $("#contentDate").value = item?.date || new Date().toISOString().slice(0, 10);
     $("#contentDeadline").value = item?.deadline || "";
     $("#contentDescription").value = item?.description || "";
+    $("#contentImages").value = "";
+    $("#contentImagesHint").textContent = item?.images?.length
+      ? `${item.images.length} ${item.images.length === 1 ? "imagem já anexada" : "imagens já anexadas"}. As novas imagens serão adicionadas.`
+      : "Até 5 imagens por envio, com no máximo 5 MB cada.";
     updateDeadlineVisibility();
     $("#contentDialog").showModal();
   }
@@ -325,10 +331,26 @@
         descricao: $("#contentDescription").value.trim()
       };
 
+      const files = [...$("#contentImages").files];
+      if (files.length > 5) {
+        alert("Anexe no máximo 5 imagens por envio.");
+        return;
+      }
+      if (files.some(file => file.size > 5 * 1024 * 1024)) {
+        alert("Cada imagem pode ter no máximo 5 MB.");
+        return;
+      }
+
+      const formData = new FormData();
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) formData.append(key, String(value));
+      });
+      files.forEach(file => formData.append("imagens", file));
+
       try {
         await api(editingId ? `/api/professor/publicacoes/${editingId}` : "/api/professor/publicacoes", {
           method: editingId ? "PUT" : "POST",
-          body: JSON.stringify(payload)
+          body: formData
         });
         closeForm();
         await loadData();
