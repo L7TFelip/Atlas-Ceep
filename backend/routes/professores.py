@@ -9,6 +9,24 @@ from ..auth_utils import roles_required
 bp = Blueprint("professores", __name__)
 
 
+def _validar_ids_turmas(cursor, ids_turmas):
+    if not isinstance(ids_turmas, list):
+        return None, "O campo 'ids_turmas' deve ser uma lista."
+
+    ids_validos = []
+    for id_turma in ids_turmas:
+        try:
+            id_turma = int(id_turma)
+        except (TypeError, ValueError):
+            return None, "A lista de turmas contém um identificador inválido."
+        if id_turma <= 0 or id_turma in ids_validos:
+            return None, "A lista de turmas contém um identificador inválido ou repetido."
+        if not registro_existe(cursor, "turmas", "id_turma", id_turma):
+            return None, "Uma das turmas informadas não existe."
+        ids_validos.append(id_turma)
+    return ids_validos, None
+
+
 # ==================== PROFESSORES ====================
 
 # Buscar todos os professores
@@ -18,7 +36,18 @@ def listar_professores():
     conexao = conectar_banco()
     try:
         cursor = conexao.cursor()
-        cursor.execute("SELECT * FROM professor")
+        cursor.execute("""
+            SELECT p.*, u.login AS email,
+                   GROUP_CONCAT(DISTINCT t.nome) AS turmas,
+                   GROUP_CONCAT(DISTINCT t.id_turma) AS ids_turmas
+            FROM professor p
+            LEFT JOIN usuarios u
+                ON u.papel = 'professor' AND u.id_referencia = p.id_professor
+            LEFT JOIN professor_turma pt ON pt.id_professor = p.id_professor
+            LEFT JOIN turmas t ON t.id_turma = pt.id_turma
+            GROUP BY p.id_professor
+            ORDER BY p.nome COLLATE NOCASE
+        """)
         linhas = cursor.fetchall()
         return jsonify({"professores": [linha_para_dict(l) for l in linhas]}), 200
     finally:
@@ -61,12 +90,12 @@ def criar_professor():
             "erro": "O campo 'nome' é obrigatório!"
         }), 400
 
-    login = str(dados.get("login", "")).strip()
+    email = str(dados.get("email", "")).strip().lower()
     senha = str(dados.get("senha", ""))
 
-    if not login:
+    if not email:
         return jsonify({
-            "erro": "O campo 'login' é obrigatório!"
+            "erro": "O campo 'email' é obrigatório!"
         }), 400
 
     if not senha:
@@ -79,29 +108,32 @@ def criar_professor():
     try:
         cursor = conexao.cursor()
 
-        # Verifica se o login já existe
+        ids_turmas, erro_turmas = _validar_ids_turmas(cursor, dados.get("ids_turmas", []))
+        if erro_turmas:
+            return jsonify({"erro": erro_turmas}), 400
+
+        # O e-mail também é o identificador usado no login.
         cursor.execute(
-            "SELECT 1 FROM usuarios WHERE login = ?",
-            (login,)
+            "SELECT 1 FROM usuarios WHERE lower(login) = ?",
+            (email,)
         )
 
         if cursor.fetchone():
             return jsonify({
-                "erro": "Esse login já está cadastrado!"
+                "erro": "Esse e-mail já está cadastrado!"
             }), 409
 
         # Cria o professor
         cursor.execute(
             """
             INSERT INTO professor
-                (nome, data_contratacao, telefone, atributo)
-            VALUES (?, ?, ?, ?)
+                (nome, data_contratacao, telefone)
+            VALUES (?, ?, ?)
             """,
             (
                 nome,
                 dados.get("data_contratacao"),
-                dados.get("telefone"),
-                dados.get("atributo")
+                dados.get("telefone")
             )
         )
 
@@ -117,10 +149,15 @@ def criar_professor():
             VALUES (?, ?, 'professor', ?)
             """,
             (
-                login,
+                email,
                 senha_hash,
                 id_professor
             )
+        )
+
+        cursor.executemany(
+            "INSERT INTO professor_turma (id_professor, id_turma) VALUES (?, ?)",
+            [(id_professor, id_turma) for id_turma in ids_turmas],
         )
 
         id_usuario = cursor.lastrowid
@@ -135,7 +172,8 @@ def criar_professor():
             },
             "usuario": {
                 "id": id_usuario,
-                "login": login
+                "email": email,
+                "ids_turmas": ids_turmas
             }
         }), 201
 
@@ -169,6 +207,12 @@ def atualizar_professor(id_professor):
     try:
         cursor = conexao.cursor()
 
+        ids_turmas = None
+        if "ids_turmas" in dados:
+            ids_turmas, erro_turmas = _validar_ids_turmas(cursor, dados["ids_turmas"])
+            if erro_turmas:
+                return jsonify({"erro": erro_turmas}), 400
+
         if not registro_existe(
             cursor,
             "professor",
@@ -179,24 +223,61 @@ def atualizar_professor(id_professor):
                 "erro": "Professor não encontrado!"
             }), 404
 
+        if "senha" in dados and not str(dados.get("senha", "")):
+            return jsonify({"erro": "A nova senha não pode ser vazia."}), 400
+
+        if "email" in dados:
+            email = str(dados.get("email", "")).strip().lower()
+            if not email:
+                return jsonify({"erro": "O campo 'email' não pode ser vazio."}), 400
+            cursor.execute(
+                "SELECT id_usuario FROM usuarios WHERE papel = 'professor' AND id_referencia = ?",
+                (id_professor,),
+            )
+            usuario = cursor.fetchone()
+            if usuario:
+                cursor.execute(
+                    "SELECT 1 FROM usuarios WHERE lower(login) = ? AND id_usuario != ?",
+                    (email, usuario["id_usuario"]),
+                )
+                if cursor.fetchone():
+                    return jsonify({"erro": "Esse e-mail já está cadastrado."}), 409
+                cursor.execute(
+                    "UPDATE usuarios SET login = ? WHERE id_usuario = ?",
+                    (email, usuario["id_usuario"]),
+                )
+
         cursor.execute(
             """
             UPDATE professor
             SET
                 nome = ?,
                 data_contratacao = ?,
-                telefone = ?,
-                atributo = ?
+                telefone = ?
             WHERE id_professor = ?
             """,
             (
                 nome,
                 dados.get("data_contratacao"),
                 dados.get("telefone"),
-                dados.get("atributo"),
                 id_professor
             )
         )
+
+        if ids_turmas is not None:
+            cursor.execute("DELETE FROM professor_turma WHERE id_professor = ?", (id_professor,))
+            cursor.executemany(
+                "INSERT INTO professor_turma (id_professor, id_turma) VALUES (?, ?)",
+                [(id_professor, id_turma) for id_turma in ids_turmas],
+            )
+
+        if "senha" in dados:
+            cursor.execute(
+                "UPDATE usuarios SET senha_hash = ? WHERE papel = 'professor' AND id_referencia = ?",
+                (generate_password_hash(str(dados["senha"])), id_professor),
+            )
+            if cursor.rowcount == 0:
+                return jsonify({"erro": "A conta de acesso do professor não foi encontrada."}), 404
 
         conexao.commit()
 
@@ -490,7 +571,7 @@ def adicionar_materia_ao_professor(id_professor):
             id_materia
         ):
             return jsonify({
-                "erro": "Matéria não encontrada!"
+                "erro": "Disciplina não encontrada!"
             }), 404
 
         cursor.execute(
@@ -505,7 +586,7 @@ def adicionar_materia_ao_professor(id_professor):
 
         if cursor.fetchone():
             return jsonify({
-                "erro": "Essa matéria já está associada ao professor!"
+                "erro": "Essa disciplina já está associada ao professor!"
             }), 409
 
         cursor.execute(
@@ -520,7 +601,7 @@ def adicionar_materia_ao_professor(id_professor):
         conexao.commit()
 
         return jsonify({
-            "mensagem": "Matéria adicionada ao professor com sucesso!"
+            "mensagem": "Disciplina adicionada ao professor com sucesso!"
         }), 201
 
     finally:
@@ -551,7 +632,7 @@ def remover_materia_do_professor(id_professor, id_materia):
 
         if not cursor.fetchone():
             return jsonify({
-                "erro": "Essa matéria não está associada ao professor!"
+                "erro": "Essa disciplina não está associada ao professor!"
             }), 404
 
         cursor.execute(
@@ -566,7 +647,7 @@ def remover_materia_do_professor(id_professor, id_materia):
         conexao.commit()
 
         return jsonify({
-            "mensagem": "Matéria removida do professor com sucesso!"
+            "mensagem": "Disciplina removida do professor com sucesso!"
         }), 200
 
     finally:

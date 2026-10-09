@@ -40,7 +40,7 @@ def _validar_publicacao(cursor, dados, id_professor):
     if not id_turma or not registro_existe(cursor, "turmas", "id_turma", id_turma):
         return "Turma inválida."
     if not id_materia or not registro_existe(cursor, "materias", "id_materia", id_materia):
-        return "Matéria inválida."
+        return "Disciplina inválida."
 
     cursor.execute(
         "SELECT 1 FROM professor_turma WHERE id_professor = ? AND id_turma = ?",
@@ -50,11 +50,11 @@ def _validar_publicacao(cursor, dados, id_professor):
         return "Essa turma não está associada ao professor."
 
     cursor.execute(
-        "SELECT 1 FROM professor_materia WHERE id_professor = ? AND id_materia = ?",
-        (id_professor, id_materia),
+        "SELECT 1 FROM turma_materia WHERE id_turma = ? AND id_materia = ?",
+        (id_turma, id_materia),
     )
     if not cursor.fetchone():
-        return "Essa matéria não está associada ao professor."
+        return "Essa disciplina não está associada à turma selecionada."
 
     return None
 
@@ -77,11 +77,13 @@ def opcoes_professor():
         turmas = [dict(l) for l in cursor.fetchall()]
 
         cursor.execute("""
-            SELECT m.id_materia AS id, m.nome
-            FROM professor_materia pm
-            JOIN materias m ON m.id_materia = pm.id_materia
-            WHERE pm.id_professor = ?
-            ORDER BY m.nome
+            SELECT DISTINCT t.id_turma, m.id_materia AS id, m.nome
+            FROM professor_turma pt
+            JOIN turma_materia tm ON tm.id_turma = pt.id_turma
+            JOIN turmas t ON t.id_turma = tm.id_turma
+            JOIN materias m ON m.id_materia = tm.id_materia
+            WHERE pt.id_professor = ?
+            ORDER BY t.nome, m.nome
         """, (id_professor,))
         materias = [dict(l) for l in cursor.fetchall()]
         return jsonify({"turmas": turmas, "materias": materias})

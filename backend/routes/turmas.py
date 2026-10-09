@@ -58,15 +58,15 @@ def criar_turma():
 
     materias = dados.get("materias", [])
     if not isinstance(materias, list):
-        return jsonify({"erro": "O campo 'materias' deve ser uma lista."}), 400
+        return jsonify({"erro": "O campo 'materias' deve ser uma lista de disciplinas."}), 400
 
     materias_validadas = []
     for materia in materias:
         if not isinstance(materia, dict):
-            return jsonify({"erro": "Cada matéria deve ser um objeto."}), 400
+            return jsonify({"erro": "Cada disciplina deve ser um objeto."}), 400
         nome_materia = str(materia.get("nome", "")).strip()
         if not nome_materia:
-            return jsonify({"erro": "Toda matéria precisa ter um nome."}), 400
+            return jsonify({"erro": "Toda disciplina precisa ter um nome."}), 400
         materias_validadas.append((nome_materia, materia.get("carga_horaria")))
 
     id_administrado = dados.get("id_administrado")
@@ -101,11 +101,15 @@ def criar_turma():
 @roles_required("adm")
 def atualizar_turma(id_turma):
     dados = request.get_json(silent=True) or {}
-    nome = dados.get("nome")
+    nome = str(dados.get("nome", "")).strip()
     if not nome:
         return jsonify({"erro": "O campo 'nome' é obrigatório!"}), 400
 
     id_administrado = dados.get("id_administrado")
+    materias = dados.get("materias") if "materias" in dados else None
+    if materias is not None and not isinstance(materias, list):
+        return jsonify({"erro": "O campo 'materias' deve ser uma lista de disciplinas."}), 400
+
     conexao = conectar_banco()
     try:
         cursor = conexao.cursor()
@@ -114,10 +118,60 @@ def atualizar_turma(id_turma):
         if id_administrado is not None and not registro_existe(cursor, "adm", "id_administrado", id_administrado):
             return jsonify({"erro": "Administrador informado não existe!"}), 400
 
+        materias_validadas = None
+        if materias is not None:
+            cursor.execute(
+                "SELECT id_materia FROM turma_materia WHERE id_turma = ?",
+                (id_turma,),
+            )
+            materias_da_turma = {linha["id_materia"] for linha in cursor.fetchall()}
+            materias_validadas = []
+            ids_materias_vistas = set()
+            for materia in materias:
+                if not isinstance(materia, dict):
+                    return jsonify({"erro": "Cada disciplina deve ser um objeto."}), 400
+                nome_materia = str(materia.get("nome", "")).strip()
+                if not nome_materia:
+                    return jsonify({"erro": "Toda disciplina precisa ter um nome."}), 400
+
+                id_materia = materia.get("id_materia")
+                if id_materia is not None:
+                    try:
+                        id_materia = int(id_materia)
+                    except (TypeError, ValueError):
+                        return jsonify({"erro": "Identificador de disciplina inválido."}), 400
+                    if id_materia not in materias_da_turma or id_materia in ids_materias_vistas:
+                        return jsonify({"erro": "A disciplina não pertence à turma ou foi repetida."}), 400
+                    ids_materias_vistas.add(id_materia)
+                materias_validadas.append((id_materia, nome_materia))
+
         cursor.execute(
             "UPDATE turmas SET nome = ?, sala = ?, ano = ?, semestre = ?, id_administrado = ? WHERE id_turma = ?",
             (nome, dados.get("sala"), dados.get("ano"), dados.get("semestre"), id_administrado, id_turma)
         )
+
+        if materias_validadas is not None:
+            vinculos = []
+            for id_materia, nome_materia in materias_validadas:
+                if id_materia is None:
+                    cursor.execute(
+                        "INSERT INTO materias (nome, id_administrado) VALUES (?, ?)",
+                        (nome_materia, id_administrado),
+                    )
+                    id_materia = cursor.lastrowid
+                else:
+                    cursor.execute(
+                        "UPDATE materias SET nome = ? WHERE id_materia = ?",
+                        (nome_materia, id_materia),
+                    )
+                vinculos.append((id_turma, id_materia))
+
+            cursor.execute("DELETE FROM turma_materia WHERE id_turma = ?", (id_turma,))
+            cursor.executemany(
+                "INSERT INTO turma_materia (id_turma, id_materia) VALUES (?, ?)",
+                vinculos,
+            )
+
         conexao.commit()
         return jsonify({"mensagem": "Turma atualizada com sucesso!"}), 200
     finally:
@@ -182,21 +236,21 @@ def adicionar_materia_a_turma(id_turma):
         if not registro_existe(cursor, "turmas", "id_turma", id_turma):
             return jsonify({"erro": "Turma não encontrada!"}), 404
         if not registro_existe(cursor, "materias", "id_materia", id_materia):
-            return jsonify({"erro": "Matéria não encontrada!"}), 404
+            return jsonify({"erro": "Disciplina não encontrada!"}), 404
 
         cursor.execute(
             "SELECT 1 FROM turma_materia WHERE id_turma = ? AND id_materia = ?",
             (id_turma, id_materia)
         )
         if cursor.fetchone():
-            return jsonify({"erro": "Essa matéria já está associada à turma!"}), 409
+            return jsonify({"erro": "Essa disciplina já está associada à turma!"}), 409
 
         cursor.execute(
             "INSERT INTO turma_materia (id_turma, id_materia) VALUES (?, ?)",
             (id_turma, id_materia)
         )
         conexao.commit()
-        return jsonify({"mensagem": "Matéria adicionada à turma com sucesso!"}), 201
+        return jsonify({"mensagem": "Disciplina adicionada à turma com sucesso!"}), 201
     finally:
         conexao.close()
 
@@ -213,13 +267,13 @@ def remover_materia_da_turma(id_turma, id_materia):
             (id_turma, id_materia)
         )
         if not cursor.fetchone():
-            return jsonify({"erro": "Essa matéria não está associada à turma!"}), 404
+            return jsonify({"erro": "Essa disciplina não está associada à turma!"}), 404
 
         cursor.execute(
             "DELETE FROM turma_materia WHERE id_turma = ? AND id_materia = ?",
             (id_turma, id_materia)
         )
         conexao.commit()
-        return jsonify({"mensagem": "Matéria removida da turma com sucesso!"}), 200
+        return jsonify({"mensagem": "Disciplina removida da turma com sucesso!"}), 200
     finally:
         conexao.close()

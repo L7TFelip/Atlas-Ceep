@@ -136,34 +136,35 @@
     };
   }
 
-  function populateFormOptions() {
-    const subject = $("#contentSubject");
-    const classSelect = $("#contentClass");
+  function populateFormOptions(selectedClassId = "", selectedSubjectId = "") {
+    const classSubject = $("#contentClassSubject");
+    const combinations = materias.map(item => {
+      const turma = turmas.find(entry => String(entry.id) === String(item.id_turma));
+      return turma ? { ...item, turmaNome: turma.nome } : null;
+    }).filter(Boolean);
 
-    subject.innerHTML = '<option value="">Selecione</option>' + materias
-      .map(item => `<option value="${item.id}">${escapeHtml(item.nome)}</option>`)
+    classSubject.innerHTML = '<option value="">Selecione</option>' + combinations
+      .map(item => `<option value="${item.id_turma}:${item.id}" data-class-id="${item.id_turma}" data-subject-id="${item.id}">${escapeHtml(item.turmaNome)} — ${escapeHtml(item.nome)}</option>`)
       .join("");
-
-    classSelect.innerHTML = '<option value="">Selecione</option>' + turmas
-      .map(item => `<option value="${item.id}">${escapeHtml(item.nome)}</option>`)
-      .join("");
+    classSubject.value = selectedClassId && selectedSubjectId
+      ? `${selectedClassId}:${selectedSubjectId}`
+      : "";
   }
 
   function renderFilters() {
-    const classFilter = $("#classFilter");
-    const subjectFilter = $("#subjectFilter");
-    const currentClass = classFilter.value || "all";
-    const currentSubject = subjectFilter.value || "all";
+    const classSubjectFilter = $("#classSubjectFilter");
+    const currentSelection = classSubjectFilter.value || "all";
+    const combinations = [...new Map(materias.map(item => {
+      const turma = turmas.find(entry => String(entry.id) === String(item.id_turma));
+      return turma ? [`${item.id_turma}:${item.id}`, { ...item, turmaNome: turma.nome }] : null;
+    }).filter(Boolean)).values()];
 
-    classFilter.innerHTML = '<option value="all">Todas as turmas</option>' + turmas
-      .map(item => `<option value="${item.id}">${escapeHtml(item.nome)}</option>`)
+    classSubjectFilter.innerHTML = '<option value="all">Todas as turmas e disciplinas</option>' + combinations
+      .map(item => `<option value="${item.id_turma}:${item.id}">${escapeHtml(item.turmaNome)} — ${escapeHtml(item.nome)}</option>`)
       .join("");
-    subjectFilter.innerHTML = '<option value="all">Todas as disciplinas</option>' + materias
-      .map(item => `<option value="${item.id}">${escapeHtml(item.nome)}</option>`)
-      .join("");
-
-    classFilter.value = turmas.some(i => String(i.id) === currentClass) ? currentClass : "all";
-    subjectFilter.value = materias.some(i => String(i.id) === currentSubject) ? currentSubject : "all";
+    classSubjectFilter.value = combinations.some(item => `${item.id_turma}:${item.id}` === currentSelection)
+      ? currentSelection
+      : "all";
 
     $$("#typeFilters [data-type]").forEach(btn => {
       const type = btn.dataset.type;
@@ -174,12 +175,10 @@
   }
 
   function getFiltered() {
-    const classValue = $("#classFilter").value;
-    const subjectValue = $("#subjectFilter").value;
+    const classSubjectValue = $("#classSubjectFilter").value;
     return state
       .filter(item => activeType === "all" || item.type === activeType)
-      .filter(item => classValue === "all" || String(item.classId) === classValue)
-      .filter(item => subjectValue === "all" || String(item.subjectId) === subjectValue)
+      .filter(item => classSubjectValue === "all" || `${item.classId}:${item.subjectId}` === classSubjectValue)
       .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
   }
 
@@ -235,9 +234,8 @@
     $("#saveContentBtn").textContent = item ? "Salvar alterações" : "Publicar conteúdo";
 
     $("#contentTitle").value = item?.title || "";
-    $("#contentSubject").value = item ? String(item.subjectId) : "";
+    populateFormOptions(item ? item.classId : "", item ? item.subjectId : "");
     $("#contentType").value = item?.type || "";
-    $("#contentClass").value = item ? String(item.classId) : "";
     $("#contentDate").value = item?.date || new Date().toISOString().slice(0, 10);
     $("#contentDeadline").value = item?.deadline || "";
     $("#contentDescription").value = item?.description || "";
@@ -316,11 +314,12 @@
 
     $("#contentForm")?.addEventListener("submit", async event => {
       event.preventDefault();
+      const selectedClassSubject = $("#contentClassSubject").selectedOptions[0];
       const payload = {
         titulo: $("#contentTitle").value.trim(),
-        id_materia: Number($("#contentSubject").value),
+        id_materia: Number(selectedClassSubject.dataset.subjectId),
         tipo: $("#contentType").value,
-        id_turma: Number($("#contentClass").value),
+        id_turma: Number(selectedClassSubject.dataset.classId),
         data_publicacao: $("#contentDate").value,
         prazo_entrega: $("#contentType").value === "atividade" ? $("#contentDeadline").value : null,
         descricao: $("#contentDescription").value.trim()
@@ -346,8 +345,7 @@
       });
     });
 
-    $("#classFilter")?.addEventListener("change", render);
-    $("#subjectFilter")?.addEventListener("change", render);
+    $("#classSubjectFilter")?.addEventListener("change", render);
   }
 
   function init() {

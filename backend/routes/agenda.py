@@ -63,8 +63,18 @@ def agenda_aluno():
         cursor = conexao.cursor()
         tarefas = []
         avisos = []
+        disciplinas = []
 
         if id_turma:
+            cursor.execute("""
+                SELECT m.id_materia, m.nome
+                FROM turma_materia tm
+                JOIN materias m ON m.id_materia = tm.id_materia
+                WHERE tm.id_turma = ?
+                ORDER BY m.nome COLLATE NOCASE
+            """, (id_turma,))
+            disciplinas = [dict(linha) for linha in cursor.fetchall()]
+
             cursor.execute("""
                 SELECT p.id_publicacao, p.titulo, p.descricao, p.tipo,
                        p.data_publicacao, p.prazo_entrega,
@@ -122,6 +132,7 @@ def agenda_aluno():
 
         return jsonify({
             "usuario": aluno,
+            "subjects": disciplinas,
             "tasks": tarefas,
             "notices": avisos,
             "events": eventos,

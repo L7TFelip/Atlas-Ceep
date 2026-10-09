@@ -1220,6 +1220,94 @@ dialog::backdrop {
   font-weight: 700;
 }
 
+.teacher-class-field {
+  display: grid;
+  gap: 7px;
+}
+
+.teacher-class-label {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.teacher-class-dropdown {
+  position: relative;
+}
+
+.teacher-class-dropdown summary {
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  list-style: none;
+}
+
+.teacher-class-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.teacher-class-dropdown summary::after {
+  content: "▾";
+  float: right;
+  color: var(--muted);
+}
+
+.teacher-class-dropdown[open] summary::after {
+  content: "▴";
+}
+
+.teacher-class-options {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  max-height: 180px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  box-shadow: var(--shadow);
+  overflow-y: auto;
+}
+
+.modal-form .teacher-class-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  font-weight: 500;
+}
+
+.modal-form .teacher-class-option input[type="checkbox"] {
+  appearance: auto;
+  width: 14px;
+  height: 14px;
+  min-height: 14px;
+  max-width: 14px;
+  margin: 0;
+  flex: 0 0 14px;
+  padding: 0;
+  accent-color: var(--accent);
+}
+
+.teacher-class-option span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .modal-form input,
 .modal-form select,
 .modal-form textarea {

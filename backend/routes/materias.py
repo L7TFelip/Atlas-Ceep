@@ -34,7 +34,7 @@ def buscar_materia(id_materia):
         cursor.execute("SELECT * FROM materias WHERE id_materia = ?", (id_materia,))
         linha = cursor.fetchone()
         if not linha:
-            return jsonify({"erro": "Matéria não encontrada!"}), 404
+            return jsonify({"erro": "Disciplina não encontrada!"}), 404
         return jsonify(linha_para_dict(linha)), 200
     finally:
         conexao.close()
@@ -61,7 +61,7 @@ def criar_materia():
             (nome, dados.get("descricao"), dados.get("carga_horaria"), dados.get("ementa"), id_administrado)
         )
         conexao.commit()
-        return jsonify({"mensagem": "Matéria criada com sucesso!", "id": cursor.lastrowid}), 201
+        return jsonify({"mensagem": "Disciplina criada com sucesso!", "id": cursor.lastrowid}), 201
     finally:
         conexao.close()
 
@@ -80,7 +80,7 @@ def atualizar_materia(id_materia):
     try:
         cursor = conexao.cursor()
         if not registro_existe(cursor, "materias", "id_materia", id_materia):
-            return jsonify({"erro": "Matéria não encontrada!"}), 404
+            return jsonify({"erro": "Disciplina não encontrada!"}), 404
         if id_administrado is not None and not registro_existe(cursor, "adm", "id_administrado", id_administrado):
             return jsonify({"erro": "Administrador informado não existe!"}), 400
 
@@ -89,7 +89,7 @@ def atualizar_materia(id_materia):
             (nome, dados.get("descricao"), dados.get("carga_horaria"), dados.get("ementa"), id_administrado, id_materia)
         )
         conexao.commit()
-        return jsonify({"mensagem": "Matéria atualizada com sucesso!"}), 200
+        return jsonify({"mensagem": "Disciplina atualizada com sucesso!"}), 200
     finally:
         conexao.close()
 
@@ -102,10 +102,10 @@ def excluir_materia(id_materia):
     try:
         cursor = conexao.cursor()
         if not registro_existe(cursor, "materias", "id_materia", id_materia):
-            return jsonify({"erro": "Matéria não encontrada!"}), 404
+            return jsonify({"erro": "Disciplina não encontrada!"}), 404
 
         cursor.execute("DELETE FROM materias WHERE id_materia = ?", (id_materia,))
         conexao.commit()
-        return jsonify({"mensagem": "Matéria excluída com sucesso!"}), 200
+        return jsonify({"mensagem": "Disciplina excluída com sucesso!"}), 200
     finally:
         conexao.close()

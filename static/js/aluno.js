@@ -6,7 +6,7 @@
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  let state = { tasks: [], notices: [], events: [] };
+  let state = { subjects: [], tasks: [], notices: [], events: [] };
   let currentFilter = "all";
   let currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   let selectedDate = isoDate(today);
@@ -70,10 +70,22 @@
   function renderSubjects() {
     const select = $("#subjectFilter");
     const current = select.value;
-    const subjects = [...new Set(state.tasks.map(task => task.subject).filter(Boolean))]
+    const activityCounts = new Map();
+    state.tasks
+      .filter(task => task.source === "professor" && task.subject)
+      .forEach(task => activityCounts.set(task.subject, (activityCounts.get(task.subject) || 0) + 1));
+    const subjects = [...new Map(state.subjects
+      .filter(subject => subject?.nome)
+      .map(subject => [subject.nome, subject.nome])).values()]
       .sort((a, b) => a.localeCompare(b));
     select.innerHTML = '<option value="all">Todas as disciplinas</option>' + subjects
-      .map(subject => `<option value="${escapeHtml(subject)}">${escapeHtml(subject)}</option>`)
+      .map(subject => {
+        const count = activityCounts.get(subject) || 0;
+        const label = count === 0
+          ? `${subject} (sem atividades)`
+          : `${subject} (${count} ${count === 1 ? "atividade" : "atividades"})`;
+        return `<option value="${escapeHtml(subject)}">${escapeHtml(label)}</option>`;
+      })
       .join("");
     select.value = subjects.includes(current) ? current : "all";
   }
@@ -391,6 +403,7 @@
       if (user.papel !== "aluno") return window.location.href = "/login";
       const data = await api("/api/aluno/agenda");
       state = {
+        subjects: data.subjects || [],
         tasks: data.tasks || [],
         notices: data.notices || [],
         events: data.events || []

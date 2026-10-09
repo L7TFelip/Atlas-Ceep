@@ -186,21 +186,12 @@
                         <div class="select-row">
 
                             <select
-                                id="classFilter"
-                                class="compact-select">
+                                id="classSubjectFilter"
+                                class="compact-select"
+                                aria-label="Filtrar por turma e disciplina">
 
                                 <option value="all">
-                                    Todas as turmas
-                                </option>
-
-                            </select>
-
-                            <select
-                                id="subjectFilter"
-                                class="compact-select">
-
-                                <option value="all">
-                                    Todas as disciplinas
+                                    Todas as turmas e disciplinas
                                 </option>
 
                             </select>
@@ -357,54 +348,21 @@
 
         </label>
 
-        <!-- DISCIPLINA + TIPO -->
+        <!-- TURMA, DISCIPLINA E TIPO -->
 
         <div class="modal-grid-two">
 
             <label>
 
-                Disciplina
+                Turma e disciplina
 
                 <select
-                    id="contentSubject"
+                    id="contentClassSubject"
                     required>
 
                     <option value="">
-                        Selecione
+                        Selecione turma e disciplina
                     </option>
-
-                    <option>
-                        Programação no Desenvolvimento de Sistemas
-                    </option>
-
-                    <option>
-                        Banco de Dados
-                    </option>
-
-                    <option>
-                        Engenharia de Software
-                    </option>
-
-                    <option>
-                        Matemática
-                    </option>
-
-                    <option>
-                        Língua Portuguesa
-                    </option>
-
-                    <option>
-                        História
-                    </option>
-
-                    <option>
-                        Física
-                    </option>
-
-                    <option>
-                        Química
-                    </option>
-
                 </select>
 
             </label>
@@ -439,50 +397,16 @@
 
         </div>
 
-        <!-- TURMA + DATA -->
+        <label>
 
-        <div class="modal-grid-two">
+            Data de publicação
 
-            <label>
+            <input
+                type="date"
+                id="contentDate"
+                required>
 
-                Turma
-
-                <select
-                    id="contentClass"
-                    required>
-
-                    <option value="">
-                        Selecione
-                    </option>
-
-                    <option>
-                        1º Desenvolvimento de Sistemas
-                    </option>
-
-                    <option>
-                        2º Desenvolvimento de Sistemas
-                    </option>
-
-                    <option>
-                        3º Desenvolvimento de Sistemas
-                    </option>
-
-                </select>
-
-            </label>
-
-            <label>
-
-                Data de publicação
-
-                <input
-                    type="date"
-                    id="contentDate"
-                    required>
-
-            </label>
-
-        </div>
+        </label>
 
         <!-- PRAZO -->
 
@@ -594,7 +518,7 @@
 </dialog>
 
   <script src="../static/js/main.js"></script>
-  <script src="../static/js/professor.js"></script>
+  <script src="../static/js/professor.js?v=20261008-3"></script>
 </body>
 
 </html>

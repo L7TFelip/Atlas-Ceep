@@ -166,6 +166,18 @@ def atualizar_aluno(id_aluno):
             WHERE id_aluno = ?
         """, (nome, dados.get("email"), dados.get("telefone"),
               dados.get("data_nascimento"), id_turma, id_aluno))
+
+        if "senha" in dados:
+            senha = str(dados.get("senha", ""))
+            if not senha:
+                return jsonify({"erro": "A nova senha não pode ser vazia."}), 400
+            cursor.execute(
+                "UPDATE usuarios SET senha_hash = ? WHERE papel = 'aluno' AND id_referencia = ?",
+                (generate_password_hash(senha), id_aluno),
+            )
+            if cursor.rowcount == 0:
+                return jsonify({"erro": "A conta de acesso do aluno não foi encontrada."}), 404
+
         conexao.commit()
         return jsonify({"mensagem": "Aluno atualizado com sucesso!"}), 200
     finally:

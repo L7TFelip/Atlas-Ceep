@@ -16,7 +16,7 @@
     const id = student ? person.id_aluno : person.id_professor;
     const detail = student
       ? [person.cgm ? `CGM: ${person.cgm}` : "CGM não informado", person.turma || "Sem turma", person.email].filter(Boolean).join(" · ")
-      : [person.atributo, person.telefone].filter(Boolean).join(" · ");
+      : [person.email, person.turmas, person.telefone].filter(Boolean).join(" · ");
     const article = document.createElement("article");
     article.className = "task";
     article.innerHTML = `<div class="task-content">
@@ -56,6 +56,34 @@
     if (classes.some(item => String(item.id_turma) === selected)) classSelect.value = selected;
   }
 
+  function renderTeacherClasses(selectedIds = []) {
+    const selected = new Set(selectedIds.map(String));
+    const list = $("#teacherClasses");
+    $("#teacherClassDropdown").open = false;
+    if (!classes.length) {
+      list.innerHTML = '<span class="muted">Cadastre uma turma para poder associá-la ao professor.</span>';
+      $("#teacherClassesSummary").textContent = "Nenhuma turma disponível";
+      return;
+    }
+    list.innerHTML = classes.map(item => `
+      <label class="teacher-class-option">
+        <input type="checkbox" name="teacherClass" value="${item.id_turma}" ${selected.has(String(item.id_turma)) ? "checked" : ""}>
+        <span>${escapeHtml(item.nome)}</span>
+      </label>
+    `).join("");
+    updateTeacherClassSummary();
+  }
+
+  function updateTeacherClassSummary() {
+    const selectedNames = $$("#teacherClasses input[name='teacherClass']:checked").map(input =>
+      input.nextElementSibling.textContent.trim()
+    );
+    const summary = $("#teacherClassesSummary");
+    if (selectedNames.length === 0) summary.textContent = "Selecionar turmas";
+    else if (selectedNames.length <= 2) summary.textContent = selectedNames.join(", ");
+    else summary.textContent = `${selectedNames.length} turmas selecionadas`;
+  }
+
   function renderClasses() {
     const list = $("#classList");
     list.replaceChildren(...classes.map(item => {
@@ -78,7 +106,7 @@
     $("#classEmpty").hidden = classes.length !== 0;
   }
 
-  function openClassForm(id = null) {
+  async function openClassForm(id = null) {
     editingClassId = id;
     const item = classes.find(entry => entry.id_turma === id);
     $("#classFormEyebrow").textContent = item ? "EDITAR TURMA" : "NOVA TURMA";
@@ -89,38 +117,63 @@
     $("#classYear").value = item?.ano || "";
     const subjectsFields = $("#classSubjectsFieldsWrap");
     const fieldsList = $("#classSubjectsFields");
-    subjectsFields.hidden = Boolean(item);
+    subjectsFields.hidden = false;
     fieldsList.replaceChildren();
-    if (!item) addClassSubjectField();
+    try {
+      const materias = item
+        ? (await api(`/api/turmas/${id}/materias`)).materias || []
+        : [];
+      materias.forEach(materia => addClassSubjectField(materia));
+      if (!materias.length) addClassSubjectField();
+    } catch (error) {
+      alert(error.message);
+      return;
+    }
     updateClassSubjectButtons();
     $("#classDialog").showModal();
   }
 
-  function addClassSubjectField() {
+  function addClassSubjectField(materia = null) {
     const field = document.createElement("div");
-    field.innerHTML = '<label data-new-subject-row>Matéria<input type="text" data-new-subject-name maxlength="150"></label>';
+    field.dataset.subjectId = materia?.id_materia || "";
+    const label = document.createElement("label");
+    label.dataset.newSubjectRow = "";
+    label.append("Disciplina");
+    const input = document.createElement("input");
+    input.type = "text";
+    input.maxLength = 150;
+    input.dataset.newSubjectName = "";
+    input.value = materia?.nome || "";
+    label.appendChild(input);
+    field.appendChild(label);
     $("#classSubjectsFields").appendChild(field);
     updateClassSubjectButtons();
   }
 
   function removeClassSubjectField() {
     const fields = $("#classSubjectsFields");
-    if (fields.children.length > 1) fields.lastElementChild.remove();
+    if (fields.children.length > 1 || (editingClassId && fields.children.length === 1)) {
+      fields.lastElementChild.remove();
+    }
     updateClassSubjectButtons();
   }
 
   function updateClassSubjectButtons() {
-    $("#removeClassSubjectBtn").disabled = $("#classSubjectsFields").children.length <= 1;
+    const fieldCount = $("#classSubjectsFields").children.length;
+    $("#removeClassSubjectBtn").disabled = editingClassId
+      ? fieldCount === 0
+      : fieldCount <= 1;
   }
 
   async function saveClass(event) {
     event.preventDefault();
     const currentClass = classes.find(item => item.id_turma === editingClassId);
-    const materias = editingClassId ? [] : $$('[data-new-subject-row]', $("#classSubjectsFields")).map(row => ({
-      nome: $("[data-new-subject-name]", row).value.trim()
+    const materias = $$('[data-new-subject-row]', $("#classSubjectsFields")).map(row => ({
+      nome: $("[data-new-subject-name]", row).value.trim(),
+      id_materia: row.parentElement.dataset.subjectId || null
     })).filter(item => item.nome);
     if (!editingClassId && !materias.length) {
-      alert("Adicione ao menos uma matéria para criar a turma.");
+      alert("Adicione ao menos uma disciplina para criar a turma.");
       return;
     }
     const payload = {
@@ -128,7 +181,9 @@
       sala: $("#classRoom").value.trim() || null,
       ano: $("#classYear").value ? Number($("#classYear").value) : null,
       id_administrado: currentClass?.id_administrado ?? currentAdminId,
-      materias
+      materias: editingClassId
+        ? materias.map(({ nome, id_materia }) => ({ nome, ...(id_materia ? { id_materia: Number(id_materia) } : {}) }))
+        : materias.map(({ nome }) => ({ nome }))
     };
     try {
       await api(editingClassId ? `/api/turmas/${editingClassId}` : "/api/turmas", {
@@ -149,7 +204,7 @@
     }, "EXCLUIR TURMA");
   }
 
-  function askAcademicDelete(message, action, eyebrow = "DESVINCULAR MATÉRIA") {
+  function askAcademicDelete(message, action, eyebrow = "DESVINCULAR DISCIPLINA") {
     academicDeleteAction = action;
     $("#academicDeleteMessage").textContent = message;
     $("#academicDeleteEyebrow").textContent = eyebrow;
@@ -178,8 +233,10 @@
       group.hidden = group.dataset.personField !== kind;
     });
     $$("[data-create-only]").forEach(group => { group.hidden = !createOnly; });
-    $("#teacherLogin").required = kind === "teacher" && createOnly;
     $("#teacherPassword").required = kind === "teacher" && createOnly;
+    $("#teacherEmail").required = kind === "teacher";
+    $("#teacherName").required = kind === "teacher";
+    $("#personName").required = kind === "student";
   }
 
   function openForm(kind, id = null) {
@@ -192,17 +249,26 @@
     $("#personFormEyebrow").textContent = item ? "EDITAR CADASTRO" : "NOVO CADASTRO";
     $("#personFormTitle").textContent = `${item ? "Editar" : "Novo"} ${student ? "aluno" : "professor"}`;
     $("#savePersonBtn").textContent = item ? "Salvar alterações" : "Criar cadastro";
-    $("#personName").value = item?.nome || "";
-    $("#personPhone").value = item?.telefone || "";
+    $("#personName").value = student ? (item?.nome || "") : "";
+    $("#personPhone").value = student ? (item?.telefone || "") : "";
     $("#studentEmail").value = item?.email || "";
     $("#studentBirth").value = item?.data_nascimento || "";
     $("#studentClass").value = item?.id_turma || "";
     $("#studentCgm").value = "";
     $("#studentPassword").value = "";
+    $("#studentPasswordHint").textContent = item
+      ? "Senhas existentes não são exibidas. Informe uma nova senha para alterá-la; vazia mantém a atual."
+      : "Se deixar vazio, será usada a senha padrão.";
     $("#teacherHireDate").value = item?.data_contratacao || "";
-    $("#teacherAttribute").value = item?.atributo || "";
-    $("#teacherLogin").value = "";
+    $("#teacherName").value = student ? "" : (item?.nome || "");
+    $("#teacherEmail").value = student ? "" : (item?.email || "");
+    $("#teacherPhone").value = student ? "" : (item?.telefone || "");
     $("#teacherPassword").value = "";
+    $("#teacherPasswordHint").textContent = item
+      ? "Senhas existentes não são exibidas. Informe uma nova senha para alterá-la; vazia mantém a atual."
+      : "Obrigatória para criar o acesso.";
+    const teacherClassIds = student || !item ? [] : (item.ids_turmas || "").split(",").filter(Boolean);
+    renderTeacherClasses(teacherClassIds);
     $("#personDialog").showModal();
   }
 
@@ -233,19 +299,19 @@
       data_nascimento: $("#studentBirth").value || null,
       id_turma: $("#studentClass").value || null
     } : {
-      nome: $("#personName").value.trim(),
-      telefone: $("#personPhone").value.trim(),
+      nome: $("#teacherName").value.trim(),
+      email: $("#teacherEmail").value.trim(),
+      telefone: $("#teacherPhone").value.trim(),
       data_contratacao: $("#teacherHireDate").value || null,
-      atributo: $("#teacherAttribute").value.trim()
+      ids_turmas: $$("#teacherClasses input[name='teacherClass']:checked").map(input => Number(input.value))
     };
-    if (!editing) {
-      if (student) {
+    if (student) {
+      if (!editing) {
         payload.cgm = $("#studentCgm").value.trim();
-        if ($("#studentPassword").value) payload.senha = $("#studentPassword").value;
-      } else {
-        payload.login = $("#teacherLogin").value.trim();
-        payload.senha = $("#teacherPassword").value;
       }
+      if ($("#studentPassword").value) payload.senha = $("#studentPassword").value;
+    } else if ($("#teacherPassword").value) {
+      payload.senha = $("#teacherPassword").value;
     }
     const base = student ? "/api/alunos" : "/api/professores";
     try {
@@ -297,6 +363,7 @@
     $("#newStudentBtn").addEventListener("click", () => openForm("student"));
     $("#newTeacherBtn").addEventListener("click", () => openForm("teacher"));
     $("#personForm").addEventListener("submit", submitForm);
+    $("#teacherClasses").addEventListener("change", updateTeacherClassSummary);
     $("#closePersonBtn").addEventListener("click", closeForm);
     $("#cancelPersonBtn").addEventListener("click", closeForm);
     $("#closePersonDeleteBtn").addEventListener("click", closeDelete);
